@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@/core/domain/*": ["src/core/domain/*"],
+      "@/core/infrastructure/*": ["src/core/infrastructure/*"],
+      "@/core/utils/*": ["src/core/utils/*"],
+      "@/features/*": ["src/features/*"],
+      "@/features/auth/*": ["src/features/auth/*"]
+    },
+    "incremental": true,
+    "skipLibCheck": true
+  }
+}
