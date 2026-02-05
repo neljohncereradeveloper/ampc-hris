@@ -7,4 +7,12 @@ export const MANAGEMENT_201_TOKENS = {
   CITIZENSHIP: 'CitizenshipRepository',
   /** Civil Status Repository */
   CIVIL_STATUS: 'CivilStatusRepository',
+  /** Employment Type Repository */
+  EMPLOYMENT_TYPE: 'EmploymentTypeRepository',
+  /** Employment Status Repository */
+  EMPLOYMENT_STATUS: 'EmploymentStatusRepository',
+  /** Province Repository */
+  PROVINCE: 'ProvinceRepository',
+  /** Religion Repository */
+  RELIGION: 'ReligionRepository',
 } as const;

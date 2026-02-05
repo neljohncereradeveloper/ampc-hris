@@ -2,4 +2,8 @@ export * from './barangay.entity';
 export * from './city.entity';
 export * from './citizenship.entity';
 export * from './civil-status.entity';
+export * from './employment-type.entity';
+export * from './employment-status.entity';
+export * from './province.entity';
+export * from './religion.entity';
 export * from './management-201.entities';

@@ -41,6 +41,11 @@ export const PERMISSION_RESOURCES = {
   CITIES: 'cities',
   CITIZENSHIPS: 'citizenships',
   CIVIL_STATUSES: 'civil-statuses',
+  EMPLOYMENT_TYPES: 'employment-types',
+  EMPLOYMENT_STATUSES: 'employment-statuses',
+  PROVINCES: 'provinces',
+  RELIGIONS: 'religions',
+  BRANCHES: 'branches',
 } as const;
 
 /**
@@ -283,6 +288,161 @@ export const PERMISSIONS = {
     ),
     PAGINATED_LIST: buildPermissionName(
       PERMISSION_RESOURCES.CIVIL_STATUSES,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Employment Type permissions (201-management)
+  EMPLOYMENT_TYPES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Employment Status permissions (201-management)
+  EMPLOYMENT_STATUSES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Province permissions (201-management)
+  PROVINCES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.PROVINCES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.PROVINCES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.PROVINCES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.PROVINCES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.PROVINCES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.PROVINCES,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.PROVINCES,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Religion permissions (201-management)
+  RELIGIONS: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.RELIGIONS,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.RELIGIONS,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.RELIGIONS,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.RELIGIONS,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.RELIGIONS,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.RELIGIONS,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.RELIGIONS,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Branch permissions (core - shared across features)
+  BRANCHES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.BRANCHES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.BRANCHES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.BRANCHES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.BRANCHES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.BRANCHES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.BRANCHES,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.BRANCHES,
       PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },

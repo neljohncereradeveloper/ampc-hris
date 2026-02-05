@@ -2,3 +2,7 @@ export * from './barangay-business.exception';
 export * from './city-business.exception';
 export * from './citizenship-business.exception';
 export * from './civil-status-business.exception';
+export * from './employment-type-business.exception';
+export * from './employment-status-business.exception';
+export * from './province-business.exception';
+export * from './religion-business.exception';

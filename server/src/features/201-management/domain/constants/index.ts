@@ -4,3 +4,7 @@ export * from './barangay.constants';
 export * from './city.constants';
 export * from './citizenship.constants';
 export * from './civil-status.constants';
+export * from './employment-type.constants';
+export * from './employment-status.constants';
+export * from './province.constants';
+export * from './religion.constants';

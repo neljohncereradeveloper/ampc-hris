@@ -3,4 +3,8 @@ export const MANAGEMENT_201_DATABASE_MODELS = {
   CITIES: 'cities',
   CITIZENSHIPS: 'citizenships',
   CIVIL_STATUSES: 'civil_statuses',
+  EMPLOYMENT_TYPES: 'employment_types',
+  EMPLOYMENT_STATUSES: 'employment_statuses',
+  PROVINCES: 'provinces',
+  RELIGIONS: 'religions',
 } as const;

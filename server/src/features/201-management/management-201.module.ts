@@ -5,6 +5,10 @@ import { BarangayRepositoryImpl } from './infrastructure/database/repositories/b
 import { CityRepositoryImpl } from './infrastructure/database/repositories/city.repository.impl';
 import { CitizenshipRepositoryImpl } from './infrastructure/database/repositories/citizenship.repository.impl';
 import { CivilStatusRepositoryImpl } from './infrastructure/database/repositories/civil-status.repository.impl';
+import { EmploymentTypeRepositoryImpl } from './infrastructure/database/repositories/employment-type.repository.impl';
+import { EmploymentStatusRepositoryImpl } from './infrastructure/database/repositories/employment-status.repository.impl';
+import { ProvinceRepositoryImpl } from './infrastructure/database/repositories/province.repository.impl';
+import { ReligionRepositoryImpl } from './infrastructure/database/repositories/religion.repository.impl';
 import {
   CreateBarangayUseCase,
   UpdateBarangayUseCase,
@@ -38,10 +42,46 @@ import {
   ComboboxCivilStatusUseCase,
 } from './application/use-cases/civil-status';
 import {
+  CreateEmploymentTypeUseCase,
+  UpdateEmploymentTypeUseCase,
+  ArchiveEmploymentTypeUseCase,
+  RestoreEmploymentTypeUseCase,
+  GetPaginatedEmploymentTypeUseCase,
+  ComboboxEmploymentTypeUseCase,
+} from './application/use-cases/employment-type';
+import {
+  CreateEmploymentStatusUseCase,
+  UpdateEmploymentStatusUseCase,
+  ArchiveEmploymentStatusUseCase,
+  RestoreEmploymentStatusUseCase,
+  GetPaginatedEmploymentStatusUseCase,
+  ComboboxEmploymentStatusUseCase,
+} from './application/use-cases/employment-status';
+import {
+  CreateProvinceUseCase,
+  UpdateProvinceUseCase,
+  ArchiveProvinceUseCase,
+  RestoreProvinceUseCase,
+  GetPaginatedProvinceUseCase,
+  ComboboxProvinceUseCase,
+} from './application/use-cases/province';
+import {
+  CreateReligionUseCase,
+  UpdateReligionUseCase,
+  ArchiveReligionUseCase,
+  RestoreReligionUseCase,
+  GetPaginatedReligionUseCase,
+  ComboboxReligionUseCase,
+} from './application/use-cases/religion';
+import {
   BarangayController,
   CityController,
   CitizenshipController,
   CivilStatusController,
+  EmploymentTypeController,
+  EmploymentStatusController,
+  ProvinceController,
+  ReligionController,
 } from './presentation/controllers';
 import { TransactionAdapter } from '@/core/infrastructure/database/adapters/transaction-helper.adapter';
 import { TOKENS_CORE } from '@/core/domain/constants';
@@ -54,6 +94,10 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     CityController,
     CitizenshipController,
     CivilStatusController,
+    EmploymentTypeController,
+    EmploymentStatusController,
+    ProvinceController,
+    ReligionController,
   ],
   providers: [
     // Repository implementation
@@ -72,6 +116,22 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     {
       provide: MANAGEMENT_201_TOKENS.CIVIL_STATUS,
       useClass: CivilStatusRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.EMPLOYMENT_TYPE,
+      useClass: EmploymentTypeRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.EMPLOYMENT_STATUS,
+      useClass: EmploymentStatusRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.PROVINCE,
+      useClass: ProvinceRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.RELIGION,
+      useClass: ReligionRepositoryImpl,
     },
     {
       provide: TOKENS_CORE.TRANSACTIONPORT,
@@ -110,6 +170,34 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     RestoreCivilStatusUseCase,
     GetPaginatedCivilStatusUseCase,
     ComboboxCivilStatusUseCase,
+    // Employment type use cases (no get-by-id)
+    CreateEmploymentTypeUseCase,
+    UpdateEmploymentTypeUseCase,
+    ArchiveEmploymentTypeUseCase,
+    RestoreEmploymentTypeUseCase,
+    GetPaginatedEmploymentTypeUseCase,
+    ComboboxEmploymentTypeUseCase,
+    // Employment status use cases (no get-by-id)
+    CreateEmploymentStatusUseCase,
+    UpdateEmploymentStatusUseCase,
+    ArchiveEmploymentStatusUseCase,
+    RestoreEmploymentStatusUseCase,
+    GetPaginatedEmploymentStatusUseCase,
+    ComboboxEmploymentStatusUseCase,
+    // Province use cases (no get-by-id)
+    CreateProvinceUseCase,
+    UpdateProvinceUseCase,
+    ArchiveProvinceUseCase,
+    RestoreProvinceUseCase,
+    GetPaginatedProvinceUseCase,
+    ComboboxProvinceUseCase,
+    // Religion use cases (no get-by-id)
+    CreateReligionUseCase,
+    UpdateReligionUseCase,
+    ArchiveReligionUseCase,
+    RestoreReligionUseCase,
+    GetPaginatedReligionUseCase,
+    ComboboxReligionUseCase,
   ],
   exports: [
     // Barangay use cases
@@ -140,6 +228,34 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     RestoreCivilStatusUseCase,
     GetPaginatedCivilStatusUseCase,
     ComboboxCivilStatusUseCase,
+    // Employment type use cases (no get-by-id)
+    CreateEmploymentTypeUseCase,
+    UpdateEmploymentTypeUseCase,
+    ArchiveEmploymentTypeUseCase,
+    RestoreEmploymentTypeUseCase,
+    GetPaginatedEmploymentTypeUseCase,
+    ComboboxEmploymentTypeUseCase,
+    // Employment status use cases (no get-by-id)
+    CreateEmploymentStatusUseCase,
+    UpdateEmploymentStatusUseCase,
+    ArchiveEmploymentStatusUseCase,
+    RestoreEmploymentStatusUseCase,
+    GetPaginatedEmploymentStatusUseCase,
+    ComboboxEmploymentStatusUseCase,
+    // Province use cases (no get-by-id)
+    CreateProvinceUseCase,
+    UpdateProvinceUseCase,
+    ArchiveProvinceUseCase,
+    RestoreProvinceUseCase,
+    GetPaginatedProvinceUseCase,
+    ComboboxProvinceUseCase,
+    // Religion use cases (no get-by-id)
+    CreateReligionUseCase,
+    UpdateReligionUseCase,
+    ArchiveReligionUseCase,
+    RestoreReligionUseCase,
+    GetPaginatedReligionUseCase,
+    ComboboxReligionUseCase,
   ],
 })
 export class Management201Module { }

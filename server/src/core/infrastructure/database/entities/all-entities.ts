@@ -10,9 +10,11 @@ import { userManagementEntities } from '@/features/user-management/infrastructur
 import { rbacEntities } from '@/features/rbac/infrastructure/database/entities/rbac.entities';
 import { holidayManagementEntities } from '@/features/holiday-management/infrastructure/database/entities/holiday-management.entities';
 import { management201Entities } from '@/features/201-management/infrastructure/database/entities/management-201.entities';
+import { sharedDomainEntities } from '@/features/shared-domain/infrastructure/database/entities/shared-domain.entities';
 
 // Re-export individual entities for convenience
 export * from './activity-log.entity';
+export * from '@/features/shared-domain/infrastructure/database/entities/branch.entity';
 export * from '@/features/user-management/infrastructure/database/entities/user.entity';
 export * from '@/features/rbac/infrastructure/database/entities/role.entity';
 export * from '@/features/rbac/infrastructure/database/entities/permission.entity';
@@ -32,6 +34,7 @@ export * from '@/features/201-management/infrastructure/database/entities/civil-
  */
 export const allEntities = [
   ...coreEntities,
+  ...sharedDomainEntities,
   ...userManagementEntities,
   ...rbacEntities,
   ...holidayManagementEntities,

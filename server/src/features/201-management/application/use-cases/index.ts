@@ -2,3 +2,7 @@ export * from './barangay';
 export * from './city';
 export * from './citizenship';
 export * from './civil-status';
+export * from './employment-type';
+export * from './employment-status';
+export * from './province';
+export * from './religion';

@@ -2,3 +2,7 @@ export * from './barangay.repository.impl';
 export * from './city.repository.impl';
 export * from './citizenship.repository.impl';
 export * from './civil-status.repository.impl';
+export * from './employment-type.repository.impl';
+export * from './employment-status.repository.impl';
+export * from './province.repository.impl';
+export * from './religion.repository.impl';

@@ -2,3 +2,7 @@ export * from './barangay.controller';
 export * from './city.controller';
 export * from './citizenship.controller';
 export * from './civil-status.controller';
+export * from './employment-type.controller';
+export * from './employment-status.controller';
+export * from './province.controller';
+export * from './religion.controller';
