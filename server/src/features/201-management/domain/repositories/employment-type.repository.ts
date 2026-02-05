@@ -15,6 +15,8 @@ export interface EmploymentTypeRepository<Context = unknown> {
   ): Promise<boolean>;
   /** Find an employment type by ID. */
   findById(id: number, context: Context): Promise<EmploymentType | null>;
+  /** Find an employment type by description. */
+  findByDescription(description: string, context: Context): Promise<EmploymentType | null>;
   /** Find paginated list of employment types. */
   findPaginatedList(
     term: string,

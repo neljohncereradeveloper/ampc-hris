@@ -99,6 +99,24 @@ export class CitizenshipRepositoryImpl
     return this.entityToModel(result[0]);
   }
 
+  async findByDescription(
+    description: string,
+    manager: EntityManager,
+  ): Promise<Citizenship | null> {
+    const query = `
+      SELECT *
+      FROM ${MANAGEMENT_201_DATABASE_MODELS.CITIZENSHIPS}
+      WHERE desc1 = $1 AND deleted_at IS NULL
+    `;
+
+    const result = await manager.query(query, [description]);
+    if (result.length === 0) {
+      return null;
+    }
+
+    return this.entityToModel(result[0]);
+  }
+
   async findPaginatedList(
     term: string,
     page: number,

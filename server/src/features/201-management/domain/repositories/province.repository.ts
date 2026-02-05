@@ -12,6 +12,8 @@ export interface ProvinceRepository<Context = unknown> {
   ): Promise<boolean>;
   /** Find a province by ID. */
   findById(id: number, context: Context): Promise<Province | null>;
+  /** Find a province by description. */
+  findByDescription(description: string, context: Context): Promise<Province | null>;
   /** Find paginated list of provinces. */
   findPaginatedList(
     term: string,

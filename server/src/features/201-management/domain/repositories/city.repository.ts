@@ -8,6 +8,8 @@ export interface CityRepository<Context = unknown> {
   update(id: number, dto: Partial<City>, context: Context): Promise<boolean>;
   /** Find a city by ID. */
   findById(id: number, context: Context): Promise<City | null>;
+  /** Find a city by description. */
+  findByDescription(description: string, context: Context): Promise<City | null>;
   /** Find paginated list of cities. */
   findPaginatedList(
     term: string,

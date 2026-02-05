@@ -12,6 +12,8 @@ export interface CivilStatusRepository<Context = unknown> {
   ): Promise<boolean>;
   /** Find a civil status by ID. */
   findById(id: number, context: Context): Promise<CivilStatus | null>;
+  /** Find a civil status by description. */
+  findByDescription(description: string, context: Context): Promise<CivilStatus | null>;
   /** Find paginated list of civil statuses. */
   findPaginatedList(
     term: string,

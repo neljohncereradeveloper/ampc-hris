@@ -256,6 +256,15 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     RestoreReligionUseCase,
     GetPaginatedReligionUseCase,
     ComboboxReligionUseCase,
+    // Export repository tokens for use in other modules
+    MANAGEMENT_201_TOKENS.BARANGAY,
+    MANAGEMENT_201_TOKENS.CITY,
+    MANAGEMENT_201_TOKENS.CITIZENSHIP,
+    MANAGEMENT_201_TOKENS.CIVIL_STATUS,
+    MANAGEMENT_201_TOKENS.EMPLOYMENT_TYPE,
+    MANAGEMENT_201_TOKENS.EMPLOYMENT_STATUS,
+    MANAGEMENT_201_TOKENS.PROVINCE,
+    MANAGEMENT_201_TOKENS.RELIGION,
   ],
 })
 export class Management201Module { }

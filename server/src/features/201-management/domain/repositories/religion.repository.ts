@@ -12,6 +12,8 @@ export interface ReligionRepository<Context = unknown> {
   ): Promise<boolean>;
   /** Find a religion by ID. */
   findById(id: number, context: Context): Promise<Religion | null>;
+  /** Find a religion by description. */
+  findByDescription(description: string, context: Context): Promise<Religion | null>;
   /** Find paginated list of religions. */
   findPaginatedList(
     term: string,

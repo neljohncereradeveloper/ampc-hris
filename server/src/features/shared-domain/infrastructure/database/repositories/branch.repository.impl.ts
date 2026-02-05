@@ -92,6 +92,21 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
     return this.entityToModel(result[0]);
   }
 
+  async findByDescription(description: string, manager: EntityManager): Promise<Branch | null> {
+    const query = `
+      SELECT *
+      FROM ${SHARED_DOMAIN_DATABASE_MODELS.BRANCHES}
+      WHERE desc1 = $1 AND deleted_at IS NULL
+    `;
+
+    const result = await manager.query(query, [description]);
+    if (result.length === 0) {
+      return null;
+    }
+
+    return this.entityToModel(result[0]);
+  }
+
   async findPaginatedList(
     term: string,
     page: number,

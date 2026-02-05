@@ -46,6 +46,9 @@ export const PERMISSION_RESOURCES = {
   PROVINCES: 'provinces',
   RELIGIONS: 'religions',
   BRANCHES: 'branches',
+  DEPARTMENTS: 'departments',
+  JOBTITLES: 'jobtitles',
+  EMPLOYEES: 'employees',
 } as const;
 
 /**
@@ -443,6 +446,95 @@ export const PERMISSIONS = {
     ),
     PAGINATED_LIST: buildPermissionName(
       PERMISSION_RESOURCES.BRANCHES,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Department permissions (shared-domain)
+  DEPARTMENTS: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.DEPARTMENTS,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.DEPARTMENTS,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.DEPARTMENTS,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.DEPARTMENTS,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.DEPARTMENTS,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.DEPARTMENTS,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.DEPARTMENTS,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Jobtitle permissions (shared-domain)
+  JOBTITLES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.JOBTITLES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.JOBTITLES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.JOBTITLES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.JOBTITLES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.JOBTITLES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.JOBTITLES,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.JOBTITLES,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Employee permissions (shared-domain)
+  EMPLOYEES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYEES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYEES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYEES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYEES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYEES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYEES,
       PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },

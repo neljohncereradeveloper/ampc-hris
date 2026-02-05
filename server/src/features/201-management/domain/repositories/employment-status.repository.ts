@@ -15,6 +15,8 @@ export interface EmploymentStatusRepository<Context = unknown> {
   ): Promise<boolean>;
   /** Find an employment status by ID. */
   findById(id: number, context: Context): Promise<EmploymentStatus | null>;
+  /** Find an employment status by description. */
+  findByDescription(description: string, context: Context): Promise<EmploymentStatus | null>;
   /** Find paginated list of employment statuses. */
   findPaginatedList(
     term: string,

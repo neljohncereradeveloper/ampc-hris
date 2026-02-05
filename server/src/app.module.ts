@@ -19,7 +19,6 @@ import {
   PermissionsGuard,
   RolesGuard,
 } from '@/features/auth/infrastructure/guards';
-import { HolidayManagementModule } from './features/holiday-management/holiday-management.module';
 import { Management201Module } from './features/201-management/management-201.module';
 import { UserManagementModule } from './features/user-management/user-management.module';
 import { RbacModule } from './features/rbac/rbac.module';
@@ -41,7 +40,6 @@ import { SharedDomainModule } from './features/shared-domain/shared-domain.modul
     PostgresqlDatabaseModule,
     AuthModule,
     HealthCheckModule,
-    HolidayManagementModule,
     Management201Module,
     UserManagementModule,
     RbacModule,

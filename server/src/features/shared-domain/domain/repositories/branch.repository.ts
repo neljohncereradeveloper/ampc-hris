@@ -12,6 +12,8 @@ export interface BranchRepository<Context = unknown> {
   ): Promise<boolean>;
   /** Find a branch by ID. */
   findById(id: number, context: Context): Promise<Branch | null>;
+  /** Find a branch by description. */
+  findByDescription(description: string, context: Context): Promise<Branch | null>;
   /** Find paginated list of branches. */
   findPaginatedList(
     term: string,
