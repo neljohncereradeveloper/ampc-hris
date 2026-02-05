@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { MANAGEMENT_201_DATABASE_MODELS } from '@/features/201-management/domain/constants';
+import { EmployeeEntity } from '@/features/shared-domain/infrastructure/database/entities/employee.entity';
 
 @Entity(MANAGEMENT_201_DATABASE_MODELS.PROVINCES)
 export class ProvinceEntity {
@@ -56,4 +58,19 @@ export class ProvinceEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  /**
+   * RELATIONS
+   */
+  /**
+   * One province belongs to many employees as home_address_province
+   */
+  @OneToMany(() => EmployeeEntity, (employee) => employee.home_address_province)
+  employees_home_address: EmployeeEntity[];
+
+  /**
+   * One province belongs to many employees as present_address_province
+   */
+  @OneToMany(() => EmployeeEntity, (employee) => employee.present_address_province)
+  employees_present_address: EmployeeEntity[];
 }

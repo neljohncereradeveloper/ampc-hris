@@ -15,4 +15,6 @@ export const MANAGEMENT_201_TOKENS = {
   PROVINCE: 'ProvinceRepository',
   /** Religion Repository */
   RELIGION: 'ReligionRepository',
+  /** Reference Repository */
+  REFERENCE: 'ReferenceRepository',
 } as const;

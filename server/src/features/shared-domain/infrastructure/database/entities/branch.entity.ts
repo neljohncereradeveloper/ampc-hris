@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { SHARED_DOMAIN_DATABASE_MODELS } from '@/features/shared-domain/domain/constants';
+import { EmployeeEntity } from './employee.entity';
 
 @Entity(SHARED_DOMAIN_DATABASE_MODELS.BRANCHES)
 export class BranchEntity {
@@ -56,4 +58,13 @@ export class BranchEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  /**
+   * RELATIONS
+   */
+  /**
+   * One branch belongs to many employees as branch
+   */
+  @OneToMany(() => EmployeeEntity, (employee) => employee.branch)
+  employees: EmployeeEntity[];
 }

@@ -6,6 +6,9 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Index,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { SHARED_DOMAIN_DATABASE_MODELS } from '@/features/shared-domain/domain/constants';
 import {
@@ -14,6 +17,18 @@ import {
   LaborClassificationEnum,
   LaborClassificationStatusEnum,
 } from '@/features/shared-domain/domain/enum';
+import { BranchEntity } from './branch.entity';
+import { DepartmentEntity } from './department.entity';
+import { JobtitleEntity } from './jobtitle.entity';
+import { EmploymentTypeEntity } from '@/features/201-management/infrastructure/database/entities/employment-type.entity';
+import { EmploymentStatusEntity } from '@/features/201-management/infrastructure/database/entities/employment-status.entity';
+import { ReligionEntity } from '@/features/201-management/infrastructure/database/entities/religion.entity';
+import { CivilStatusEntity } from '@/features/201-management/infrastructure/database/entities/civil-status.entity';
+import { CitizenshipEntity } from '@/features/201-management/infrastructure/database/entities/citizenship.entity';
+import { BarangayEntity } from '@/features/201-management/infrastructure/database/entities/barangay.entity';
+import { CityEntity } from '@/features/201-management/infrastructure/database/entities/city.entity';
+import { ProvinceEntity } from '@/features/201-management/infrastructure/database/entities/province.entity';
+import { ReferenceEntity } from '@/features/201-management/infrastructure/database/entities/reference.entity';
 
 @Entity(SHARED_DOMAIN_DATABASE_MODELS.EMPLOYEES)
 export class EmployeeEntity {
@@ -323,4 +338,67 @@ export class EmployeeEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  /** Relationships */
+  @ManyToOne(() => JobtitleEntity)
+  @JoinColumn({ name: 'job_title_id' })
+  job_title: JobtitleEntity;
+
+  @ManyToOne(() => EmploymentTypeEntity)
+  @JoinColumn({ name: 'employment_type_id' })
+  employment_type: EmploymentTypeEntity;
+
+  @ManyToOne(() => EmploymentStatusEntity)
+  @JoinColumn({ name: 'employment_status_id' })
+  employment_status: EmploymentStatusEntity;
+
+  @ManyToOne(() => BranchEntity)
+  @JoinColumn({ name: 'branch_id' })
+  branch: BranchEntity;
+
+  @ManyToOne(() => DepartmentEntity)
+  @JoinColumn({ name: 'department_id' })
+  department: DepartmentEntity;
+
+  @ManyToOne(() => ReligionEntity)
+  @JoinColumn({ name: 'religion_id' })
+  religion: ReligionEntity;
+
+  @ManyToOne(() => CivilStatusEntity)
+  @JoinColumn({ name: 'civil_status_id' })
+  civil_status: CivilStatusEntity;
+
+  @ManyToOne(() => CitizenshipEntity)
+  @JoinColumn({ name: 'citizen_ship_id' })
+  citizen_ship: CitizenshipEntity;
+
+  @ManyToOne(() => BarangayEntity)
+  @JoinColumn({ name: 'home_address_barangay_id' })
+  home_address_barangay: BarangayEntity;
+
+  @ManyToOne(() => CityEntity)
+  @JoinColumn({ name: 'home_address_city_id' })
+  home_address_city: CityEntity;
+
+  @ManyToOne(() => ProvinceEntity)
+  @JoinColumn({ name: 'home_address_province_id' })
+  home_address_province: ProvinceEntity;
+
+  @ManyToOne(() => BarangayEntity, { nullable: true })
+  @JoinColumn({ name: 'present_address_barangay_id' })
+  present_address_barangay: BarangayEntity | null;
+
+  @ManyToOne(() => CityEntity, { nullable: true })
+  @JoinColumn({ name: 'present_address_city_id' })
+  present_address_city: CityEntity | null;
+
+  @ManyToOne(() => ProvinceEntity, { nullable: true })
+  @JoinColumn({ name: 'present_address_province_id' })
+  present_address_province: ProvinceEntity | null;
+
+  /**
+   * One employee has many references
+   */
+  @OneToMany(() => ReferenceEntity, (reference) => reference.employee)
+  references: ReferenceEntity[];
 }

@@ -6,3 +6,4 @@ export * from './employment-type.repository.impl';
 export * from './employment-status.repository.impl';
 export * from './province.repository.impl';
 export * from './religion.repository.impl';
+export * from './reference.repository.impl';

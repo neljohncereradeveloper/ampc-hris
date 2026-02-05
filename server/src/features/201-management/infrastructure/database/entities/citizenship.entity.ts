@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { MANAGEMENT_201_DATABASE_MODELS } from '@/features/201-management/domain/constants';
+import { EmployeeEntity } from '@/features/shared-domain/infrastructure/database/entities/employee.entity';
 
 @Entity(MANAGEMENT_201_DATABASE_MODELS.CITIZENSHIPS)
 export class CitizenshipEntity {
@@ -56,4 +58,13 @@ export class CitizenshipEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  /**
+   * RELATIONS
+   */
+  /**
+   * One citizenship belongs to many employees as citizen_ship
+   */
+  @OneToMany(() => EmployeeEntity, (employee) => employee.citizen_ship)
+  employees: EmployeeEntity[];
 }

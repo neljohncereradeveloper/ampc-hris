@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { MANAGEMENT_201_DATABASE_MODELS } from '@/features/201-management/domain/constants';
+import { EmployeeEntity } from '@/features/shared-domain/infrastructure/database/entities/employee.entity';
 
 @Entity(MANAGEMENT_201_DATABASE_MODELS.RELIGIONS)
 export class ReligionEntity {
@@ -56,4 +58,13 @@ export class ReligionEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  /**
+   * RELATIONS
+   */
+  /**
+   * One religion belongs to many employees as religion
+   */
+  @OneToMany(() => EmployeeEntity, (employee) => employee.religion)
+  employees: EmployeeEntity[];
 }

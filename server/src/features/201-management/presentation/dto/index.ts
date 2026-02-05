@@ -6,3 +6,4 @@ export * from './employment-type';
 export * from './employment-status';
 export * from './province';
 export * from './religion';
+export * from './reference';

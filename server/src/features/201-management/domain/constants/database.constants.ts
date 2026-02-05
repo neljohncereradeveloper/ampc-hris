@@ -7,4 +7,5 @@ export const MANAGEMENT_201_DATABASE_MODELS = {
   EMPLOYMENT_STATUSES: 'employment_statuses',
   PROVINCES: 'provinces',
   RELIGIONS: 'religions',
+  REFERENCES: 'references',
 } as const;

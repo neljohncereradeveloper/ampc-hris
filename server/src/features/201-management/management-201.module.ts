@@ -9,6 +9,7 @@ import { EmploymentTypeRepositoryImpl } from './infrastructure/database/reposito
 import { EmploymentStatusRepositoryImpl } from './infrastructure/database/repositories/employment-status.repository.impl';
 import { ProvinceRepositoryImpl } from './infrastructure/database/repositories/province.repository.impl';
 import { ReligionRepositoryImpl } from './infrastructure/database/repositories/religion.repository.impl';
+import { ReferenceRepositoryImpl } from './infrastructure/database/repositories/reference.repository.impl';
 import {
   CreateBarangayUseCase,
   UpdateBarangayUseCase,
@@ -74,6 +75,13 @@ import {
   ComboboxReligionUseCase,
 } from './application/use-cases/religion';
 import {
+  CreateReferenceUseCase,
+  UpdateReferenceUseCase,
+  ArchiveReferenceUseCase,
+  RestoreReferenceUseCase,
+  GetPaginatedReferenceUseCase,
+} from './application/use-cases/reference';
+import {
   BarangayController,
   CityController,
   CitizenshipController,
@@ -82,6 +90,7 @@ import {
   EmploymentStatusController,
   ProvinceController,
   ReligionController,
+  ReferenceController,
 } from './presentation/controllers';
 import { TransactionAdapter } from '@/core/infrastructure/database/adapters/transaction-helper.adapter';
 import { TOKENS_CORE } from '@/core/domain/constants';
@@ -98,6 +107,7 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     EmploymentStatusController,
     ProvinceController,
     ReligionController,
+    ReferenceController,
   ],
   providers: [
     // Repository implementation
@@ -132,6 +142,10 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     {
       provide: MANAGEMENT_201_TOKENS.RELIGION,
       useClass: ReligionRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.REFERENCE,
+      useClass: ReferenceRepositoryImpl,
     },
     {
       provide: TOKENS_CORE.TRANSACTIONPORT,
@@ -198,6 +212,12 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     RestoreReligionUseCase,
     GetPaginatedReligionUseCase,
     ComboboxReligionUseCase,
+    // Reference use cases (no combobox, no get-by-id)
+    CreateReferenceUseCase,
+    UpdateReferenceUseCase,
+    ArchiveReferenceUseCase,
+    RestoreReferenceUseCase,
+    GetPaginatedReferenceUseCase,
   ],
   exports: [
     // Barangay use cases
@@ -256,6 +276,12 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     RestoreReligionUseCase,
     GetPaginatedReligionUseCase,
     ComboboxReligionUseCase,
+    // Reference use cases (no combobox, no get-by-id)
+    CreateReferenceUseCase,
+    UpdateReferenceUseCase,
+    ArchiveReferenceUseCase,
+    RestoreReferenceUseCase,
+    GetPaginatedReferenceUseCase,
     // Export repository tokens for use in other modules
     MANAGEMENT_201_TOKENS.BARANGAY,
     MANAGEMENT_201_TOKENS.CITY,
@@ -265,6 +291,7 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     MANAGEMENT_201_TOKENS.EMPLOYMENT_STATUS,
     MANAGEMENT_201_TOKENS.PROVINCE,
     MANAGEMENT_201_TOKENS.RELIGION,
+    MANAGEMENT_201_TOKENS.REFERENCE,
   ],
 })
 export class Management201Module { }
