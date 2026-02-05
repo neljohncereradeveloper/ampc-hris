@@ -15,6 +15,10 @@ import { TrainingRepositoryImpl } from './infrastructure/database/repositories/t
 import { WorkExperienceCompanyRepositoryImpl } from './infrastructure/database/repositories/work-experience-company.repository.impl';
 import { WorkExperienceJobTitleRepositoryImpl } from './infrastructure/database/repositories/work-experience-jobtitle.repository.impl';
 import { WorkExperienceRepositoryImpl } from './infrastructure/database/repositories/work-experience.repository.impl';
+import { EducationCourseLevelRepositoryImpl } from './infrastructure/database/repositories/education-course-level.repository.impl';
+import { EducationCourseRepositoryImpl } from './infrastructure/database/repositories/education-course.repository.impl';
+import { EducationLevelRepositoryImpl } from './infrastructure/database/repositories/education-level.repository.impl';
+import { EducationSchoolRepositoryImpl } from './infrastructure/database/repositories/education-school.repository.impl';
 import {
   CreateBarangayUseCase,
   UpdateBarangayUseCase,
@@ -125,6 +129,38 @@ import {
   GetPaginatedWorkExperienceUseCase,
 } from './application/use-cases/work-experience';
 import {
+  CreateEducationCourseLevelUseCase,
+  UpdateEducationCourseLevelUseCase,
+  ArchiveEducationCourseLevelUseCase,
+  RestoreEducationCourseLevelUseCase,
+  GetPaginatedEducationCourseLevelUseCase,
+  ComboboxEducationCourseLevelUseCase,
+} from './application/use-cases/education-course-level';
+import {
+  CreateEducationCourseUseCase,
+  UpdateEducationCourseUseCase,
+  ArchiveEducationCourseUseCase,
+  RestoreEducationCourseUseCase,
+  GetPaginatedEducationCourseUseCase,
+  ComboboxEducationCourseUseCase,
+} from './application/use-cases/education-course';
+import {
+  CreateEducationLevelUseCase,
+  UpdateEducationLevelUseCase,
+  ArchiveEducationLevelUseCase,
+  RestoreEducationLevelUseCase,
+  GetPaginatedEducationLevelUseCase,
+  ComboboxEducationLevelUseCase,
+} from './application/use-cases/education-level';
+import {
+  CreateEducationSchoolUseCase,
+  UpdateEducationSchoolUseCase,
+  ArchiveEducationSchoolUseCase,
+  RestoreEducationSchoolUseCase,
+  GetPaginatedEducationSchoolUseCase,
+  ComboboxEducationSchoolUseCase,
+} from './application/use-cases/education-school';
+import {
   BarangayController,
   CityController,
   CitizenshipController,
@@ -138,6 +174,10 @@ import {
   TrainingController,
   WorkExperienceCompanyController,
   WorkExperienceJobTitleController,
+  EducationCourseLevelController,
+  EducationCourseController,
+  EducationLevelController,
+  EducationSchoolController,
 } from './presentation/controllers';
 import { TransactionAdapter } from '@/core/infrastructure/database/adapters/transaction-helper.adapter';
 import { TOKENS_CORE } from '@/core/domain/constants';
@@ -219,6 +259,22 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     {
       provide: MANAGEMENT_201_TOKENS.WORK_EXPERIENCE,
       useClass: WorkExperienceRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.EDUCATION_COURSE_LEVEL,
+      useClass: EducationCourseLevelRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.EDUCATION_COURSE,
+      useClass: EducationCourseRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.EDUCATION_LEVEL,
+      useClass: EducationLevelRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.EDUCATION_SCHOOL,
+      useClass: EducationSchoolRepositoryImpl,
     },
     {
       provide: TOKENS_CORE.TRANSACTIONPORT,
@@ -318,6 +374,34 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     RestoreWorkExperienceJobTitleUseCase,
     GetPaginatedWorkExperienceJobTitleUseCase,
     ComboboxWorkExperienceJobTitleUseCase,
+    // Education course level use cases (with combobox, no get-by-id)
+    CreateEducationCourseLevelUseCase,
+    UpdateEducationCourseLevelUseCase,
+    ArchiveEducationCourseLevelUseCase,
+    RestoreEducationCourseLevelUseCase,
+    GetPaginatedEducationCourseLevelUseCase,
+    ComboboxEducationCourseLevelUseCase,
+    // Education course use cases (with combobox, no get-by-id)
+    CreateEducationCourseUseCase,
+    UpdateEducationCourseUseCase,
+    ArchiveEducationCourseUseCase,
+    RestoreEducationCourseUseCase,
+    GetPaginatedEducationCourseUseCase,
+    ComboboxEducationCourseUseCase,
+    // Education level use cases (with combobox, no get-by-id)
+    CreateEducationLevelUseCase,
+    UpdateEducationLevelUseCase,
+    ArchiveEducationLevelUseCase,
+    RestoreEducationLevelUseCase,
+    GetPaginatedEducationLevelUseCase,
+    ComboboxEducationLevelUseCase,
+    // Education school use cases (with combobox, no get-by-id)
+    CreateEducationSchoolUseCase,
+    UpdateEducationSchoolUseCase,
+    ArchiveEducationSchoolUseCase,
+    RestoreEducationSchoolUseCase,
+    GetPaginatedEducationSchoolUseCase,
+    ComboboxEducationSchoolUseCase,
   ],
   exports: [
     // Barangay use cases
@@ -415,6 +499,34 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     ArchiveWorkExperienceUseCase,
     RestoreWorkExperienceUseCase,
     GetPaginatedWorkExperienceUseCase,
+    // Education course level use cases (with combobox, no get-by-id)
+    CreateEducationCourseLevelUseCase,
+    UpdateEducationCourseLevelUseCase,
+    ArchiveEducationCourseLevelUseCase,
+    RestoreEducationCourseLevelUseCase,
+    GetPaginatedEducationCourseLevelUseCase,
+    ComboboxEducationCourseLevelUseCase,
+    // Education course use cases (with combobox, no get-by-id)
+    CreateEducationCourseUseCase,
+    UpdateEducationCourseUseCase,
+    ArchiveEducationCourseUseCase,
+    RestoreEducationCourseUseCase,
+    GetPaginatedEducationCourseUseCase,
+    ComboboxEducationCourseUseCase,
+    // Education level use cases (with combobox, no get-by-id)
+    CreateEducationLevelUseCase,
+    UpdateEducationLevelUseCase,
+    ArchiveEducationLevelUseCase,
+    RestoreEducationLevelUseCase,
+    GetPaginatedEducationLevelUseCase,
+    ComboboxEducationLevelUseCase,
+    // Education school use cases (with combobox, no get-by-id)
+    CreateEducationSchoolUseCase,
+    UpdateEducationSchoolUseCase,
+    ArchiveEducationSchoolUseCase,
+    RestoreEducationSchoolUseCase,
+    GetPaginatedEducationSchoolUseCase,
+    ComboboxEducationSchoolUseCase,
     // Export repository tokens for use in other modules
     MANAGEMENT_201_TOKENS.BARANGAY,
     MANAGEMENT_201_TOKENS.CITY,
@@ -430,6 +542,10 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     MANAGEMENT_201_TOKENS.WORK_EXPERIENCE_COMPANY,
     MANAGEMENT_201_TOKENS.WORK_EXPERIENCE_JOBTITLE,
     MANAGEMENT_201_TOKENS.WORK_EXPERIENCE,
+    MANAGEMENT_201_TOKENS.EDUCATION_COURSE_LEVEL,
+    MANAGEMENT_201_TOKENS.EDUCATION_COURSE,
+    MANAGEMENT_201_TOKENS.EDUCATION_LEVEL,
+    MANAGEMENT_201_TOKENS.EDUCATION_SCHOOL,
   ],
 })
 export class Management201Module { }

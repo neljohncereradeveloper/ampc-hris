@@ -13,4 +13,8 @@ export const MANAGEMENT_201_DATABASE_MODELS = {
   WORK_EXPERIENCE_COMPANIES: 'work_experience_companies',
   WORK_EXPERIENCE_JOBTITLES: 'work_experience_jobtitles',
   WORK_EXPERIENCES: 'work_experiences',
+  EDUCATION_COURSE_LEVELS: 'education_course_levels',
+  EDUCATION_COURSES: 'education_courses',
+  EDUCATION_LEVELS: 'education_levels',
+  EDUCATION_SCHOOLS: 'education_schools',
 } as const;

@@ -12,3 +12,7 @@ export * from './training-business.exception';
 export * from './work-experience-company-business.exception';
 export * from './work-experience-jobtitle-business.exception';
 export * from './work-experience-business.exception';
+export * from './education-course-level-business.exception';
+export * from './education-course-business.exception';
+export * from './education-level-business.exception';
+export * from './education-school-business.exception';

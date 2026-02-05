@@ -11,3 +11,7 @@ export * from './training-certificate';
 export * from './work-experience-company';
 export * from './work-experience-jobtitle';
 export * from './work-experience';
+export * from './education-course-level';
+export * from './education-course';
+export * from './education-level';
+export * from './education-school';

@@ -27,4 +27,12 @@ export const MANAGEMENT_201_TOKENS = {
   WORK_EXPERIENCE_JOBTITLE: 'WorkExperienceJobTitleRepository',
   /** Work Experience Repository */
   WORK_EXPERIENCE: 'WorkExperienceRepository',
+  /** Education Course Level Repository */
+  EDUCATION_COURSE_LEVEL: 'EducationCourseLevelRepository',
+  /** Education Course Repository */
+  EDUCATION_COURSE: 'EducationCourseRepository',
+  /** Education Level Repository */
+  EDUCATION_LEVEL: 'EducationLevelRepository',
+  /** Education School Repository */
+  EDUCATION_SCHOOL: 'EducationSchoolRepository',
 } as const;

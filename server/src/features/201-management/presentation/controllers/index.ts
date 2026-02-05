@@ -12,3 +12,7 @@ export * from './training.controller';
 export * from './work-experience-company.controller';
 export * from './work-experience-jobtitle.controller';
 export * from './work-experience.controller';
+export * from './education-course-level.controller';
+export * from './education-course.controller';
+export * from './education-level.controller';
+export * from './education-school.controller';

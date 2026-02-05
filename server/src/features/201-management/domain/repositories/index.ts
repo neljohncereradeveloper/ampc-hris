@@ -12,3 +12,7 @@ export * from './training.repository';
 export * from './work-experience-company.repository';
 export * from './work-experience-jobtitle.repository';
 export * from './work-experience.repository';
+export * from './education-course-level.repository';
+export * from './education-course.repository';
+export * from './education-level.repository';
+export * from './education-school.repository';

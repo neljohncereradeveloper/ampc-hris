@@ -14,3 +14,7 @@ export * from './training.constants';
 export * from './work-experience-company.constants';
 export * from './work-experience-jobtitle.constants';
 export * from './work-experience.constants';
+export * from './education-course-level.constants';
+export * from './education-course.constants';
+export * from './education-level.constants';
+export * from './education-school.constants';

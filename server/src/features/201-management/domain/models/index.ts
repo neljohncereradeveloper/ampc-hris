@@ -12,3 +12,7 @@ export * from './training.model';
 export * from './work-experience-company.model';
 export * from './work-experience-jobtitle.model';
 export * from './work-experience.model';
+export * from './education-course-level.model';
+export * from './education-course.model';
+export * from './education-level.model';
+export * from './education-school.model';
