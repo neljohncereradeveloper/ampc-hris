@@ -22,6 +22,8 @@ export * from '@/features/rbac/infrastructure/database/entities/user-permission.
 export * from '@/features/holiday-management/infrastructure/database/entities/holiday.entity';
 export * from '@/features/201-management/infrastructure/database/entities/barangay.entity';
 export * from '@/features/201-management/infrastructure/database/entities/city.entity';
+export * from '@/features/201-management/infrastructure/database/entities/citizenship.entity';
+export * from '@/features/201-management/infrastructure/database/entities/civil-status.entity';
 
 /**
  * Array of all entities for TypeORM configuration

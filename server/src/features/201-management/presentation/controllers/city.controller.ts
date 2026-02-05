@@ -34,7 +34,6 @@ import {
   UpdateCityUseCase,
   ArchiveCityUseCase,
   RestoreCityUseCase,
-  GetCityByIdUseCase,
   GetPaginatedCityUseCase,
   ComboboxCityUseCase,
 } from '../../application/use-cases/city';
@@ -63,7 +62,6 @@ export class CityController {
     private readonly updateCityUseCase: UpdateCityUseCase,
     private readonly archiveCityUseCase: ArchiveCityUseCase,
     private readonly restoreCityUseCase: RestoreCityUseCase,
-    private readonly getCityByIdUseCase: GetCityByIdUseCase,
     private readonly getPaginatedCityUseCase: GetPaginatedCityUseCase,
     private readonly comboboxCityUseCase: ComboboxCityUseCase,
   ) { }
@@ -193,19 +191,5 @@ export class CityController {
   @ApiBearerAuth('JWT-auth')
   async getCombobox(): Promise<{ value: string; label: string }[]> {
     return this.comboboxCityUseCase.execute();
-  }
-
-  @Version('1')
-  @Get(':id')
-  @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
-  @RequirePermissions(PERMISSIONS.CITIES.READ)
-  @ApiOperation({ summary: 'Get city by ID' })
-  @ApiParam({ name: 'id', description: 'City ID', example: 1 })
-  @ApiResponse({ status: 200, description: 'City retrieved successfully' })
-  @ApiResponse({ status: 404, description: 'City not found' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiBearerAuth('JWT-auth')
-  async getById(@Param('id', ParseIntPipe) id: number): Promise<City> {
-    return this.getCityByIdUseCase.execute(id);
   }
 }

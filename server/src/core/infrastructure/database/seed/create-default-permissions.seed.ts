@@ -320,6 +320,92 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.PAGINATED_LIST,
         description: 'Get paginated list of cities',
       },
+      // Citizenship permissions (201-management)
+      {
+        name: PERMISSIONS.CITIZENSHIPS.CREATE,
+        resource: PERMISSION_RESOURCES.CITIZENSHIPS,
+        action: PERMISSION_ACTIONS.CREATE,
+        description: 'Create new citizenships',
+      },
+      {
+        name: PERMISSIONS.CITIZENSHIPS.READ,
+        resource: PERMISSION_RESOURCES.CITIZENSHIPS,
+        action: PERMISSION_ACTIONS.READ,
+        description: 'View citizenship details',
+      },
+      {
+        name: PERMISSIONS.CITIZENSHIPS.UPDATE,
+        resource: PERMISSION_RESOURCES.CITIZENSHIPS,
+        action: PERMISSION_ACTIONS.UPDATE,
+        description: 'Update citizenship information',
+      },
+      {
+        name: PERMISSIONS.CITIZENSHIPS.ARCHIVE,
+        resource: PERMISSION_RESOURCES.CITIZENSHIPS,
+        action: PERMISSION_ACTIONS.ARCHIVE,
+        description: 'Archive (soft delete) citizenships',
+      },
+      {
+        name: PERMISSIONS.CITIZENSHIPS.RESTORE,
+        resource: PERMISSION_RESOURCES.CITIZENSHIPS,
+        action: PERMISSION_ACTIONS.RESTORE,
+        description: 'Restore archived citizenships',
+      },
+      {
+        name: PERMISSIONS.CITIZENSHIPS.COMBOBOX,
+        resource: PERMISSION_RESOURCES.CITIZENSHIPS,
+        action: PERMISSION_ACTIONS.COMBOBOX,
+        description: 'Get citizenships list for dropdowns',
+      },
+      {
+        name: PERMISSIONS.CITIZENSHIPS.PAGINATED_LIST,
+        resource: PERMISSION_RESOURCES.CITIZENSHIPS,
+        action: PERMISSION_ACTIONS.PAGINATED_LIST,
+        description: 'Get paginated list of citizenships',
+      },
+      // Civil Status permissions (201-management)
+      {
+        name: PERMISSIONS.CIVIL_STATUSES.CREATE,
+        resource: PERMISSION_RESOURCES.CIVIL_STATUSES,
+        action: PERMISSION_ACTIONS.CREATE,
+        description: 'Create new civil statuses',
+      },
+      {
+        name: PERMISSIONS.CIVIL_STATUSES.READ,
+        resource: PERMISSION_RESOURCES.CIVIL_STATUSES,
+        action: PERMISSION_ACTIONS.READ,
+        description: 'View civil status details',
+      },
+      {
+        name: PERMISSIONS.CIVIL_STATUSES.UPDATE,
+        resource: PERMISSION_RESOURCES.CIVIL_STATUSES,
+        action: PERMISSION_ACTIONS.UPDATE,
+        description: 'Update civil status information',
+      },
+      {
+        name: PERMISSIONS.CIVIL_STATUSES.ARCHIVE,
+        resource: PERMISSION_RESOURCES.CIVIL_STATUSES,
+        action: PERMISSION_ACTIONS.ARCHIVE,
+        description: 'Archive (soft delete) civil statuses',
+      },
+      {
+        name: PERMISSIONS.CIVIL_STATUSES.RESTORE,
+        resource: PERMISSION_RESOURCES.CIVIL_STATUSES,
+        action: PERMISSION_ACTIONS.RESTORE,
+        description: 'Restore archived civil statuses',
+      },
+      {
+        name: PERMISSIONS.CIVIL_STATUSES.COMBOBOX,
+        resource: PERMISSION_RESOURCES.CIVIL_STATUSES,
+        action: PERMISSION_ACTIONS.COMBOBOX,
+        description: 'Get civil statuses list for dropdowns',
+      },
+      {
+        name: PERMISSIONS.CIVIL_STATUSES.PAGINATED_LIST,
+        resource: PERMISSION_RESOURCES.CIVIL_STATUSES,
+        action: PERMISSION_ACTIONS.PAGINATED_LIST,
+        description: 'Get paginated list of civil statuses',
+      },
     ];
 
     /**

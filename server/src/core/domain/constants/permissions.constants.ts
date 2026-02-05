@@ -39,6 +39,8 @@ export const PERMISSION_RESOURCES = {
   HOLIDAYS: 'holidays',
   BARANGAYS: 'barangays',
   CITIES: 'cities',
+  CITIZENSHIPS: 'citizenships',
+  CIVIL_STATUSES: 'civil-statuses',
 } as const;
 
 /**
@@ -219,6 +221,68 @@ export const PERMISSIONS = {
     ),
     PAGINATED_LIST: buildPermissionName(
       PERMISSION_RESOURCES.CITIES,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Citizenship permissions (201-management)
+  CITIZENSHIPS: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.CITIZENSHIPS,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.CITIZENSHIPS,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.CITIZENSHIPS,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.CITIZENSHIPS,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.CITIZENSHIPS,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.CITIZENSHIPS,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.CITIZENSHIPS,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Civil Status permissions (201-management)
+  CIVIL_STATUSES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.CIVIL_STATUSES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.CIVIL_STATUSES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.CIVIL_STATUSES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.CIVIL_STATUSES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.CIVIL_STATUSES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.CIVIL_STATUSES,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.CIVIL_STATUSES,
       PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
