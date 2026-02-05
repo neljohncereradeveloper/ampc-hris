@@ -8,3 +8,6 @@ export * from './province';
 export * from './religion';
 export * from './training';
 export * from './training-certificate';
+export * from './work-experience-company';
+export * from './work-experience-jobtitle';
+export * from './work-experience';

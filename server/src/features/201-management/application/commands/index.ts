@@ -9,3 +9,6 @@ export * from './religion';
 export * from './reference';
 export * from './training-certificate';
 export * from './training';
+export * from './work-experience-company';
+export * from './work-experience-jobtitle';
+export * from './work-experience';

@@ -30,6 +30,7 @@ import { CityEntity } from '@/features/201-management/infrastructure/database/en
 import { ProvinceEntity } from '@/features/201-management/infrastructure/database/entities/province.entity';
 import { ReferenceEntity } from '@/features/201-management/infrastructure/database/entities/reference.entity';
 import { TrainingEntity } from '@/features/201-management/infrastructure/database/entities/training.entity';
+import { WorkExperienceEntity } from '@/features/201-management/infrastructure/database/entities/work-experience.entity';
 
 @Entity(SHARED_DOMAIN_DATABASE_MODELS.EMPLOYEES)
 export class EmployeeEntity {
@@ -408,4 +409,13 @@ export class EmployeeEntity {
    */
   @OneToMany(() => TrainingEntity, (training) => training.employee)
   trainings: TrainingEntity[];
+
+  /**
+   * One employee has many work experiences
+   */
+  @OneToMany(
+    () => WorkExperienceEntity,
+    (work_experience) => work_experience.employee,
+  )
+  work_experiences: WorkExperienceEntity[];
 }

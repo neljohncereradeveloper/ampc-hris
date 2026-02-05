@@ -9,3 +9,6 @@ export * from './religion.repository.impl';
 export * from './reference.repository.impl';
 export * from './training-certificate.repository.impl';
 export * from './training.repository.impl';
+export * from './work-experience-company.repository.impl';
+export * from './work-experience-jobtitle.repository.impl';
+export * from './work-experience.repository.impl';

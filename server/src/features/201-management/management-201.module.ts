@@ -12,6 +12,9 @@ import { ReligionRepositoryImpl } from './infrastructure/database/repositories/r
 import { ReferenceRepositoryImpl } from './infrastructure/database/repositories/reference.repository.impl';
 import { TrainingCertificateRepositoryImpl } from './infrastructure/database/repositories/training-certificate.repository.impl';
 import { TrainingRepositoryImpl } from './infrastructure/database/repositories/training.repository.impl';
+import { WorkExperienceCompanyRepositoryImpl } from './infrastructure/database/repositories/work-experience-company.repository.impl';
+import { WorkExperienceJobTitleRepositoryImpl } from './infrastructure/database/repositories/work-experience-jobtitle.repository.impl';
+import { WorkExperienceRepositoryImpl } from './infrastructure/database/repositories/work-experience.repository.impl';
 import {
   CreateBarangayUseCase,
   UpdateBarangayUseCase,
@@ -99,6 +102,29 @@ import {
   UpdateTrainingUseCase,
 } from './application/use-cases/training';
 import {
+  CreateWorkExperienceCompanyUseCase,
+  UpdateWorkExperienceCompanyUseCase,
+  ArchiveWorkExperienceCompanyUseCase,
+  RestoreWorkExperienceCompanyUseCase,
+  GetPaginatedWorkExperienceCompanyUseCase,
+  ComboboxWorkExperienceCompanyUseCase,
+} from './application/use-cases/work-experience-company';
+import {
+  CreateWorkExperienceJobTitleUseCase,
+  UpdateWorkExperienceJobTitleUseCase,
+  ArchiveWorkExperienceJobTitleUseCase,
+  RestoreWorkExperienceJobTitleUseCase,
+  GetPaginatedWorkExperienceJobTitleUseCase,
+  ComboboxWorkExperienceJobTitleUseCase,
+} from './application/use-cases/work-experience-jobtitle';
+import {
+  CreateWorkExperienceUseCase,
+  UpdateWorkExperienceUseCase,
+  ArchiveWorkExperienceUseCase,
+  RestoreWorkExperienceUseCase,
+  GetPaginatedWorkExperienceUseCase,
+} from './application/use-cases/work-experience';
+import {
   BarangayController,
   CityController,
   CitizenshipController,
@@ -110,6 +136,8 @@ import {
   ReferenceController,
   TrainingCertificateController,
   TrainingController,
+  WorkExperienceCompanyController,
+  WorkExperienceJobTitleController,
 } from './presentation/controllers';
 import { TransactionAdapter } from '@/core/infrastructure/database/adapters/transaction-helper.adapter';
 import { TOKENS_CORE } from '@/core/domain/constants';
@@ -130,6 +158,9 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     ReferenceController,
     TrainingCertificateController,
     TrainingController,
+    WorkExperienceCompanyController,
+    WorkExperienceJobTitleController,
+    WorkExperienceController,
   ],
   providers: [
     // Repository implementation
@@ -176,6 +207,18 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     {
       provide: MANAGEMENT_201_TOKENS.TRAINING,
       useClass: TrainingRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.WORK_EXPERIENCE_COMPANY,
+      useClass: WorkExperienceCompanyRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.WORK_EXPERIENCE_JOBTITLE,
+      useClass: WorkExperienceJobTitleRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.WORK_EXPERIENCE,
+      useClass: WorkExperienceRepositoryImpl,
     },
     {
       provide: TOKENS_CORE.TRANSACTIONPORT,
@@ -261,6 +304,20 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     ArchiveTrainingUseCase,
     RestoreTrainingUseCase,
     GetPaginatedTrainingUseCase,
+    // Work experience company use cases (with combobox, no get-by-id)
+    CreateWorkExperienceCompanyUseCase,
+    UpdateWorkExperienceCompanyUseCase,
+    ArchiveWorkExperienceCompanyUseCase,
+    RestoreWorkExperienceCompanyUseCase,
+    GetPaginatedWorkExperienceCompanyUseCase,
+    ComboboxWorkExperienceCompanyUseCase,
+    // Work experience job title use cases (with combobox, no get-by-id)
+    CreateWorkExperienceJobTitleUseCase,
+    UpdateWorkExperienceJobTitleUseCase,
+    ArchiveWorkExperienceJobTitleUseCase,
+    RestoreWorkExperienceJobTitleUseCase,
+    GetPaginatedWorkExperienceJobTitleUseCase,
+    ComboboxWorkExperienceJobTitleUseCase,
   ],
   exports: [
     // Barangay use cases
@@ -338,6 +395,26 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     ArchiveTrainingUseCase,
     RestoreTrainingUseCase,
     GetPaginatedTrainingUseCase,
+    // Work experience company use cases (with combobox, no get-by-id)
+    CreateWorkExperienceCompanyUseCase,
+    UpdateWorkExperienceCompanyUseCase,
+    ArchiveWorkExperienceCompanyUseCase,
+    RestoreWorkExperienceCompanyUseCase,
+    GetPaginatedWorkExperienceCompanyUseCase,
+    ComboboxWorkExperienceCompanyUseCase,
+    // Work experience job title use cases (with combobox, no get-by-id)
+    CreateWorkExperienceJobTitleUseCase,
+    UpdateWorkExperienceJobTitleUseCase,
+    ArchiveWorkExperienceJobTitleUseCase,
+    RestoreWorkExperienceJobTitleUseCase,
+    GetPaginatedWorkExperienceJobTitleUseCase,
+    ComboboxWorkExperienceJobTitleUseCase,
+    // Work experience use cases (no combobox, no get-by-id)
+    CreateWorkExperienceUseCase,
+    UpdateWorkExperienceUseCase,
+    ArchiveWorkExperienceUseCase,
+    RestoreWorkExperienceUseCase,
+    GetPaginatedWorkExperienceUseCase,
     // Export repository tokens for use in other modules
     MANAGEMENT_201_TOKENS.BARANGAY,
     MANAGEMENT_201_TOKENS.CITY,
@@ -350,6 +427,9 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     MANAGEMENT_201_TOKENS.REFERENCE,
     MANAGEMENT_201_TOKENS.TRAINING_CERTIFICATE,
     MANAGEMENT_201_TOKENS.TRAINING,
+    MANAGEMENT_201_TOKENS.WORK_EXPERIENCE_COMPANY,
+    MANAGEMENT_201_TOKENS.WORK_EXPERIENCE_JOBTITLE,
+    MANAGEMENT_201_TOKENS.WORK_EXPERIENCE,
   ],
 })
 export class Management201Module { }

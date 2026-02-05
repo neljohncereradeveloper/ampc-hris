@@ -11,4 +11,6 @@ export * from './religion.constants';
 export * from './reference.constants';
 export * from './training-certificate.constants';
 export * from './training.constants';
-export * from './training-certificate.constants';
+export * from './work-experience-company.constants';
+export * from './work-experience-jobtitle.constants';
+export * from './work-experience.constants';

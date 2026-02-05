@@ -9,3 +9,6 @@ export * from './religion.model';
 export * from './reference.model';
 export * from './training-certificate.model';
 export * from './training.model';
+export * from './work-experience-company.model';
+export * from './work-experience-jobtitle.model';
+export * from './work-experience.model';

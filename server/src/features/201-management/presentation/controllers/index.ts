@@ -9,3 +9,6 @@ export * from './religion.controller';
 export * from './reference.controller';
 export * from './training-certificate.controller';
 export * from './training.controller';
+export * from './work-experience-company.controller';
+export * from './work-experience-jobtitle.controller';
+export * from './work-experience.controller';

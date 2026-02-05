@@ -9,4 +9,6 @@ export * from './religion-business.exception';
 export * from './reference-business.exception';
 export * from './training-certificate-business.exception';
 export * from './training-business.exception';
-export * from './training-certificate-business.exception';
+export * from './work-experience-company-business.exception';
+export * from './work-experience-jobtitle-business.exception';
+export * from './work-experience-business.exception';

@@ -10,4 +10,7 @@ export const MANAGEMENT_201_DATABASE_MODELS = {
   REFERENCES: 'references',
   TRAINING_CERTIFICATES: 'training_certificates',
   TRAININGS: 'trainings',
+  WORK_EXPERIENCE_COMPANIES: 'work_experience_companies',
+  WORK_EXPERIENCE_JOBTITLES: 'work_experience_jobtitles',
+  WORK_EXPERIENCES: 'work_experiences',
 } as const;

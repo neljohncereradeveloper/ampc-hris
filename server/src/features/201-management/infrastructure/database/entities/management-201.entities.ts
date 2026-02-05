@@ -14,6 +14,9 @@ import { ReligionEntity } from './religion.entity';
 import { ReferenceEntity } from './reference.entity';
 import { TrainingCertificateEntity } from './training-certificate.entity';
 import { TrainingEntity } from './training.entity';
+import { WorkExperienceCompanyEntity } from './work-experience-company.entity';
+import { WorkExperienceJobTitleEntity } from './work-experience-jobtitle.entity';
+import { WorkExperienceEntity } from './work-experience.entity';
 
 /**
  * Array of 201 Management entities for TypeORM configuration
@@ -30,4 +33,7 @@ export const management201Entities = [
   ReferenceEntity,
   TrainingCertificateEntity,
   TrainingEntity,
+  WorkExperienceCompanyEntity,
+  WorkExperienceJobTitleEntity,
+  WorkExperienceEntity,
 ];
