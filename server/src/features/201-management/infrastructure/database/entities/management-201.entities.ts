@@ -12,6 +12,8 @@ import { EmploymentStatusEntity } from './employment-status.entity';
 import { ProvinceEntity } from './province.entity';
 import { ReligionEntity } from './religion.entity';
 import { ReferenceEntity } from './reference.entity';
+import { TrainingCertificateEntity } from './training-certificate.entity';
+import { TrainingEntity } from './training.entity';
 
 /**
  * Array of 201 Management entities for TypeORM configuration
@@ -26,4 +28,6 @@ export const management201Entities = [
   ProvinceEntity,
   ReligionEntity,
   ReferenceEntity,
+  TrainingCertificateEntity,
+  TrainingEntity,
 ];

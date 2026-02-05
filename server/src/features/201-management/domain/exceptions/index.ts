@@ -7,3 +7,6 @@ export * from './employment-status-business.exception';
 export * from './province-business.exception';
 export * from './religion-business.exception';
 export * from './reference-business.exception';
+export * from './training-certificate-business.exception';
+export * from './training-business.exception';
+export * from './training-certificate-business.exception';

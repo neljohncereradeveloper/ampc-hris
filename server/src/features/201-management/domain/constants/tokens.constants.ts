@@ -17,4 +17,8 @@ export const MANAGEMENT_201_TOKENS = {
   RELIGION: 'ReligionRepository',
   /** Reference Repository */
   REFERENCE: 'ReferenceRepository',
+  /** Training Certificate Repository */
+  TRAINING_CERTIFICATE: 'TrainingCertificateRepository',
+  /** Training Repository */
+  TRAINING: 'TrainingRepository',
 } as const;

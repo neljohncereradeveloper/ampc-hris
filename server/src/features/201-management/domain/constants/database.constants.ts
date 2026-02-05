@@ -8,4 +8,6 @@ export const MANAGEMENT_201_DATABASE_MODELS = {
   PROVINCES: 'provinces',
   RELIGIONS: 'religions',
   REFERENCES: 'references',
+  TRAINING_CERTIFICATES: 'training_certificates',
+  TRAININGS: 'trainings',
 } as const;

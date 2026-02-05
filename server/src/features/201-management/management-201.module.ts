@@ -10,6 +10,8 @@ import { EmploymentStatusRepositoryImpl } from './infrastructure/database/reposi
 import { ProvinceRepositoryImpl } from './infrastructure/database/repositories/province.repository.impl';
 import { ReligionRepositoryImpl } from './infrastructure/database/repositories/religion.repository.impl';
 import { ReferenceRepositoryImpl } from './infrastructure/database/repositories/reference.repository.impl';
+import { TrainingCertificateRepositoryImpl } from './infrastructure/database/repositories/training-certificate.repository.impl';
+import { TrainingRepositoryImpl } from './infrastructure/database/repositories/training.repository.impl';
 import {
   CreateBarangayUseCase,
   UpdateBarangayUseCase,
@@ -82,6 +84,21 @@ import {
   GetPaginatedReferenceUseCase,
 } from './application/use-cases/reference';
 import {
+  CreateTrainingCertificateUseCase,
+  UpdateTrainingCertificateUseCase,
+  ArchiveTrainingCertificateUseCase,
+  RestoreTrainingCertificateUseCase,
+  GetPaginatedTrainingCertificateUseCase,
+  ComboboxTrainingCertificateUseCase,
+} from './application/use-cases/training-certificate';
+import {
+  ArchiveTrainingUseCase,
+  CreateTrainingUseCase,
+  GetPaginatedTrainingUseCase,
+  RestoreTrainingUseCase,
+  UpdateTrainingUseCase,
+} from './application/use-cases/training';
+import {
   BarangayController,
   CityController,
   CitizenshipController,
@@ -91,10 +108,13 @@ import {
   ProvinceController,
   ReligionController,
   ReferenceController,
+  TrainingCertificateController,
+  TrainingController,
 } from './presentation/controllers';
 import { TransactionAdapter } from '@/core/infrastructure/database/adapters/transaction-helper.adapter';
 import { TOKENS_CORE } from '@/core/domain/constants';
 import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/repositories';
+
 
 @Module({
   imports: [PostgresqlDatabaseModule],
@@ -108,6 +128,8 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     ProvinceController,
     ReligionController,
     ReferenceController,
+    TrainingCertificateController,
+    TrainingController,
   ],
   providers: [
     // Repository implementation
@@ -146,6 +168,14 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     {
       provide: MANAGEMENT_201_TOKENS.REFERENCE,
       useClass: ReferenceRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.TRAINING_CERTIFICATE,
+      useClass: TrainingCertificateRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.TRAINING,
+      useClass: TrainingRepositoryImpl,
     },
     {
       provide: TOKENS_CORE.TRANSACTIONPORT,
@@ -218,6 +248,19 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     ArchiveReferenceUseCase,
     RestoreReferenceUseCase,
     GetPaginatedReferenceUseCase,
+    // Training certificate use cases (with combobox, no get-by-id)
+    CreateTrainingCertificateUseCase,
+    UpdateTrainingCertificateUseCase,
+    ArchiveTrainingCertificateUseCase,
+    RestoreTrainingCertificateUseCase,
+    GetPaginatedTrainingCertificateUseCase,
+    ComboboxTrainingCertificateUseCase,
+    // Training use cases (no combobox, no get-by-id)
+    CreateTrainingUseCase,
+    UpdateTrainingUseCase,
+    ArchiveTrainingUseCase,
+    RestoreTrainingUseCase,
+    GetPaginatedTrainingUseCase,
   ],
   exports: [
     // Barangay use cases
@@ -282,6 +325,19 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     ArchiveReferenceUseCase,
     RestoreReferenceUseCase,
     GetPaginatedReferenceUseCase,
+    // Training certificate use cases (with combobox, no get-by-id)
+    CreateTrainingCertificateUseCase,
+    UpdateTrainingCertificateUseCase,
+    ArchiveTrainingCertificateUseCase,
+    RestoreTrainingCertificateUseCase,
+    GetPaginatedTrainingCertificateUseCase,
+    ComboboxTrainingCertificateUseCase,
+    // Training use cases (no combobox, no get-by-id)
+    CreateTrainingUseCase,
+    UpdateTrainingUseCase,
+    ArchiveTrainingUseCase,
+    RestoreTrainingUseCase,
+    GetPaginatedTrainingUseCase,
     // Export repository tokens for use in other modules
     MANAGEMENT_201_TOKENS.BARANGAY,
     MANAGEMENT_201_TOKENS.CITY,
@@ -292,6 +348,8 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     MANAGEMENT_201_TOKENS.PROVINCE,
     MANAGEMENT_201_TOKENS.RELIGION,
     MANAGEMENT_201_TOKENS.REFERENCE,
+    MANAGEMENT_201_TOKENS.TRAINING_CERTIFICATE,
+    MANAGEMENT_201_TOKENS.TRAINING,
   ],
 })
 export class Management201Module { }

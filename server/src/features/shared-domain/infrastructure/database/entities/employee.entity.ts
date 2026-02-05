@@ -29,6 +29,7 @@ import { BarangayEntity } from '@/features/201-management/infrastructure/databas
 import { CityEntity } from '@/features/201-management/infrastructure/database/entities/city.entity';
 import { ProvinceEntity } from '@/features/201-management/infrastructure/database/entities/province.entity';
 import { ReferenceEntity } from '@/features/201-management/infrastructure/database/entities/reference.entity';
+import { TrainingEntity } from '@/features/201-management/infrastructure/database/entities/training.entity';
 
 @Entity(SHARED_DOMAIN_DATABASE_MODELS.EMPLOYEES)
 export class EmployeeEntity {
@@ -401,4 +402,10 @@ export class EmployeeEntity {
    */
   @OneToMany(() => ReferenceEntity, (reference) => reference.employee)
   references: ReferenceEntity[];
+
+  /**
+   * One employee has many trainings
+   */
+  @OneToMany(() => TrainingEntity, (training) => training.employee)
+  trainings: TrainingEntity[];
 }

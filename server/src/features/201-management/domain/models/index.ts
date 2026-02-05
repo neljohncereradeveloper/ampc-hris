@@ -7,3 +7,5 @@ export * from './employment-status.model';
 export * from './province.model';
 export * from './religion.model';
 export * from './reference.model';
+export * from './training-certificate.model';
+export * from './training.model';

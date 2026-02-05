@@ -9,3 +9,6 @@ export * from './employment-status.constants';
 export * from './province.constants';
 export * from './religion.constants';
 export * from './reference.constants';
+export * from './training-certificate.constants';
+export * from './training.constants';
+export * from './training-certificate.constants';

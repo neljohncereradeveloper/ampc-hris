@@ -45,6 +45,9 @@ export const PERMISSION_RESOURCES = {
   EMPLOYMENT_STATUSES: 'employment-statuses',
   PROVINCES: 'provinces',
   RELIGIONS: 'religions',
+  REFERENCES: 'references',
+  TRAINING_CERTIFICATES: 'training-certificates',
+  TRAININGS: 'trainings',
   BRANCHES: 'branches',
   DEPARTMENTS: 'departments',
   JOBTITLES: 'jobtitles',
@@ -415,6 +418,91 @@ export const PERMISSIONS = {
     ),
     PAGINATED_LIST: buildPermissionName(
       PERMISSION_RESOURCES.RELIGIONS,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Reference permissions (201-management)
+  REFERENCES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.REFERENCES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.REFERENCES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.REFERENCES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.REFERENCES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.REFERENCES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.REFERENCES,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Training Certificate permissions (201-management)
+  TRAINING_CERTIFICATES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Training permissions (201-management)
+  TRAININGS: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.TRAININGS,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.TRAININGS,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.TRAININGS,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.TRAININGS,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.TRAININGS,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.TRAININGS,
       PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },

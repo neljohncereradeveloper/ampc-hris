@@ -7,3 +7,5 @@ export * from './employment-status.controller';
 export * from './province.controller';
 export * from './religion.controller';
 export * from './reference.controller';
+export * from './training-certificate.controller';
+export * from './training.controller';

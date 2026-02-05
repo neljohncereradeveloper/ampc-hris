@@ -7,3 +7,5 @@ export * from './employment-status.repository.impl';
 export * from './province.repository.impl';
 export * from './religion.repository.impl';
 export * from './reference.repository.impl';
+export * from './training-certificate.repository.impl';
+export * from './training.repository.impl';
