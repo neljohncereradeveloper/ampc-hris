@@ -15,11 +15,11 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
     const query = `
       INSERT INTO ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS} (
         employee_id, training_date, trainings_cert_id,
-        trainings_certificate, training_title, desc1, image_path,
+        training_title, desc1, image_path,
         deleted_by, deleted_at,
         created_by, created_at, updated_by, updated_at
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING *
     `;
 
@@ -27,7 +27,6 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
       training.employee_id,
       training.training_date,
       training.trainings_cert_id,
-      training.trainings_certificate,
       training.training_title,
       training.desc1,
       training.image_path,
@@ -40,7 +39,8 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
     ]);
 
     const savedEntity = result[0];
-    return this.entityToModel(savedEntity);
+    const found = await this.findById(savedEntity.id, manager);
+    return found ?? this.entityToModel(savedEntity);
   }
 
   async update(
@@ -63,10 +63,6 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
     if (dto.trainings_cert_id !== undefined) {
       updateFields.push(`trainings_cert_id = $${paramIndex++}`);
       values.push(dto.trainings_cert_id);
-    }
-    if (dto.trainings_certificate !== undefined) {
-      updateFields.push(`trainings_certificate = $${paramIndex++}`);
-      values.push(dto.trainings_certificate);
     }
     if (dto.training_title !== undefined) {
       updateFields.push(`training_title = $${paramIndex++}`);
@@ -116,9 +112,11 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
 
   async findById(id: number, manager: EntityManager): Promise<Training | null> {
     const query = `
-      SELECT *
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS}
-      WHERE id = $1
+      SELECT t.*,
+        tc.certificate_name AS trainings_certificate
+      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS} t
+      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.TRAINING_CERTIFICATES} tc ON t.trainings_cert_id = tc.id
+      WHERE t.id = $1
     `;
 
     const result = await manager.query(query, [id]);
@@ -134,10 +132,12 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
     manager: EntityManager,
   ): Promise<Training[]> {
     const query = `
-      SELECT *
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS}
-      WHERE employee_id = $1 AND deleted_at IS NULL
-      ORDER BY training_date DESC
+      SELECT t.*,
+        tc.certificate_name AS trainings_certificate
+      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS} t
+      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.TRAINING_CERTIFICATES} tc ON t.trainings_cert_id = tc.id
+      WHERE t.employee_id = $1 AND t.deleted_at IS NULL
+      ORDER BY t.training_date DESC
     `;
 
     const result = await manager.query(query, [employee_id]);
@@ -149,10 +149,12 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
     manager: EntityManager,
   ): Promise<Training[]> {
     const query = `
-      SELECT *
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS}
-      WHERE trainings_cert_id = $1 AND deleted_at IS NULL
-      ORDER BY training_date DESC
+      SELECT t.*,
+        tc.certificate_name AS trainings_certificate
+      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS} t
+      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.TRAINING_CERTIFICATES} tc ON t.trainings_cert_id = tc.id
+      WHERE t.trainings_cert_id = $1 AND t.deleted_at IS NULL
+      ORDER BY t.training_date DESC
     `;
 
     const result = await manager.query(query, [trainings_cert_id]);
@@ -177,36 +179,39 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
     let paramIndex = 1;
 
     if (is_archived) {
-      whereClause = 'WHERE deleted_at IS NOT NULL';
+      whereClause = 'WHERE t.deleted_at IS NOT NULL';
     } else {
-      whereClause = 'WHERE deleted_at IS NULL';
+      whereClause = 'WHERE t.deleted_at IS NULL';
     }
 
     // Add employee_id filter if provided
     if (employee_id !== undefined) {
-      whereClause += ` AND employee_id = $${paramIndex}`;
+      whereClause += ` AND t.employee_id = $${paramIndex}`;
       queryParams.push(employee_id);
       paramIndex++;
     }
 
     // Add trainings_cert_id filter if provided
     if (trainings_cert_id !== undefined) {
-      whereClause += ` AND trainings_cert_id = $${paramIndex}`;
+      whereClause += ` AND t.trainings_cert_id = $${paramIndex}`;
       queryParams.push(trainings_cert_id);
       paramIndex++;
     }
 
-    // Add search term if provided
+    // Add search term if provided (search in training_title, desc1, and certificate_name from join)
     if (term) {
-      whereClause += ` AND (training_title ILIKE $${paramIndex} OR desc1 ILIKE $${paramIndex} OR trainings_certificate ILIKE $${paramIndex})`;
+      whereClause += ` AND (t.training_title ILIKE $${paramIndex} OR t.desc1 ILIKE $${paramIndex} OR tc.certificate_name ILIKE $${paramIndex})`;
       queryParams.push(searchTerm);
       paramIndex++;
     }
 
+    const joinClause = `LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.TRAINING_CERTIFICATES} tc ON t.trainings_cert_id = tc.id`;
+
     // Count total records
     const countQuery = `
       SELECT COUNT(*) as total
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS}
+      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS} t
+      ${joinClause}
       ${whereClause}
     `;
 
@@ -215,10 +220,12 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
 
     // Fetch paginated data
     const dataQuery = `
-      SELECT *
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS}
+      SELECT t.*,
+        tc.certificate_name AS trainings_certificate
+      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS} t
+      ${joinClause}
       ${whereClause}
-      ORDER BY training_date DESC, training_title ASC
+      ORDER BY t.training_date DESC, t.training_title ASC
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
 

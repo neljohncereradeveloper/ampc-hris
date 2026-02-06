@@ -92,9 +92,6 @@ export class UpdateTrainingUseCase {
           updated_by: requestInfo?.user_name || null,
         });
 
-        // Update trainings_certificate name from the validated certificate
-        training.trainings_certificate = trainingCertificate.certificate_name;
-
         const success = await this.trainingRepository.update(
           id,
           training,

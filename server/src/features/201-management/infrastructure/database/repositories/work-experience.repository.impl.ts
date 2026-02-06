@@ -18,21 +18,19 @@ export class WorkExperienceRepositoryImpl
   ): Promise<WorkExperience> {
     const query = `
       INSERT INTO ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCES} (
-        employee_id, company_id, company,
-        work_experience_job_title_id, work_experience_job_title, years,
+        employee_id, company_id,
+        work_experience_job_title_id, years,
         deleted_by, deleted_at,
         created_by, created_at, updated_by, updated_at
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING *
     `;
 
     const result = await manager.query(query, [
       work_experience.employee_id,
       work_experience.company_id,
-      work_experience.company,
       work_experience.work_experience_job_title_id,
-      work_experience.work_experience_job_title,
       work_experience.years,
       work_experience.deleted_by,
       work_experience.deleted_at,
@@ -43,7 +41,8 @@ export class WorkExperienceRepositoryImpl
     ]);
 
     const savedEntity = result[0];
-    return this.entityToModel(savedEntity);
+    const found = await this.findById(savedEntity.id, manager);
+    return found ?? this.entityToModel(savedEntity);
   }
 
   async update(
@@ -63,17 +62,9 @@ export class WorkExperienceRepositoryImpl
       updateFields.push(`company_id = $${paramIndex++}`);
       values.push(dto.company_id);
     }
-    if (dto.company !== undefined) {
-      updateFields.push(`company = $${paramIndex++}`);
-      values.push(dto.company);
-    }
     if (dto.work_experience_job_title_id !== undefined) {
       updateFields.push(`work_experience_job_title_id = $${paramIndex++}`);
       values.push(dto.work_experience_job_title_id);
-    }
-    if (dto.work_experience_job_title !== undefined) {
-      updateFields.push(`work_experience_job_title = $${paramIndex++}`);
-      values.push(dto.work_experience_job_title);
     }
     if (dto.years !== undefined) {
       updateFields.push(`years = $${paramIndex++}`);
@@ -118,9 +109,13 @@ export class WorkExperienceRepositoryImpl
     manager: EntityManager,
   ): Promise<WorkExperience | null> {
     const query = `
-      SELECT *
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCES}
-      WHERE id = $1
+      SELECT w.*,
+        wc.desc1 AS company,
+        wj.desc1 AS work_experience_job_title
+      FROM ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCES} w
+      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCE_COMPANIES} wc ON w.company_id = wc.id
+      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCE_JOBTITLES} wj ON w.work_experience_job_title_id = wj.id
+      WHERE w.id = $1
     `;
 
     const result = await manager.query(query, [id]);
@@ -136,10 +131,14 @@ export class WorkExperienceRepositoryImpl
     manager: EntityManager,
   ): Promise<WorkExperience[]> {
     const query = `
-      SELECT *
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCES}
-      WHERE employee_id = $1 AND deleted_at IS NULL
-      ORDER BY created_at DESC
+      SELECT w.*,
+        wc.desc1 AS company,
+        wj.desc1 AS work_experience_job_title
+      FROM ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCES} w
+      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCE_COMPANIES} wc ON w.company_id = wc.id
+      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCE_JOBTITLES} wj ON w.work_experience_job_title_id = wj.id
+      WHERE w.employee_id = $1 AND w.deleted_at IS NULL
+      ORDER BY w.created_at DESC
     `;
 
     const result = await manager.query(query, [employee_id]);
@@ -165,29 +164,34 @@ export class WorkExperienceRepositoryImpl
     let paramIndex = 1;
 
     if (is_archived) {
-      whereClause = 'WHERE deleted_at IS NOT NULL';
+      whereClause = 'WHERE w.deleted_at IS NOT NULL';
     } else {
-      whereClause = 'WHERE deleted_at IS NULL';
+      whereClause = 'WHERE w.deleted_at IS NULL';
     }
 
     // Add employee_id filter if provided
     if (employee_id !== null && employee_id !== undefined) {
-      whereClause += ` AND employee_id = $${paramIndex}`;
+      whereClause += ` AND w.employee_id = $${paramIndex}`;
       queryParams.push(employee_id);
       paramIndex++;
     }
 
-    // Add search term if provided
+    // Add search term if provided (search in company desc1, job title desc1, and years)
     if (term) {
-      whereClause += ` AND (company ILIKE $${paramIndex} OR work_experience_job_title ILIKE $${paramIndex} OR years ILIKE $${paramIndex})`;
+      whereClause += ` AND (wc.desc1 ILIKE $${paramIndex} OR wj.desc1 ILIKE $${paramIndex} OR w.years ILIKE $${paramIndex})`;
       queryParams.push(searchTerm);
       paramIndex++;
     }
 
+    const joinClause = `
+      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCE_COMPANIES} wc ON w.company_id = wc.id
+      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCE_JOBTITLES} wj ON w.work_experience_job_title_id = wj.id`;
+
     // Count total records
     const countQuery = `
       SELECT COUNT(*) as total
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCES}
+      FROM ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCES} w
+      ${joinClause}
       ${whereClause}
     `;
 
@@ -196,10 +200,13 @@ export class WorkExperienceRepositoryImpl
 
     // Fetch paginated data
     const dataQuery = `
-      SELECT *
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCES}
+      SELECT w.*,
+        wc.desc1 AS company,
+        wj.desc1 AS work_experience_job_title
+      FROM ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCES} w
+      ${joinClause}
       ${whereClause}
-      ORDER BY created_at DESC
+      ORDER BY w.created_at DESC
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
 

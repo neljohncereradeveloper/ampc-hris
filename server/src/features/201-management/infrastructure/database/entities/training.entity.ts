@@ -42,14 +42,6 @@ export class TrainingEntity {
 
   @Column({
     type: 'varchar',
-    length: 255,
-    nullable: true,
-    comment: 'Training certificate name (denormalized)',
-  })
-  trainings_certificate: string | null;
-
-  @Column({
-    type: 'varchar',
     length: 100,
     nullable: true,
     comment: 'Training title',

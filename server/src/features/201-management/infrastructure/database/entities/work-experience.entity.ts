@@ -36,28 +36,12 @@ export class WorkExperienceEntity {
   company_id: number | null;
 
   @Column({
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-    comment: 'Work experience company name (denormalized)',
-  })
-  company: string | null;
-
-  @Column({
     type: 'int',
     nullable: true,
     comment: 'Work experience job title ID',
   })
   @Index()
   work_experience_job_title_id: number | null;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-    comment: 'Work experience job title name (denormalized)',
-  })
-  work_experience_job_title: string | null;
 
   @Column({
     type: 'varchar',

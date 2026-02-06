@@ -35,4 +35,6 @@ export const MANAGEMENT_201_TOKENS = {
   EDUCATION_LEVEL: 'EducationLevelRepository',
   /** Education School Repository */
   EDUCATION_SCHOOL: 'EducationSchoolRepository',
+  /** Education Repository */
+  EDUCATION: 'EducationRepository',
 } as const;

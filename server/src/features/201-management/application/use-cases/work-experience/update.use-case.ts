@@ -120,15 +120,6 @@ export class UpdateWorkExperienceUseCase {
           updated_by: requestInfo?.user_name || null,
         });
 
-        // Update denormalized fields if IDs changed
-        if (work_experience_company) {
-          work_experience.company = work_experience_company.desc1;
-        }
-        if (work_experience_job_title) {
-          work_experience.work_experience_job_title =
-            work_experience_job_title.desc1;
-        }
-
         const success = await this.workExperienceRepository.update(
           id,
           work_experience,

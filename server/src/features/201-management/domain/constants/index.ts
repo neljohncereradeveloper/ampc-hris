@@ -18,3 +18,4 @@ export * from './education-course-level.constants';
 export * from './education-course.constants';
 export * from './education-level.constants';
 export * from './education-school.constants';
+export * from './education.constants';

@@ -66,8 +66,6 @@ export class CreateWorkExperienceUseCase {
               HTTP_STATUS.NOT_FOUND,
             );
           }
-          // Set denormalized company name
-          new_work_experience.company = work_experience_company.desc1;
         }
 
         // Validate job title exists if work_experience_job_title_id is provided
@@ -86,9 +84,6 @@ export class CreateWorkExperienceUseCase {
               HTTP_STATUS.NOT_FOUND,
             );
           }
-          // Set denormalized job title name
-          new_work_experience.work_experience_job_title =
-            work_experience_job_title.desc1;
         }
 
         const created_work_experience =

@@ -16,3 +16,4 @@ export * from './education-course-level';
 export * from './education-course';
 export * from './education-level';
 export * from './education-school';
+export * from './education';

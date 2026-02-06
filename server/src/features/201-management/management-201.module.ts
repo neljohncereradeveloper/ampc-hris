@@ -19,6 +19,7 @@ import { EducationCourseLevelRepositoryImpl } from './infrastructure/database/re
 import { EducationCourseRepositoryImpl } from './infrastructure/database/repositories/education-course.repository.impl';
 import { EducationLevelRepositoryImpl } from './infrastructure/database/repositories/education-level.repository.impl';
 import { EducationSchoolRepositoryImpl } from './infrastructure/database/repositories/education-school.repository.impl';
+import { EducationRepositoryImpl } from './infrastructure/database/repositories/education.repository.impl';
 import {
   CreateBarangayUseCase,
   UpdateBarangayUseCase,
@@ -161,6 +162,13 @@ import {
   ComboboxEducationSchoolUseCase,
 } from './application/use-cases/education-school';
 import {
+  CreateEducationUseCase,
+  UpdateEducationUseCase,
+  ArchiveEducationUseCase,
+  RestoreEducationUseCase,
+  FindEmployeesEducationUseCase,
+} from './application/use-cases/education';
+import {
   BarangayController,
   CityController,
   CitizenshipController,
@@ -178,6 +186,7 @@ import {
   EducationCourseController,
   EducationLevelController,
   EducationSchoolController,
+  EducationController,
 } from './presentation/controllers';
 import { TransactionAdapter } from '@/core/infrastructure/database/adapters/transaction-helper.adapter';
 import { TOKENS_CORE } from '@/core/domain/constants';
@@ -201,6 +210,11 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     WorkExperienceCompanyController,
     WorkExperienceJobTitleController,
     WorkExperienceController,
+    EducationCourseLevelController,
+    EducationCourseController,
+    EducationLevelController,
+    EducationSchoolController,
+    EducationController,
   ],
   providers: [
     // Repository implementation
@@ -275,6 +289,10 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     {
       provide: MANAGEMENT_201_TOKENS.EDUCATION_SCHOOL,
       useClass: EducationSchoolRepositoryImpl,
+    },
+    {
+      provide: MANAGEMENT_201_TOKENS.EDUCATION,
+      useClass: EducationRepositoryImpl,
     },
     {
       provide: TOKENS_CORE.TRANSACTIONPORT,
@@ -402,6 +420,12 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     RestoreEducationSchoolUseCase,
     GetPaginatedEducationSchoolUseCase,
     ComboboxEducationSchoolUseCase,
+    // Education use cases (employee education records)
+    CreateEducationUseCase,
+    UpdateEducationUseCase,
+    ArchiveEducationUseCase,
+    RestoreEducationUseCase,
+    FindEmployeesEducationUseCase,
   ],
   exports: [
     // Barangay use cases
@@ -527,6 +551,12 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     RestoreEducationSchoolUseCase,
     GetPaginatedEducationSchoolUseCase,
     ComboboxEducationSchoolUseCase,
+    // Education use cases (employee education records)
+    CreateEducationUseCase,
+    UpdateEducationUseCase,
+    ArchiveEducationUseCase,
+    RestoreEducationUseCase,
+    FindEmployeesEducationUseCase,
     // Export repository tokens for use in other modules
     MANAGEMENT_201_TOKENS.BARANGAY,
     MANAGEMENT_201_TOKENS.CITY,
@@ -546,6 +576,7 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     MANAGEMENT_201_TOKENS.EDUCATION_COURSE,
     MANAGEMENT_201_TOKENS.EDUCATION_LEVEL,
     MANAGEMENT_201_TOKENS.EDUCATION_SCHOOL,
+    MANAGEMENT_201_TOKENS.EDUCATION,
   ],
 })
 export class Management201Module { }

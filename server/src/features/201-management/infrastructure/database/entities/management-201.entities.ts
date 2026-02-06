@@ -21,6 +21,7 @@ import { EducationCourseLevelEntity } from './education-course-level.entity';
 import { EducationCourseEntity } from './education-course.entity';
 import { EducationLevelEntity } from './education-level.entity';
 import { EducationSchoolEntity } from './education-school.entity';
+import { EducationEntity } from './education.entity';
 
 /**
  * Array of 201 Management entities for TypeORM configuration
@@ -44,4 +45,5 @@ export const management201Entities = [
   EducationCourseEntity,
   EducationLevelEntity,
   EducationSchoolEntity,
+  EducationEntity,
 ];

@@ -58,9 +58,6 @@ export class CreateTrainingUseCase {
           created_by: requestInfo?.user_name || null,
         });
 
-        // Set trainings_certificate name from the certificate
-        new_training.trainings_certificate = trainingCertificate.certificate_name;
-
         const created_training = await this.trainingRepository.create(
           new_training,
           manager,

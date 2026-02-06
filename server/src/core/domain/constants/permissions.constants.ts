@@ -55,6 +55,7 @@ export const PERMISSION_RESOURCES = {
   EDUCATION_COURSES: 'education-courses',
   EDUCATION_LEVELS: 'education-levels',
   EDUCATION_SCHOOLS: 'education-schools',
+  EDUCATIONS: 'educations',
   BRANCHES: 'branches',
   DEPARTMENTS: 'departments',
   JOBTITLES: 'jobtitles',
@@ -724,6 +725,29 @@ export const PERMISSIONS = {
     PAGINATED_LIST: buildPermissionName(
       PERMISSION_RESOURCES.EDUCATION_SCHOOLS,
       PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Education permissions (201-management - employee education records)
+  EDUCATIONS: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.EDUCATIONS,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.EDUCATIONS,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.EDUCATIONS,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.EDUCATIONS,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.EDUCATIONS,
+      PERMISSION_ACTIONS.RESTORE,
     ),
   },
   // Branch permissions (core - shared across features)

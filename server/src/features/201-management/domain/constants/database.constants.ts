@@ -17,4 +17,5 @@ export const MANAGEMENT_201_DATABASE_MODELS = {
   EDUCATION_COURSES: 'education_courses',
   EDUCATION_LEVELS: 'education_levels',
   EDUCATION_SCHOOLS: 'education_schools',
+  EDUCATIONS: 'educations',
 } as const;
