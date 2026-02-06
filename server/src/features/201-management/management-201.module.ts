@@ -393,6 +393,12 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     RestoreWorkExperienceJobTitleUseCase,
     GetPaginatedWorkExperienceJobTitleUseCase,
     ComboboxWorkExperienceJobTitleUseCase,
+    // Work experience use cases (no combobox, no get-by-id)
+    CreateWorkExperienceUseCase,
+    UpdateWorkExperienceUseCase,
+    ArchiveWorkExperienceUseCase,
+    RestoreWorkExperienceUseCase,
+    GetPaginatedWorkExperienceUseCase,
     // Education course level use cases (with combobox, no get-by-id)
     CreateEducationCourseLevelUseCase,
     UpdateEducationCourseLevelUseCase,
