@@ -511,7 +511,7 @@ export class EmployeeRepositoryImpl
       INNER JOIN ${SHARED_DOMAIN_DATABASE_MODELS.JOBTITLES} jt ON e.job_title_id = jt.id
       INNER JOIN ${MANAGEMENT_201_DATABASE_MODELS.EMPLOYMENT_TYPES} et ON e.employment_type_id = et.id
       INNER JOIN ${MANAGEMENT_201_DATABASE_MODELS.EMPLOYMENT_STATUSES} es ON e.employment_status_id = es.id
-      LEFT JOIN leave_types lt ON e.leave_type_id = lt.id
+      LEFT JOIN ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES} lt ON e.leave_type_id = lt.id
       INNER JOIN ${SHARED_DOMAIN_DATABASE_MODELS.BRANCHES} b ON e.branch_id = b.id
       INNER JOIN ${SHARED_DOMAIN_DATABASE_MODELS.DEPARTMENTS} d ON e.department_id = d.id
       INNER JOIN ${MANAGEMENT_201_DATABASE_MODELS.RELIGIONS} r ON e.religion_id = r.id

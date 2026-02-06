@@ -20,9 +20,12 @@ import {
   extractEntityState,
   FieldExtractorConfig,
 } from '@/core/utils/change-tracking.util';
-import { BranchRepository } from '@/features/shared-domain/domain/repositories';
-import { DepartmentRepository } from '@/features/shared-domain/domain/repositories';
-import { JobtitleRepository } from '@/features/shared-domain/domain/repositories';
+import {
+  BranchRepository,
+  DepartmentRepository,
+  JobtitleRepository,
+  LeaveTypeRepository,
+} from '@/features/shared-domain/domain/repositories';
 import { EmploymentTypeRepository } from '@/features/201-management/domain/repositories';
 import { EmploymentStatusRepository } from '@/features/201-management/domain/repositories';
 import { ReligionRepository } from '@/features/201-management/domain/repositories';
@@ -64,6 +67,8 @@ export class UpdateEmployeeUseCase {
     private readonly cityRepository: CityRepository,
     @Inject(MANAGEMENT_201_TOKENS.PROVINCE)
     private readonly provinceRepository: ProvinceRepository,
+    @Inject(SHARED_DOMAIN_TOKENS.LEAVE_TYPE)
+    private readonly leaveTypeRepository: LeaveTypeRepository,
   ) { }
 
   async execute(
@@ -85,7 +90,7 @@ export class UpdateEmployeeUseCase {
         // Validate unique employee (id_number and bio_number)
         await this.validateUniqueEmployee(id, command, manager);
 
-        // Validate all related entities in parallel
+        // Validate related entities by description when provided (from UI combobox)
         const [
           branch,
           citizenship,
@@ -98,36 +103,65 @@ export class UpdateEmployeeUseCase {
           homeAddressCity,
           homeAddressProvince,
           department,
+          leaveType,
           presentAddressBarangay,
           presentAddressCity,
           presentAddressProvince,
         ] = await Promise.all([
-          this.validateBranch(command.branch, manager),
-          this.validateCitizenship(command.citizen_ship, manager),
-          this.validateJobTitle(command.job_title, manager),
-          this.validateEmploymentType(command.employment_type, manager),
-          this.validateEmploymentStatus(command.employment_status, manager),
-          this.validateReligion(command.religion, manager),
-          this.validateCivilStatus(command.civil_status, manager),
-          this.validateBarangay(command.home_address_barangay, manager),
-          this.validateCity(command.home_address_city, manager),
-          this.validateProvince(command.home_address_province, manager),
-          this.validateDepartment(command.department, manager),
-          command.present_address_barangay
-            ? this.validateBarangay(command.present_address_barangay, manager)
+          command.branch != null
+            ? this.validateBranchByDescription(command.branch, manager)
             : Promise.resolve(null),
-          command.present_address_city
-            ? this.validateCity(command.present_address_city, manager)
+          command.citizenship != null
+            ? this.validateCitizenshipByDescription(command.citizenship, manager)
             : Promise.resolve(null),
-          command.present_address_province
-            ? this.validateProvince(command.present_address_province, manager)
+          command.job_title != null
+            ? this.validateJobTitleByDescription(command.job_title, manager)
+            : Promise.resolve(null),
+          command.employment_type != null
+            ? this.validateEmploymentTypeByDescription(command.employment_type, manager)
+            : Promise.resolve(null),
+          command.employment_status != null
+            ? this.validateEmploymentStatusByDescription(command.employment_status, manager)
+            : Promise.resolve(null),
+          command.religion != null
+            ? this.validateReligionByDescription(command.religion, manager)
+            : Promise.resolve(null),
+          command.civil_status != null
+            ? this.validateCivilStatusByDescription(command.civil_status, manager)
+            : Promise.resolve(null),
+          command.home_address_barangay != null
+            ? this.validateBarangayByDescription(command.home_address_barangay, manager)
+            : Promise.resolve(null),
+          command.home_address_city != null
+            ? this.validateCityByDescription(command.home_address_city, manager)
+            : Promise.resolve(null),
+          command.home_address_province != null
+            ? this.validateProvinceByDescription(command.home_address_province, manager)
+            : Promise.resolve(null),
+          command.department != null
+            ? this.validateDepartmentByDescription(command.department, manager)
+            : Promise.resolve(null),
+          command.leave_type != null
+            ? this.validateLeaveTypeByDescription(command.leave_type, manager)
+            : Promise.resolve(null),
+          command.present_address_barangay != null
+            ? this.validateBarangayByDescription(command.present_address_barangay, manager)
+            : Promise.resolve(null),
+          command.present_address_city != null
+            ? this.validateCityByDescription(command.present_address_city, manager)
+            : Promise.resolve(null),
+          command.present_address_province != null
+            ? this.validateProvinceByDescription(command.present_address_province, manager)
             : Promise.resolve(null),
         ]);
 
         // Validate employment status and leave type requirement
+        const effectiveEmploymentStatus =
+          employmentStatus ??
+          (employee.employment_status ? { desc1: employee.employment_status } : null);
         if (
-          employmentStatus.desc1?.toLowerCase().includes('on-leave') &&
-          !command.leave_type
+          effectiveEmploymentStatus?.desc1?.toLowerCase().includes('on-leave') &&
+          !(leaveType?.id ?? employee.leave_type_id)
         ) {
           throw new EmployeeBusinessException(
             'Leave type is required when employment status is on-leave',
@@ -213,61 +247,63 @@ export class UpdateEmployeeUseCase {
 
         const before_state = extractEntityState(employee, tracking_config);
 
-        // Update employee with validated IDs
+        // Merge command with existing employee (only update provided fields)
         employee.update({
-          job_title_id: jobTitle.id!,
-          employment_type_id: employmentType.id!,
-          employment_status_id: employmentStatus.id!,
-          leave_type_id: undefined, // TODO: Need LeaveTypeRepository to validate leave_type if provided
-          branch_id: branch.id!,
-          department_id: department.id!,
-          hire_date: command.hire_date,
-          id_number: command.id_number,
-          bio_number: command.bio_number,
-          image_path: command.image_path,
-          first_name: command.first_name,
-          middle_name: command.middle_name,
-          last_name: command.last_name,
-          suffix: command.suffix,
-          birth_date: command.birth_date,
-          religion_id: religion.id!,
-          civil_status_id: civilStatus.id!,
-          age: command.age,
-          gender: command.gender,
-          citizen_ship_id: citizenship.id!,
-          height: command.height,
-          weight: command.weight,
-          home_address_street: command.home_address_street,
-          home_address_barangay_id: homeAddressBarangay.id!,
-          home_address_city_id: homeAddressCity.id!,
-          home_address_province_id: homeAddressProvince.id!,
-          home_address_zip_code: command.home_address_zip_code,
-          present_address_street: command.present_address_street,
-          present_address_barangay_id: presentAddressBarangay?.id,
-          present_address_city_id: presentAddressCity?.id,
-          present_address_province_id: presentAddressProvince?.id,
-          present_address_zip_code: command.present_address_zip_code,
-          cellphone_number: command.cellphone_number,
-          telephone_number: command.telephone_number,
-          email: command.email,
-          emergency_contact_name: command.emergency_contact_name,
-          emergency_contact_number: command.emergency_contact_number,
-          emergency_contact_relationship: command.emergency_contact_relationship,
-          emergency_contact_address: command.emergency_contact_address,
-          husband_or_wife_name: command.husband_or_wife_name,
-          husband_or_wife_birth_date: command.husband_or_wife_birth_date,
-          husband_or_wife_occupation: command.husband_or_wife_occupation,
-          number_of_children: command.number_of_children,
-          fathers_name: command.fathers_name,
-          fathers_birth_date: command.fathers_birth_date,
-          fathers_occupation: command.fathers_occupation,
-          mothers_name: command.mothers_name,
-          mothers_birth_date: command.mothers_birth_date,
-          mothers_occupation: command.mothers_occupation,
-          remarks: command.remarks,
-          is_active: command.is_active,
-          labor_classification: command.labor_classification,
-          labor_classification_status: command.labor_classification_status,
+          job_title_id: jobTitle?.id ?? employee.job_title_id,
+          employment_type_id: employmentType?.id ?? employee.employment_type_id,
+          employment_status_id: employmentStatus?.id ?? employee.employment_status_id,
+          leave_type_id: leaveType?.id ?? employee.leave_type_id,
+          branch_id: branch?.id ?? employee.branch_id,
+          department_id: department?.id ?? employee.department_id,
+          hire_date: command.hire_date ?? employee.hire_date,
+          end_date: command.end_date ?? employee.end_date,
+          regularization_date: command.regularization_date ?? employee.regularization_date,
+          id_number: command.id_number ?? employee.id_number,
+          bio_number: command.bio_number ?? employee.bio_number,
+          image_path: command.image_path ?? employee.image_path,
+          first_name: command.first_name ?? employee.first_name,
+          middle_name: command.middle_name ?? employee.middle_name,
+          last_name: command.last_name ?? employee.last_name,
+          suffix: command.suffix ?? employee.suffix,
+          birth_date: command.birth_date ?? employee.birth_date,
+          religion_id: religion?.id ?? employee.religion_id,
+          civil_status_id: civilStatus?.id ?? employee.civil_status_id,
+          age: command.age ?? employee.age,
+          gender: command.gender ?? employee.gender,
+          citizen_ship_id: citizenship?.id ?? employee.citizen_ship_id,
+          height: command.height ?? employee.height,
+          weight: command.weight ?? employee.weight,
+          home_address_street: command.home_address_street ?? employee.home_address_street,
+          home_address_barangay_id: homeAddressBarangay?.id ?? employee.home_address_barangay_id,
+          home_address_city_id: homeAddressCity?.id ?? employee.home_address_city_id,
+          home_address_province_id: homeAddressProvince?.id ?? employee.home_address_province_id,
+          home_address_zip_code: command.home_address_zip_code ?? employee.home_address_zip_code,
+          present_address_street: command.present_address_street ?? employee.present_address_street,
+          present_address_barangay_id: presentAddressBarangay?.id ?? employee.present_address_barangay_id,
+          present_address_city_id: presentAddressCity?.id ?? employee.present_address_city_id,
+          present_address_province_id: presentAddressProvince?.id ?? employee.present_address_province_id,
+          present_address_zip_code: command.present_address_zip_code ?? employee.present_address_zip_code,
+          cellphone_number: command.cellphone_number ?? employee.cellphone_number,
+          telephone_number: command.telephone_number ?? employee.telephone_number,
+          email: command.email ?? employee.email,
+          emergency_contact_name: command.emergency_contact_name ?? employee.emergency_contact_name,
+          emergency_contact_number: command.emergency_contact_number ?? employee.emergency_contact_number,
+          emergency_contact_relationship: command.emergency_contact_relationship ?? employee.emergency_contact_relationship,
+          emergency_contact_address: command.emergency_contact_address ?? employee.emergency_contact_address,
+          husband_or_wife_name: command.husband_or_wife_name ?? employee.husband_or_wife_name,
+          husband_or_wife_birth_date: command.husband_or_wife_birth_date ?? employee.husband_or_wife_birth_date,
+          husband_or_wife_occupation: command.husband_or_wife_occupation ?? employee.husband_or_wife_occupation,
+          number_of_children: command.number_of_children ?? employee.number_of_children,
+          fathers_name: command.fathers_name ?? employee.fathers_name,
+          fathers_birth_date: command.fathers_birth_date ?? employee.fathers_birth_date,
+          fathers_occupation: command.fathers_occupation ?? employee.fathers_occupation,
+          mothers_name: command.mothers_name ?? employee.mothers_name,
+          mothers_birth_date: command.mothers_birth_date ?? employee.mothers_birth_date,
+          mothers_occupation: command.mothers_occupation ?? employee.mothers_occupation,
+          remarks: command.remarks ?? employee.remarks,
+          is_active: command.is_active ?? employee.is_active,
+          labor_classification: command.labor_classification ?? employee.labor_classification,
+          labor_classification_status: command.labor_classification_status ?? employee.labor_classification_status,
           updated_by: requestInfo?.user_name || null,
         });
 
@@ -342,160 +378,138 @@ export class UpdateEmployeeUseCase {
     }
   }
 
-  private async validateBranch(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const branch = await this.branchRepository.findByDescription(description, manager);
+  private async validateBranchByDescription(desc: string, manager: EntityManager) {
+    const branch = await this.branchRepository.findByDescription(desc, manager);
     if (!branch) {
       throw new EmployeeBusinessException(
-        `Branch '${description}' not found`,
+        `Branch "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return branch;
   }
 
-  private async validateCitizenship(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const citizenship = await this.citizenshipRepository.findByDescription(description, manager);
+  private async validateCitizenshipByDescription(desc: string, manager: EntityManager) {
+    const citizenship = await this.citizenshipRepository.findByDescription(desc, manager);
     if (!citizenship) {
       throw new EmployeeBusinessException(
-        `Citizenship '${description}' not found`,
+        `Citizenship "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return citizenship;
   }
 
-  private async validateJobTitle(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const jobTitle = await this.jobTitleRepository.findByDescription(description, manager);
+  private async validateJobTitleByDescription(desc: string, manager: EntityManager) {
+    const jobTitle = await this.jobTitleRepository.findByDescription(desc, manager);
     if (!jobTitle) {
       throw new EmployeeBusinessException(
-        `Job title '${description}' not found`,
+        `Job title "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return jobTitle;
   }
 
-  private async validateEmploymentType(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const employmentType =
-      await this.employmentTypeRepository.findByDescription(description, manager);
+  private async validateEmploymentTypeByDescription(desc: string, manager: EntityManager) {
+    const employmentType = await this.employmentTypeRepository.findByDescription(desc, manager);
     if (!employmentType) {
       throw new EmployeeBusinessException(
-        `Employment type '${description}' not found`,
+        `Employment type "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return employmentType;
   }
 
-  private async validateEmploymentStatus(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const employmentStatus =
-      await this.employmentStatusRepository.findByDescription(description, manager);
+  private async validateEmploymentStatusByDescription(desc: string, manager: EntityManager) {
+    const employmentStatus = await this.employmentStatusRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!employmentStatus) {
       throw new EmployeeBusinessException(
-        `Employment status '${description}' not found`,
+        `Employment status "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return employmentStatus;
   }
 
-  private async validateReligion(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const religion = await this.religionRepository.findByDescription(description, manager);
+  private async validateReligionByDescription(desc: string, manager: EntityManager) {
+    const religion = await this.religionRepository.findByDescription(desc, manager);
     if (!religion) {
       throw new EmployeeBusinessException(
-        `Religion '${description}' not found`,
+        `Religion "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return religion;
   }
 
-  private async validateCivilStatus(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const civilStatus =
-      await this.civilStatusRepository.findByDescription(description, manager);
+  private async validateCivilStatusByDescription(desc: string, manager: EntityManager) {
+    const civilStatus = await this.civilStatusRepository.findByDescription(desc, manager);
     if (!civilStatus) {
       throw new EmployeeBusinessException(
-        `Civil status '${description}' not found`,
+        `Civil status "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return civilStatus;
   }
 
-  private async validateCity(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const city = await this.cityRepository.findByDescription(description, manager);
+  private async validateCityByDescription(desc: string, manager: EntityManager) {
+    const city = await this.cityRepository.findByDescription(desc, manager);
     if (!city) {
       throw new EmployeeBusinessException(
-        `City '${description}' not found`,
+        `City "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return city;
   }
 
-  private async validateProvince(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const province = await this.provinceRepository.findByDescription(description, manager);
+  private async validateProvinceByDescription(desc: string, manager: EntityManager) {
+    const province = await this.provinceRepository.findByDescription(desc, manager);
     if (!province) {
       throw new EmployeeBusinessException(
-        `Province '${description}' not found`,
+        `Province "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return province;
   }
 
-  private async validateDepartment(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const department = await this.departmentRepository.findByDescription(description, manager);
+  private async validateDepartmentByDescription(desc: string, manager: EntityManager) {
+    const department = await this.departmentRepository.findByDescription(desc, manager);
     if (!department) {
       throw new EmployeeBusinessException(
-        `Department '${description}' not found`,
+        `Department "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return department;
   }
 
-  private async validateBarangay(
-    description: string,
-    manager: EntityManager,
-  ): Promise<any> {
-    const barangay = await this.barangayRepository.findByDescription(description, manager);
+  private async validateBarangayByDescription(desc: string, manager: EntityManager) {
+    const barangay = await this.barangayRepository.findByDescription(desc, manager);
     if (!barangay) {
       throw new EmployeeBusinessException(
-        `Barangay '${description}' not found`,
+        `Barangay "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return barangay;
+  }
+
+  private async validateLeaveTypeByDescription(desc: string, manager: EntityManager) {
+    const leaveType = await this.leaveTypeRepository.findByDescription(desc, manager);
+    if (!leaveType) {
+      throw new EmployeeBusinessException(
+        `Leave type "${desc}" not found`,
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    return leaveType;
   }
 }

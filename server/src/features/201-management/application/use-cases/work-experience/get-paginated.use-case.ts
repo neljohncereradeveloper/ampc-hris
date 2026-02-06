@@ -23,7 +23,7 @@ export class GetPaginatedWorkExperienceUseCase {
     page: number,
     limit: number,
     is_archived: boolean,
-    employee_id: number | null,
+    employee_id: number,
   ): Promise<PaginatedResult<WorkExperience>> {
     return this.transactionHelper.executeTransaction(
       WORK_EXPERIENCE_ACTIONS.PAGINATED_LIST,

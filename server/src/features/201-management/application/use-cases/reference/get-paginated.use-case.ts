@@ -23,7 +23,7 @@ export class GetPaginatedReferenceUseCase {
     page: number,
     limit: number,
     is_archived: boolean,
-    employee_id?: number,
+    employee_id: number,
   ): Promise<PaginatedResult<Reference>> {
     return this.transactionHelper.executeTransaction(
       REFERENCE_ACTIONS.PAGINATED_LIST,

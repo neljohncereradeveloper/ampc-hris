@@ -168,7 +168,7 @@ export class ReferenceController {
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
   @RequirePermissions(PERMISSIONS.REFERENCES.READ)
   @ApiOperation({ summary: 'Get paginated list of references' })
-  @ApiQuery({ name: 'employee_id', required: false, type: Number, description: 'Filter by employee ID' })
+  @ApiQuery({ name: 'employee_id', required: true, type: Number, description: 'Filter by employee ID' })
   @ApiResponse({
     status: 200,
     description: 'References retrieved successfully',
@@ -178,14 +178,14 @@ export class ReferenceController {
   @ApiBearerAuth('JWT-auth')
   async getPaginated(
     @Query() query: PaginationQueryDto,
-    @Query('employee_id') employee_id?: number,
+    @Query('employee_id', ParseIntPipe) employee_id: number,
   ): Promise<PaginatedResult<Reference>> {
     return this.getPaginatedReferenceUseCase.execute(
       query.term ?? '',
       query.page,
       query.limit,
       query.is_archived === 'true',
-      employee_id ? Number(employee_id) : undefined,
+      employee_id,
     );
   }
 }

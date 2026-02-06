@@ -138,7 +138,7 @@ export class ReferenceRepositoryImpl implements ReferenceRepository<EntityManage
     page: number,
     limit: number,
     is_archived: boolean,
-    employee_id: number | undefined,
+    employee_id: number,
     manager: EntityManager,
   ): Promise<PaginatedResult<Reference>> {
     const offset = (page - 1) * limit;
@@ -155,12 +155,10 @@ export class ReferenceRepositoryImpl implements ReferenceRepository<EntityManage
       whereClause = 'WHERE deleted_at IS NULL';
     }
 
-    // Add employee_id filter if provided
-    if (employee_id !== undefined) {
-      whereClause += ` AND employee_id = $${paramIndex}`;
-      queryParams.push(employee_id);
-      paramIndex++;
-    }
+    // Add employee_id filter (required)
+    whereClause += ` AND employee_id = $${paramIndex}`;
+    queryParams.push(employee_id);
+    paramIndex++;
 
     // Add search term if provided
     if (term) {

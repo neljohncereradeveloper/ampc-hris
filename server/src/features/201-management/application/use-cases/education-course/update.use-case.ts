@@ -6,6 +6,7 @@ import { getPHDateTime } from '@/core/utils/date.util';
 import { ActivityLog } from '@/core/domain/models';
 import { TransactionPort } from '@/core/domain/ports';
 import { HTTP_STATUS } from '@/core/domain/constants';
+import { EducationCourse } from '@/features/201-management/domain/models';
 import { EducationCourseBusinessException } from '@/features/201-management/domain/exceptions';
 import { EducationCourseRepository } from '@/features/201-management/domain/repositories';
 import {
@@ -17,6 +18,7 @@ import { UpdateEducationCourseCommand } from '../../commands/education-course/up
 import {
   getChangedFields,
   extractEntityState,
+  FieldExtractorConfig,
 } from '@/core/utils/change-tracking.util';
 
 @Injectable()
@@ -49,7 +51,18 @@ export class UpdateEducationCourseUseCase {
         }
 
         // Store original state for change tracking
-        const originalState = extractEntityState(existing_education_course);
+        const tracking_config: FieldExtractorConfig[] = [
+          { field: 'desc1' },
+          {
+            field: 'updated_at',
+            transform: (val) => (val ? getPHDateTime(val) : null),
+          },
+          { field: 'updated_by' },
+        ];
+        const originalState = extractEntityState(
+          existing_education_course,
+          tracking_config,
+        );
 
         // Use domain method to update (validates automatically)
         existing_education_course.update({
@@ -81,7 +94,10 @@ export class UpdateEducationCourseUseCase {
         }
 
         // Track changes
-        const newState = extractEntityState(updated_education_course);
+        const newState = extractEntityState(
+          updated_education_course,
+          tracking_config,
+        );
         const changedFields = getChangedFields(originalState, newState);
 
         // Log the update

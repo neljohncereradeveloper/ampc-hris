@@ -6,6 +6,7 @@ import { getPHDateTime } from '@/core/utils/date.util';
 import { ActivityLog } from '@/core/domain/models';
 import { TransactionPort } from '@/core/domain/ports';
 import { HTTP_STATUS } from '@/core/domain/constants';
+import { EducationSchool } from '@/features/201-management/domain/models';
 import { EducationSchoolBusinessException } from '@/features/201-management/domain/exceptions';
 import { EducationSchoolRepository } from '@/features/201-management/domain/repositories';
 import {
@@ -17,6 +18,7 @@ import { UpdateEducationSchoolCommand } from '../../commands/education-school/up
 import {
   getChangedFields,
   extractEntityState,
+  FieldExtractorConfig,
 } from '@/core/utils/change-tracking.util';
 
 @Injectable()
@@ -28,7 +30,7 @@ export class UpdateEducationSchoolUseCase {
     private readonly educationSchoolRepository: EducationSchoolRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -49,7 +51,18 @@ export class UpdateEducationSchoolUseCase {
         }
 
         // Store original state for change tracking
-        const originalState = extractEntityState(existing_education_school);
+        const tracking_config: FieldExtractorConfig[] = [
+          { field: 'desc1' },
+          {
+            field: 'updated_at',
+            transform: (val) => (val ? getPHDateTime(val) : null),
+          },
+          { field: 'updated_by' },
+        ];
+        const originalState = extractEntityState(
+          existing_education_school,
+          tracking_config,
+        );
 
         // Use domain method to update (validates automatically)
         existing_education_school.update({
@@ -81,7 +94,10 @@ export class UpdateEducationSchoolUseCase {
         }
 
         // Track changes
-        const newState = extractEntityState(updated_education_school);
+        const newState = extractEntityState(
+          updated_education_school,
+          tracking_config,
+        );
         const changedFields = getChangedFields(originalState, newState);
 
         // Log the update

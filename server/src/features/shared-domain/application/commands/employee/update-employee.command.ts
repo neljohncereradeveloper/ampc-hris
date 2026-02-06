@@ -1,47 +1,48 @@
 import {
   GenderEnum,
-  PaymentTypeEnum,
   LaborClassificationEnum,
   LaborClassificationStatusEnum,
 } from '@/features/shared-domain/domain/enum';
 
 /**
- * Command for updating an employee
+ * Command for updating an employee (partial update - all fields optional)
  * Application layer command - simple type definition without validation
  */
 export interface UpdateEmployeeCommand {
-  /** employment information */
-  job_title: string;
-  employment_type: string;
-  employment_status: string;
+  /** employment information (descriptions from UI combobox) */
+  job_title?: string;
+  employment_type?: string;
+  employment_status?: string;
   leave_type?: string;
-  branch: string;
-  department: string;
-  hire_date: Date;
-  id_number: string;
+  branch?: string;
+  department?: string;
+  hire_date?: Date;
+  end_date?: Date;
+  regularization_date?: Date;
+  id_number?: string;
   bio_number?: string;
   image_path?: string;
 
   /** personal information */
-  first_name: string;
+  first_name?: string;
   middle_name?: string;
-  last_name: string;
+  last_name?: string;
   suffix?: string;
-  birth_date: Date;
-  religion: string;
-  civil_status: string;
+  birth_date?: Date;
+  religion?: string;
+  civil_status?: string;
   age?: number;
   gender?: GenderEnum;
-  citizen_ship: string;
+  citizenship?: string;
   height?: number;
   weight?: number;
 
   /** address information */
-  home_address_street: string;
-  home_address_barangay: string;
-  home_address_city: string;
-  home_address_province: string;
-  home_address_zip_code: string;
+  home_address_street?: string;
+  home_address_barangay?: string;
+  home_address_city?: string;
+  home_address_province?: string;
+  home_address_zip_code?: string;
   present_address_street?: string;
   present_address_barangay?: string;
   present_address_city?: string;

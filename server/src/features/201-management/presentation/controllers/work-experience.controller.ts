@@ -201,7 +201,7 @@ export class WorkExperienceController {
   })
   @ApiQuery({
     name: 'employee_id',
-    required: false,
+    required: true,
     type: Number,
     description: 'Filter by employee ID',
   })
@@ -214,14 +214,14 @@ export class WorkExperienceController {
   @ApiBearerAuth('JWT-auth')
   async getPaginated(
     @Query() query: PaginationQueryDto,
-    @Query('employee_id') employee_id?: number,
+    @Query('employee_id', ParseIntPipe) employee_id: number,
   ): Promise<PaginatedResult<WorkExperience>> {
     return this.getPaginatedWorkExperienceUseCase.execute(
       query.term ?? '',
       query.page,
       query.limit,
       query.is_archived === 'true',
-      employee_id ? parseInt(employee_id.toString(), 10) : null,
+      employee_id,
     );
   }
 }

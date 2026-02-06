@@ -1,6 +1,5 @@
 import {
   GenderEnum,
-  PaymentTypeEnum,
   LaborClassificationEnum,
   LaborClassificationStatusEnum,
 } from '@/features/shared-domain/domain/enum';
@@ -10,7 +9,7 @@ import {
  * Application layer command - simple type definition without validation
  */
 export interface CreateEmployeeCommand {
-  /** employment information */
+  /** employment information (descriptions from UI combobox) */
   job_title: string;
   employment_type: string;
   employment_status: string;
@@ -32,7 +31,7 @@ export interface CreateEmployeeCommand {
   civil_status: string;
   age?: number;
   gender?: GenderEnum;
-  citizen_ship: string;
+  citizenship: string;
   height?: number;
   weight?: number;
 

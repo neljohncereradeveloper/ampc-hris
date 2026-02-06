@@ -152,7 +152,7 @@ export class WorkExperienceRepositoryImpl
     page: number,
     limit: number,
     is_archived: boolean,
-    employee_id: number | null,
+    employee_id: number,
     manager: EntityManager,
   ): Promise<PaginatedResult<WorkExperience>> {
     const offset = (page - 1) * limit;
@@ -169,12 +169,10 @@ export class WorkExperienceRepositoryImpl
       whereClause = 'WHERE w.deleted_at IS NULL';
     }
 
-    // Add employee_id filter if provided
-    if (employee_id !== null && employee_id !== undefined) {
-      whereClause += ` AND w.employee_id = $${paramIndex}`;
-      queryParams.push(employee_id);
-      paramIndex++;
-    }
+    // Add employee_id filter (required)
+    whereClause += ` AND w.employee_id = $${paramIndex}`;
+    queryParams.push(employee_id);
+    paramIndex++;
 
     // Add search term if provided (search in company desc1, job title desc1, and years)
     if (term) {

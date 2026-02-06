@@ -15,9 +15,12 @@ import {
   SHARED_DOMAIN_TOKENS,
 } from '@/features/shared-domain/domain/constants';
 import { CreateEmployeeCommand } from '../../commands/employee/create-employee.command';
-import { BranchRepository } from '@/features/shared-domain/domain/repositories';
-import { DepartmentRepository } from '@/features/shared-domain/domain/repositories';
-import { JobtitleRepository } from '@/features/shared-domain/domain/repositories';
+import {
+  BranchRepository,
+  DepartmentRepository,
+  JobtitleRepository,
+  LeaveTypeRepository,
+} from '@/features/shared-domain/domain/repositories';
 import { EmploymentTypeRepository } from '@/features/201-management/domain/repositories';
 import { EmploymentStatusRepository } from '@/features/201-management/domain/repositories';
 import { ReligionRepository } from '@/features/201-management/domain/repositories';
@@ -59,6 +62,8 @@ export class CreateEmployeeUseCase {
     private readonly cityRepository: CityRepository,
     @Inject(MANAGEMENT_201_TOKENS.PROVINCE)
     private readonly provinceRepository: ProvinceRepository,
+    @Inject(SHARED_DOMAIN_TOKENS.LEAVE_TYPE)
+    private readonly leaveTypeRepository: LeaveTypeRepository,
   ) { }
 
   async execute(
@@ -71,7 +76,7 @@ export class CreateEmployeeUseCase {
         // Check for duplicate employees
         await this.validateUniqueEmployee(command, manager);
 
-        // Validate all required entities in parallel
+        // Validate all required entities by description (from UI combobox)
         const [
           branch,
           citizenship,
@@ -84,36 +89,40 @@ export class CreateEmployeeUseCase {
           homeAddressCity,
           homeAddressProvince,
           department,
+          leaveType,
           presentAddressBarangay,
           presentAddressCity,
           presentAddressProvince,
         ] = await Promise.all([
-          this.validateBranch(command.branch, manager),
-          this.validateCitizenship(command.citizen_ship, manager),
-          this.validateJobTitle(command.job_title, manager),
-          this.validateEmploymentType(command.employment_type, manager),
-          this.validateEmploymentStatus(command.employment_status, manager),
-          this.validateReligion(command.religion, manager),
-          this.validateCivilStatus(command.civil_status, manager),
-          this.validateBarangay(command.home_address_barangay, manager),
-          this.validateCity(command.home_address_city, manager),
-          this.validateProvince(command.home_address_province, manager),
-          this.validateDepartment(command.department, manager),
+          this.validateBranchByDescription(command.branch, manager),
+          this.validateCitizenshipByDescription(command.citizenship, manager),
+          this.validateJobTitleByDescription(command.job_title, manager),
+          this.validateEmploymentTypeByDescription(command.employment_type, manager),
+          this.validateEmploymentStatusByDescription(command.employment_status, manager),
+          this.validateReligionByDescription(command.religion, manager),
+          this.validateCivilStatusByDescription(command.civil_status, manager),
+          this.validateBarangayByDescription(command.home_address_barangay, manager),
+          this.validateCityByDescription(command.home_address_city, manager),
+          this.validateProvinceByDescription(command.home_address_province, manager),
+          this.validateDepartmentByDescription(command.department, manager),
+          command.leave_type
+            ? this.validateLeaveTypeByDescription(command.leave_type, manager)
+            : Promise.resolve(null),
           command.present_address_barangay
-            ? this.validateBarangay(command.present_address_barangay, manager)
+            ? this.validateBarangayByDescription(command.present_address_barangay, manager)
             : Promise.resolve(null),
           command.present_address_city
-            ? this.validateCity(command.present_address_city, manager)
+            ? this.validateCityByDescription(command.present_address_city, manager)
             : Promise.resolve(null),
           command.present_address_province
-            ? this.validateProvince(command.present_address_province, manager)
+            ? this.validateProvinceByDescription(command.present_address_province, manager)
             : Promise.resolve(null),
         ]);
 
         // Validate employment status and leave type
         if (
           employmentStatus.desc1?.toLowerCase().includes('on-leave') &&
-          !command.leave_type
+          !leaveType
         ) {
           throw new EmployeeBusinessException(
             'Leave type is required when employment status is on-leave',
@@ -126,7 +135,7 @@ export class CreateEmployeeUseCase {
           job_title_id: jobTitle.id!,
           employment_type_id: employmentType.id!,
           employment_status_id: employmentStatus.id!,
-          leave_type_id: undefined, // TODO: Need LeaveTypeRepository to validate leave_type if provided
+          leave_type_id: leaveType?.id ?? undefined,
           branch_id: branch.id!,
           department_id: department?.id || 0,
           hire_date: command.hire_date,
@@ -243,130 +252,138 @@ export class CreateEmployeeUseCase {
     }
   }
 
-  private async validateBranch(description: string, manager: EntityManager) {
-    const branch = await this.branchRepository.findByDescription(description, manager);
+  private async validateBranchByDescription(desc: string, manager: EntityManager) {
+    const branch = await this.branchRepository.findByDescription(desc, manager);
     if (!branch) {
       throw new EmployeeBusinessException(
-        `Branch '${description}' not found`,
+        `Branch "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return branch;
   }
 
-  private async validateCitizenship(description: string, manager: EntityManager) {
-    const citizenship = await this.citizenshipRepository.findByDescription(description, manager);
+  private async validateCitizenshipByDescription(desc: string, manager: EntityManager) {
+    const citizenship = await this.citizenshipRepository.findByDescription(desc, manager);
     if (!citizenship) {
       throw new EmployeeBusinessException(
-        `Citizenship '${description}' not found`,
+        `Citizenship "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return citizenship;
   }
 
-  private async validateJobTitle(description: string, manager: EntityManager) {
-    const jobTitle = await this.jobTitleRepository.findByDescription(description, manager);
+  private async validateJobTitleByDescription(desc: string, manager: EntityManager) {
+    const jobTitle = await this.jobTitleRepository.findByDescription(desc, manager);
     if (!jobTitle) {
       throw new EmployeeBusinessException(
-        `Job title '${description}' not found`,
+        `Job title "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return jobTitle;
   }
 
-  private async validateEmploymentType(description: string, manager: EntityManager) {
-    const employmentType = await this.employmentTypeRepository.findByDescription(
-      description,
-      manager,
-    );
+  private async validateEmploymentTypeByDescription(desc: string, manager: EntityManager) {
+    const employmentType = await this.employmentTypeRepository.findByDescription(desc, manager);
     if (!employmentType) {
       throw new EmployeeBusinessException(
-        `Employment type '${description}' not found`,
+        `Employment type "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return employmentType;
   }
 
-  private async validateEmploymentStatus(description: string, manager: EntityManager) {
+  private async validateEmploymentStatusByDescription(desc: string, manager: EntityManager) {
     const employmentStatus = await this.employmentStatusRepository.findByDescription(
-      description,
+      desc,
       manager,
     );
     if (!employmentStatus) {
       throw new EmployeeBusinessException(
-        `Employment status '${description}' not found`,
+        `Employment status "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return employmentStatus;
   }
 
-  private async validateReligion(description: string, manager: EntityManager) {
-    const religion = await this.religionRepository.findByDescription(description, manager);
+  private async validateReligionByDescription(desc: string, manager: EntityManager) {
+    const religion = await this.religionRepository.findByDescription(desc, manager);
     if (!religion) {
       throw new EmployeeBusinessException(
-        `Religion '${description}' not found`,
+        `Religion "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return religion;
   }
 
-  private async validateCivilStatus(description: string, manager: EntityManager) {
-    const civilStatus = await this.civilStatusRepository.findByDescription(description, manager);
+  private async validateCivilStatusByDescription(desc: string, manager: EntityManager) {
+    const civilStatus = await this.civilStatusRepository.findByDescription(desc, manager);
     if (!civilStatus) {
       throw new EmployeeBusinessException(
-        `Civil status '${description}' not found`,
+        `Civil status "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return civilStatus;
   }
 
-  private async validateCity(description: string, manager: EntityManager) {
-    const city = await this.cityRepository.findByDescription(description, manager);
+  private async validateCityByDescription(desc: string, manager: EntityManager) {
+    const city = await this.cityRepository.findByDescription(desc, manager);
     if (!city) {
       throw new EmployeeBusinessException(
-        `City '${description}' not found`,
+        `City "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return city;
   }
 
-  private async validateProvince(description: string, manager: EntityManager) {
-    const province = await this.provinceRepository.findByDescription(description, manager);
+  private async validateProvinceByDescription(desc: string, manager: EntityManager) {
+    const province = await this.provinceRepository.findByDescription(desc, manager);
     if (!province) {
       throw new EmployeeBusinessException(
-        `Province '${description}' not found`,
+        `Province "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return province;
   }
 
-  private async validateDepartment(description: string, manager: EntityManager) {
-    const department = await this.departmentRepository.findByDescription(description, manager);
+  private async validateDepartmentByDescription(desc: string, manager: EntityManager) {
+    const department = await this.departmentRepository.findByDescription(desc, manager);
     if (!department) {
       throw new EmployeeBusinessException(
-        `Department '${description}' not found`,
+        `Department "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return department;
   }
 
-  private async validateBarangay(description: string, manager: EntityManager) {
-    const barangay = await this.barangayRepository.findByDescription(description, manager);
+  private async validateBarangayByDescription(desc: string, manager: EntityManager) {
+    const barangay = await this.barangayRepository.findByDescription(desc, manager);
     if (!barangay) {
       throw new EmployeeBusinessException(
-        `Barangay '${description}' not found`,
+        `Barangay "${desc}" not found`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     return barangay;
+  }
+
+  private async validateLeaveTypeByDescription(desc: string, manager: EntityManager) {
+    const leaveType = await this.leaveTypeRepository.findByDescription(desc, manager);
+    if (!leaveType) {
+      throw new EmployeeBusinessException(
+        `Leave type "${desc}" not found`,
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    return leaveType;
   }
 }

@@ -26,7 +26,7 @@ export interface WorkExperienceRepository<Context = unknown> {
     page: number,
     limit: number,
     is_archived: boolean,
-    employee_id: number | null,
+    employee_id: number,
     context: Context,
   ): Promise<PaginatedResult<WorkExperience>>;
 }

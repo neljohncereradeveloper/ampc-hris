@@ -7,6 +7,7 @@ import { DepartmentRepositoryImpl } from './infrastructure/database/repositories
 import { JobtitleRepositoryImpl } from './infrastructure/database/repositories/jobtitle.repository.impl';
 import { HolidayRepositoryImpl } from './infrastructure/database/repositories/holiday.repository.impl';
 import { EmployeeRepositoryImpl } from './infrastructure/database/repositories/employee.repository.impl';
+import { LeaveTypeRepositoryImpl } from './infrastructure/database/repositories/leave-type.repository.impl';
 import {
   CreateBranchUseCase,
   UpdateBranchUseCase,
@@ -93,6 +94,10 @@ import { TOKENS_CORE } from '@/core/domain/constants';
     {
       provide: SHARED_DOMAIN_TOKENS.EMPLOYEE,
       useClass: EmployeeRepositoryImpl,
+    },
+    {
+      provide: SHARED_DOMAIN_TOKENS.LEAVE_TYPE,
+      useClass: LeaveTypeRepositoryImpl,
     },
     {
       provide: TOKENS_CORE.TRANSACTIONPORT,
@@ -194,6 +199,7 @@ import { TOKENS_CORE } from '@/core/domain/constants';
     SHARED_DOMAIN_TOKENS.JOBTITLE,
     SHARED_DOMAIN_TOKENS.HOLIDAY,
     SHARED_DOMAIN_TOKENS.EMPLOYEE,
+    SHARED_DOMAIN_TOKENS.LEAVE_TYPE,
   ],
 })
 export class SharedDomainModule { }

@@ -9,4 +9,6 @@ export const SHARED_DOMAIN_TOKENS = {
   HOLIDAY: 'HolidayRepository',
   /** Employee Repository */
   EMPLOYEE: 'EmployeeRepository',
+  /** Leave Type Repository */
+  LEAVE_TYPE: 'LeaveTypeRepository',
 } as const;

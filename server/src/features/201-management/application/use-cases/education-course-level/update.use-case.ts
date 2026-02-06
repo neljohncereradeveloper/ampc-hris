@@ -6,6 +6,7 @@ import { getPHDateTime } from '@/core/utils/date.util';
 import { ActivityLog } from '@/core/domain/models';
 import { TransactionPort } from '@/core/domain/ports';
 import { HTTP_STATUS } from '@/core/domain/constants';
+import { EducationCourseLevel } from '@/features/201-management/domain/models';
 import { EducationCourseLevelBusinessException } from '@/features/201-management/domain/exceptions';
 import { EducationCourseLevelRepository } from '@/features/201-management/domain/repositories';
 import {
@@ -17,6 +18,7 @@ import { UpdateEducationCourseLevelCommand } from '../../commands/education-cour
 import {
   getChangedFields,
   extractEntityState,
+  FieldExtractorConfig,
 } from '@/core/utils/change-tracking.util';
 
 @Injectable()
@@ -28,7 +30,7 @@ export class UpdateEducationCourseLevelUseCase {
     private readonly educationCourseLevelRepository: EducationCourseLevelRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -49,7 +51,18 @@ export class UpdateEducationCourseLevelUseCase {
         }
 
         // Store original state for change tracking
-        const originalState = extractEntityState(existing_education_course_level);
+        const tracking_config: FieldExtractorConfig[] = [
+          { field: 'desc1' },
+          {
+            field: 'updated_at',
+            transform: (val) => (val ? getPHDateTime(val) : null),
+          },
+          { field: 'updated_by' },
+        ];
+        const originalState = extractEntityState(
+          existing_education_course_level,
+          tracking_config,
+        );
 
         // Use domain method to update (validates automatically)
         existing_education_course_level.update({
@@ -81,7 +94,10 @@ export class UpdateEducationCourseLevelUseCase {
         }
 
         // Track changes
-        const newState = extractEntityState(updated_education_course_level);
+        const newState = extractEntityState(
+          updated_education_course_level,
+          tracking_config,
+        );
         const changedFields = getChangedFields(originalState, newState);
 
         // Log the update

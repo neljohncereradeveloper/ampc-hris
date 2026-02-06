@@ -8,7 +8,6 @@ import {
   IsBoolean,
   IsEmail,
   MaxLength,
-  MinLength,
 } from 'class-validator';
 import {
   GenderEnum,
@@ -18,36 +17,36 @@ import {
 } from '@/features/shared-domain/domain/enum';
 
 export class CreateEmployeeDto {
-  /** Employment information */
-  @ApiProperty({ description: 'Job title ID', example: 1 })
-  @IsNumber()
+  /** Employment information (descriptions from combobox) */
+  @ApiProperty({ description: 'Job title description', example: 'Software Engineer' })
+  @IsString()
   @IsNotEmpty()
-  job_title_id: number;
+  job_title: string;
 
-  @ApiProperty({ description: 'Employment type ID', example: 1 })
-  @IsNumber()
+  @ApiProperty({ description: 'Employment type description', example: 'Regular' })
+  @IsString()
   @IsNotEmpty()
-  employment_type_id: number;
+  employment_type: string;
 
-  @ApiProperty({ description: 'Employment status ID', example: 1 })
-  @IsNumber()
+  @ApiProperty({ description: 'Employment status description', example: 'Active' })
+  @IsString()
   @IsNotEmpty()
-  employment_status_id: number;
+  employment_status: string;
 
-  @ApiProperty({ description: 'Leave type ID', example: 1, required: false })
-  @IsNumber()
+  @ApiProperty({ description: 'Leave type description', example: 'Sick Leave', required: false })
+  @IsString()
   @IsOptional()
-  leave_type_id?: number;
+  leave_type?: string;
 
-  @ApiProperty({ description: 'Branch ID', example: 1 })
-  @IsNumber()
+  @ApiProperty({ description: 'Branch description', example: 'Main Office' })
+  @IsString()
   @IsNotEmpty()
-  branch_id: number;
+  branch: string;
 
-  @ApiProperty({ description: 'Department ID', example: 1 })
-  @IsNumber()
+  @ApiProperty({ description: 'Department description', example: 'IT' })
+  @IsString()
   @IsNotEmpty()
-  department_id: number;
+  department: string;
 
   @ApiProperty({ description: 'Hire date', example: '2024-01-01' })
   @IsDateString()
@@ -102,15 +101,15 @@ export class CreateEmployeeDto {
   @IsNotEmpty()
   birth_date: Date;
 
-  @ApiProperty({ description: 'Religion ID', example: 1 })
-  @IsNumber()
+  @ApiProperty({ description: 'Religion description', example: 'Roman Catholic' })
+  @IsString()
   @IsNotEmpty()
-  religion_id: number;
+  religion: string;
 
-  @ApiProperty({ description: 'Civil status ID', example: 1 })
-  @IsNumber()
+  @ApiProperty({ description: 'Civil status description', example: 'Single' })
+  @IsString()
   @IsNotEmpty()
-  civil_status_id: number;
+  civil_status: string;
 
   @ApiProperty({ description: 'Age', example: 30, required: false })
   @IsNumber()
@@ -126,10 +125,10 @@ export class CreateEmployeeDto {
   @IsOptional()
   gender?: GenderEnum;
 
-  @ApiProperty({ description: 'Citizenship ID', example: 1 })
-  @IsNumber()
+  @ApiProperty({ description: 'Citizenship description', example: 'Filipino' })
+  @IsString()
   @IsNotEmpty()
-  citizen_ship_id: number;
+  citizenship: string;
 
   @ApiProperty({ description: 'Height', example: 170.5, required: false })
   @IsNumber()
@@ -148,20 +147,20 @@ export class CreateEmployeeDto {
   @MaxLength(255)
   home_address_street: string;
 
-  @ApiProperty({ description: 'Home address barangay ID', example: 1 })
-  @IsNumber()
+  @ApiProperty({ description: 'Home address barangay description', example: 'Barangay 1' })
+  @IsString()
   @IsNotEmpty()
-  home_address_barangay_id: number;
+  home_address_barangay: string;
 
-  @ApiProperty({ description: 'Home address city ID', example: 1 })
-  @IsNumber()
+  @ApiProperty({ description: 'Home address city description', example: 'Manila' })
+  @IsString()
   @IsNotEmpty()
-  home_address_city_id: number;
+  home_address_city: string;
 
-  @ApiProperty({ description: 'Home address province ID', example: 1 })
-  @IsNumber()
+  @ApiProperty({ description: 'Home address province description', example: 'Metro Manila' })
+  @IsString()
   @IsNotEmpty()
-  home_address_province_id: number;
+  home_address_province: string;
 
   @ApiProperty({ description: 'Home address zip code', example: '1234' })
   @IsString()
@@ -175,20 +174,20 @@ export class CreateEmployeeDto {
   @MaxLength(255)
   present_address_street?: string;
 
-  @ApiProperty({ description: 'Present address barangay ID', example: 1, required: false })
-  @IsNumber()
+  @ApiProperty({ description: 'Present address barangay description', example: 'Barangay 1', required: false })
+  @IsString()
   @IsOptional()
-  present_address_barangay_id?: number;
+  present_address_barangay?: string;
 
-  @ApiProperty({ description: 'Present address city ID', example: 1, required: false })
-  @IsNumber()
+  @ApiProperty({ description: 'Present address city description', example: 'Manila', required: false })
+  @IsString()
   @IsOptional()
-  present_address_city_id?: number;
+  present_address_city?: string;
 
-  @ApiProperty({ description: 'Present address province ID', example: 1, required: false })
-  @IsNumber()
+  @ApiProperty({ description: 'Present address province description', example: 'Metro Manila', required: false })
+  @IsString()
   @IsOptional()
-  present_address_province_id?: number;
+  present_address_province?: string;
 
   @ApiProperty({ description: 'Present address zip code', example: '5678', required: false })
   @IsString()
