@@ -5,3 +5,4 @@ export * from './department.constants';
 export * from './jobtitle.constants';
 export * from './holiday.constants';
 export * from './employee.constants';
+export * from './leave-type.constants';

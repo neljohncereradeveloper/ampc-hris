@@ -6,6 +6,26 @@ import { SeedPermissions } from './create-default-permissions.seed';
 import { SeedRoles } from './create-default-roles.seed';
 import { SeedRolePermissions } from './create-default-role-permissions.seed';
 import { SeedAdminAccount } from './create-default-admin.seed';
+import { SeedEmploymentTypes } from './seed-employment-types.seed';
+import { SeedEmploymentStatuses } from './seed-employment-statuses.seed';
+import { SeedCivilStatuses } from './seed-civil-statuses.seed';
+import { SeedReligions } from './seed-religions.seed';
+import { SeedCitizenships } from './seed-citizenships.seed';
+import { SeedLeaveTypes } from './seed-leave-types.seed';
+import { SeedBranches } from './seed-branches.seed';
+import { SeedDepartments } from './seed-departments.seed';
+import { SeedJobTitles } from './seed-job-titles.seed';
+import { SeedProvinces } from './seed-provinces.seed';
+import { SeedCities } from './seed-cities.seed';
+import { SeedBarangays } from './seed-barangays.seed';
+import { SeedEducationLevels } from './seed-education-levels.seed';
+import { SeedEducationSchools } from './seed-education-schools.seed';
+import { SeedEducationCourses } from './seed-education-courses.seed';
+import { SeedEducationCourseLevels } from './seed-education-course-levels.seed';
+import { SeedWorkExperienceCompanies } from './seed-work-experience-companies.seed';
+import { SeedWorkExperienceJobTitles } from './seed-work-experience-job-titles.seed';
+import { SeedTrainingCertificates } from './seed-training-certificates.seed';
+import { SeedHolidays } from './seed-holidays.seed';
 
 // Load environment variables from .env
 dotenvConfig();
@@ -27,7 +47,7 @@ const data_source = new DataSource({
 class SeedRunner {
   private readonly logger = new Logger('SeedRunner');
 
-  constructor(private readonly data_source: DataSource) {}
+  constructor(private readonly data_source: DataSource) { }
 
   async run() {
     // Initialize database connection
@@ -65,6 +85,29 @@ class SeedRunner {
       const admin_seeder = new SeedAdminAccount(query_runner.manager);
       await admin_seeder.run(roleMap);
       this.logger.log('Admin account seeded');
+
+      // 5. Seed reference data (employment, branches, locations, education, etc.)
+      await new SeedEmploymentTypes(query_runner.manager).run();
+      await new SeedEmploymentStatuses(query_runner.manager).run();
+      await new SeedCivilStatuses(query_runner.manager).run();
+      await new SeedReligions(query_runner.manager).run();
+      await new SeedCitizenships(query_runner.manager).run();
+      await new SeedLeaveTypes(query_runner.manager).run();
+      await new SeedBranches(query_runner.manager).run();
+      await new SeedDepartments(query_runner.manager).run();
+      await new SeedJobTitles(query_runner.manager).run();
+      await new SeedProvinces(query_runner.manager).run();
+      await new SeedCities(query_runner.manager).run();
+      await new SeedBarangays(query_runner.manager).run();
+      await new SeedEducationLevels(query_runner.manager).run();
+      await new SeedEducationSchools(query_runner.manager).run();
+      await new SeedEducationCourses(query_runner.manager).run();
+      await new SeedEducationCourseLevels(query_runner.manager).run();
+      await new SeedWorkExperienceCompanies(query_runner.manager).run();
+      await new SeedWorkExperienceJobTitles(query_runner.manager).run();
+      await new SeedTrainingCertificates(query_runner.manager).run();
+      await new SeedHolidays(query_runner.manager).run();
+      this.logger.log('Reference data seeded');
 
       // Commit the transaction if all seeds succeed
       await query_runner.commitTransaction();

@@ -17,7 +17,6 @@ import { EducationCourseEntity } from './education-course.entity';
 import { EducationCourseLevelEntity } from './education-course-level.entity';
 
 @Entity(MANAGEMENT_201_DATABASE_MODELS.EDUCATIONS)
-@Index(['employee_id'])
 export class EducationEntity {
   @PrimaryGeneratedColumn()
   id: number;

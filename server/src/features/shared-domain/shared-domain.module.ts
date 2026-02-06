@@ -33,6 +33,14 @@ import {
   ComboboxJobtitleUseCase,
 } from './application/use-cases/jobtitle';
 import {
+  CreateLeaveTypeUseCase,
+  UpdateLeaveTypeUseCase,
+  ArchiveLeaveTypeUseCase,
+  RestoreLeaveTypeUseCase,
+  GetPaginatedLeaveTypeUseCase,
+  ComboboxLeaveTypeUseCase,
+} from './application/use-cases/leave-type';
+import {
   CreateHolidayUseCase,
   UpdateHolidayUseCase,
   ArchiveHolidayUseCase,
@@ -58,6 +66,7 @@ import {
 import { BranchController } from './presentation/controllers/branch.controller';
 import { DepartmentController } from './presentation/controllers/department.controller';
 import { JobtitleController } from './presentation/controllers/jobtitle.controller';
+import { LeaveTypeController } from './presentation/controllers/leave-type.controller';
 import { HolidayController } from './presentation/controllers/holiday.controller';
 import { EmployeeController } from './presentation/controllers/employee.controller';
 import { TransactionAdapter } from '@/core/infrastructure/database/adapters/transaction-helper.adapter';
@@ -70,6 +79,7 @@ import { TOKENS_CORE } from '@/core/domain/constants';
     BranchController,
     DepartmentController,
     JobtitleController,
+    LeaveTypeController,
     HolidayController,
     EmployeeController,
   ],
@@ -128,6 +138,13 @@ import { TOKENS_CORE } from '@/core/domain/constants';
     RestoreJobtitleUseCase,
     GetPaginatedJobtitleUseCase,
     ComboboxJobtitleUseCase,
+    // Leave type use cases (no get-by-id)
+    CreateLeaveTypeUseCase,
+    UpdateLeaveTypeUseCase,
+    ArchiveLeaveTypeUseCase,
+    RestoreLeaveTypeUseCase,
+    GetPaginatedLeaveTypeUseCase,
+    ComboboxLeaveTypeUseCase,
     // Holiday use cases (no get-by-id)
     CreateHolidayUseCase,
     UpdateHolidayUseCase,
@@ -172,6 +189,13 @@ import { TOKENS_CORE } from '@/core/domain/constants';
     RestoreJobtitleUseCase,
     GetPaginatedJobtitleUseCase,
     ComboboxJobtitleUseCase,
+    // Leave type use cases (no get-by-id)
+    CreateLeaveTypeUseCase,
+    UpdateLeaveTypeUseCase,
+    ArchiveLeaveTypeUseCase,
+    RestoreLeaveTypeUseCase,
+    GetPaginatedLeaveTypeUseCase,
+    ComboboxLeaveTypeUseCase,
     // Holiday use cases (no get-by-id)
     CreateHolidayUseCase,
     UpdateHolidayUseCase,

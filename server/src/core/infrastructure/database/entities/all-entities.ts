@@ -17,6 +17,7 @@ export * from '@/features/shared-domain/infrastructure/database/entities/branch.
 export * from '@/features/shared-domain/infrastructure/database/entities/department.entity';
 export * from '@/features/shared-domain/infrastructure/database/entities/jobtitle.entity';
 export * from '@/features/shared-domain/infrastructure/database/entities/holiday.entity';
+export * from '@/features/shared-domain/infrastructure/database/entities/leave-type.entity';
 export * from '@/features/user-management/infrastructure/database/entities/user.entity';
 export * from '@/features/rbac/infrastructure/database/entities/role.entity';
 export * from '@/features/rbac/infrastructure/database/entities/permission.entity';

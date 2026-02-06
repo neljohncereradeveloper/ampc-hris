@@ -20,6 +20,7 @@ import {
 import { BranchEntity } from './branch.entity';
 import { DepartmentEntity } from './department.entity';
 import { JobtitleEntity } from './jobtitle.entity';
+import { LeaveTypeEntity } from './leave-type.entity';
 import { EmploymentTypeEntity } from '@/features/201-management/infrastructure/database/entities/employment-type.entity';
 import { EmploymentStatusEntity } from '@/features/201-management/infrastructure/database/entities/employment-status.entity';
 import { ReligionEntity } from '@/features/201-management/infrastructure/database/entities/religion.entity';
@@ -354,6 +355,10 @@ export class EmployeeEntity {
   @ManyToOne(() => EmploymentStatusEntity)
   @JoinColumn({ name: 'employment_status_id' })
   employment_status: EmploymentStatusEntity;
+
+  @ManyToOne(() => LeaveTypeEntity, { nullable: true })
+  @JoinColumn({ name: 'leave_type_id' })
+  leave_type: LeaveTypeEntity | null;
 
   @ManyToOne(() => BranchEntity)
   @JoinColumn({ name: 'branch_id' })

@@ -7,6 +7,7 @@ import { BranchEntity } from './branch.entity';
 import { DepartmentEntity } from './department.entity';
 import { JobtitleEntity } from './jobtitle.entity';
 import { HolidayEntity } from './holiday.entity';
+import { LeaveTypeEntity } from './leave-type.entity';
 import { EmployeeEntity } from './employee.entity';
 
 /**
@@ -17,5 +18,6 @@ export const sharedDomainEntities = [
   DepartmentEntity,
   JobtitleEntity,
   HolidayEntity,
+  LeaveTypeEntity,
   EmployeeEntity,
 ];

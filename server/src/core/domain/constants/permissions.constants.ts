@@ -59,6 +59,7 @@ export const PERMISSION_RESOURCES = {
   BRANCHES: 'branches',
   DEPARTMENTS: 'departments',
   JOBTITLES: 'jobtitles',
+  LEAVE_TYPES: 'leave-types',
   EMPLOYEES: 'employees',
 } as const;
 
@@ -840,6 +841,37 @@ export const PERMISSIONS = {
     ),
     PAGINATED_LIST: buildPermissionName(
       PERMISSION_RESOURCES.JOBTITLES,
+      PERMISSION_ACTIONS.PAGINATED_LIST,
+    ),
+  },
+  // Leave type permissions (shared-domain)
+  LEAVE_TYPES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_TYPES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_TYPES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_TYPES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_TYPES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_TYPES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    COMBOBOX: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_TYPES,
+      PERMISSION_ACTIONS.COMBOBOX,
+    ),
+    PAGINATED_LIST: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_TYPES,
       PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
