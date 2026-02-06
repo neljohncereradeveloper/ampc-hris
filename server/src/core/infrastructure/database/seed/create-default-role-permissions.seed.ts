@@ -157,6 +157,8 @@ export class SeedRolePermissions {
         ...Object.values(PERMISSIONS.DEPARTMENTS),
         // All jobtitle permissions (shared-domain)
         ...Object.values(PERMISSIONS.JOBTITLES),
+        // All leave type permissions (shared-domain)
+        ...Object.values(PERMISSIONS.LEAVE_TYPES),
         // All employee permissions (shared-domain)
         ...Object.values(PERMISSIONS.EMPLOYEES),
       ],
@@ -290,6 +292,12 @@ export class SeedRolePermissions {
         PERMISSIONS.JOBTITLES.UPDATE,
         PERMISSIONS.JOBTITLES.COMBOBOX,
         PERMISSIONS.JOBTITLES.PAGINATED_LIST,
+        // Leave type (no archive/restore)
+        PERMISSIONS.LEAVE_TYPES.CREATE,
+        PERMISSIONS.LEAVE_TYPES.READ,
+        PERMISSIONS.LEAVE_TYPES.UPDATE,
+        PERMISSIONS.LEAVE_TYPES.COMBOBOX,
+        PERMISSIONS.LEAVE_TYPES.PAGINATED_LIST,
         // Employee (no archive/restore)
         PERMISSIONS.EMPLOYEES.CREATE,
         PERMISSIONS.EMPLOYEES.READ,
@@ -383,6 +391,9 @@ export class SeedRolePermissions {
         PERMISSIONS.JOBTITLES.READ,
         PERMISSIONS.JOBTITLES.COMBOBOX,
         PERMISSIONS.JOBTITLES.PAGINATED_LIST,
+        PERMISSIONS.LEAVE_TYPES.READ,
+        PERMISSIONS.LEAVE_TYPES.COMBOBOX,
+        PERMISSIONS.LEAVE_TYPES.PAGINATED_LIST,
         PERMISSIONS.EMPLOYEES.READ,
         PERMISSIONS.EMPLOYEES.PAGINATED_LIST,
       ],

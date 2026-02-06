@@ -1150,6 +1150,49 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.PAGINATED_LIST,
         description: 'Get paginated list of job titles',
       },
+      // Leave type permissions (shared-domain)
+      {
+        name: PERMISSIONS.LEAVE_TYPES.CREATE,
+        resource: PERMISSION_RESOURCES.LEAVE_TYPES,
+        action: PERMISSION_ACTIONS.CREATE,
+        description: 'Create new leave types',
+      },
+      {
+        name: PERMISSIONS.LEAVE_TYPES.READ,
+        resource: PERMISSION_RESOURCES.LEAVE_TYPES,
+        action: PERMISSION_ACTIONS.READ,
+        description: 'View leave type details',
+      },
+      {
+        name: PERMISSIONS.LEAVE_TYPES.UPDATE,
+        resource: PERMISSION_RESOURCES.LEAVE_TYPES,
+        action: PERMISSION_ACTIONS.UPDATE,
+        description: 'Update leave type information',
+      },
+      {
+        name: PERMISSIONS.LEAVE_TYPES.ARCHIVE,
+        resource: PERMISSION_RESOURCES.LEAVE_TYPES,
+        action: PERMISSION_ACTIONS.ARCHIVE,
+        description: 'Archive (soft delete) leave types',
+      },
+      {
+        name: PERMISSIONS.LEAVE_TYPES.RESTORE,
+        resource: PERMISSION_RESOURCES.LEAVE_TYPES,
+        action: PERMISSION_ACTIONS.RESTORE,
+        description: 'Restore archived leave types',
+      },
+      {
+        name: PERMISSIONS.LEAVE_TYPES.COMBOBOX,
+        resource: PERMISSION_RESOURCES.LEAVE_TYPES,
+        action: PERMISSION_ACTIONS.COMBOBOX,
+        description: 'Get leave types list for dropdowns',
+      },
+      {
+        name: PERMISSIONS.LEAVE_TYPES.PAGINATED_LIST,
+        resource: PERMISSION_RESOURCES.LEAVE_TYPES,
+        action: PERMISSION_ACTIONS.PAGINATED_LIST,
+        description: 'Get paginated list of leave types',
+      },
       // Employee permissions (shared-domain)
       {
         name: PERMISSIONS.EMPLOYEES.CREATE,
