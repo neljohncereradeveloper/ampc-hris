@@ -187,6 +187,7 @@ import {
   EducationLevelController,
   EducationSchoolController,
   EducationController,
+  WorkExperienceController,
 } from './presentation/controllers';
 import { TransactionAdapter } from '@/core/infrastructure/database/adapters/transaction-helper.adapter';
 import { TOKENS_CORE } from '@/core/domain/constants';

@@ -168,8 +168,7 @@ export class TrainingController {
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
   @RequirePermissions(PERMISSIONS.TRAININGS.READ)
   @ApiOperation({ summary: 'Get paginated list of trainings' })
-  @ApiQuery({ name: 'employee_id', required: false, type: Number, description: 'Filter by employee ID' })
-  @ApiQuery({ name: 'trainings_cert_id', required: false, type: Number, description: 'Filter by training certificate ID' })
+  @ApiQuery({ name: 'employee_id', required: true, type: Number, description: 'Filter by employee ID' })
   @ApiResponse({
     status: 200,
     description: 'Trainings retrieved successfully',
@@ -179,16 +178,14 @@ export class TrainingController {
   @ApiBearerAuth('JWT-auth')
   async getPaginated(
     @Query() query: PaginationQueryDto,
-    @Query('employee_id') employee_id?: number,
-    @Query('trainings_cert_id') trainings_cert_id?: number,
+    @Query('employee_id', ParseIntPipe) employee_id: number,
   ): Promise<PaginatedResult<Training>> {
     return this.getPaginatedTrainingUseCase.execute(
       query.term ?? '',
       query.page,
       query.limit,
       query.is_archived === 'true',
-      employee_id ? Number(employee_id) : undefined,
-      trainings_cert_id ? Number(trainings_cert_id) : undefined,
+      employee_id,
     );
   }
 }

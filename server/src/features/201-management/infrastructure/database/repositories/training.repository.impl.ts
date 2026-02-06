@@ -166,8 +166,7 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
     page: number,
     limit: number,
     is_archived: boolean,
-    employee_id: number | undefined,
-    trainings_cert_id: number | undefined,
+    employee_id: number,
     manager: EntityManager,
   ): Promise<PaginatedResult<Training>> {
     const offset = (page - 1) * limit;
@@ -184,19 +183,10 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
       whereClause = 'WHERE t.deleted_at IS NULL';
     }
 
-    // Add employee_id filter if provided
-    if (employee_id !== undefined) {
-      whereClause += ` AND t.employee_id = $${paramIndex}`;
-      queryParams.push(employee_id);
-      paramIndex++;
-    }
-
-    // Add trainings_cert_id filter if provided
-    if (trainings_cert_id !== undefined) {
-      whereClause += ` AND t.trainings_cert_id = $${paramIndex}`;
-      queryParams.push(trainings_cert_id);
-      paramIndex++;
-    }
+    // Add employee_id filter (required)
+    whereClause += ` AND t.employee_id = $${paramIndex}`;
+    queryParams.push(employee_id);
+    paramIndex++;
 
     // Add search term if provided (search in training_title, desc1, and certificate_name from join)
     if (term) {

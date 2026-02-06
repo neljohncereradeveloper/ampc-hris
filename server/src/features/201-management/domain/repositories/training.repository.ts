@@ -22,8 +22,7 @@ export interface TrainingRepository<Context = unknown> {
     page: number,
     limit: number,
     is_archived: boolean,
-    employee_id?: number,
-    trainings_cert_id?: number,
+    employee_id: number,
     context: Context,
   ): Promise<PaginatedResult<Training>>;
 }

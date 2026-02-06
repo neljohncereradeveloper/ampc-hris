@@ -31,6 +31,7 @@ import { ProvinceEntity } from '@/features/201-management/infrastructure/databas
 import { ReferenceEntity } from '@/features/201-management/infrastructure/database/entities/reference.entity';
 import { TrainingEntity } from '@/features/201-management/infrastructure/database/entities/training.entity';
 import { WorkExperienceEntity } from '@/features/201-management/infrastructure/database/entities/work-experience.entity';
+import { EducationEntity } from '@/features/201-management/infrastructure/database/entities/education.entity';
 
 @Entity(SHARED_DOMAIN_DATABASE_MODELS.EMPLOYEES)
 export class EmployeeEntity {
@@ -418,4 +419,10 @@ export class EmployeeEntity {
     (work_experience) => work_experience.employee,
   )
   work_experiences: WorkExperienceEntity[];
+
+  /**
+   * One employee has many educations
+   */
+  @OneToMany(() => EducationEntity, (education) => education.employee)
+  educations: EducationEntity[];
 }

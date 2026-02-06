@@ -23,8 +23,7 @@ export class GetPaginatedTrainingUseCase {
     page: number,
     limit: number,
     is_archived: boolean,
-    employee_id?: number,
-    trainings_cert_id?: number,
+    employee_id: number,
   ): Promise<PaginatedResult<Training>> {
     return this.transactionHelper.executeTransaction(
       TRAINING_ACTIONS.PAGINATED_LIST,
@@ -35,7 +34,6 @@ export class GetPaginatedTrainingUseCase {
           limit,
           is_archived,
           employee_id,
-          trainings_cert_id,
           manager,
         );
         return trainings;
