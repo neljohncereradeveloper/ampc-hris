@@ -12,10 +12,6 @@ export interface TrainingRepository<Context = unknown> {
   ): Promise<boolean>;
   /** Find a training by ID. */
   findById(id: number, context: Context): Promise<Training | null>;
-  /** Find trainings by employee ID. */
-  findByEmployeeId(employee_id: number, context: Context): Promise<Training[]>;
-  /** Find trainings by training certificate ID. */
-  findByTrainingCertificateId(trainings_cert_id: number, context: Context): Promise<Training[]>;
   /** Find paginated list of trainings. */
   findPaginatedList(
     term: string,

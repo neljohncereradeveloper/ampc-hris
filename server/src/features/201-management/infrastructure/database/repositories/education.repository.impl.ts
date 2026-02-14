@@ -3,6 +3,10 @@ import { EntityManager } from 'typeorm';
 import { EducationRepository } from '@/features/201-management/domain/repositories';
 import { Education } from '@/features/201-management/domain/models';
 import { MANAGEMENT_201_DATABASE_MODELS } from '@/features/201-management/domain/constants';
+import {
+  PaginatedResult,
+  calculatePagination,
+} from '@/core/utils/pagination.util';
 
 @Injectable()
 export class EducationRepositoryImpl implements EducationRepository<EntityManager> {
@@ -132,36 +136,73 @@ export class EducationRepositoryImpl implements EducationRepository<EntityManage
     return this.entityToModel(result[0]);
   }
 
-  async findEmployeesEducation(
-    employee_id: number,
-    is_archived: boolean,
-    manager: EntityManager,
-  ): Promise<{ data: Education[] }> {
-    const whereClause = is_archived
-      ? 'WHERE employee_id = $1 AND deleted_at IS NOT NULL'
-      : 'WHERE employee_id = $1 AND deleted_at IS NULL';
 
-    const query = `
-      SELECT e.*,
-        es.desc1 AS education_school,
-        el.desc1 AS education_level,
-        ec.desc1 AS education_course,
-        ecl.desc1 AS education_course_level
+
+  async findPaginatedList(
+    term: string,
+    page: number,
+    limit: number,
+    is_archived: boolean,
+    employee_id: number,
+    manager: EntityManager,
+  ): Promise<PaginatedResult<Education>> {
+    const offset = (page - 1) * limit;
+    const searchTerm = term ? `%${term}%` : '%';
+
+    const baseFrom = `
       FROM ${MANAGEMENT_201_DATABASE_MODELS.EDUCATIONS} e
       LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.EDUCATION_SCHOOLS} es ON e.education_school_id = es.id
       LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.EDUCATION_LEVELS} el ON e.education_level_id = el.id
       LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.EDUCATION_COURSES} ec ON e.education_course_id = ec.id
       LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.EDUCATION_COURSE_LEVELS} ecl ON e.education_course_level_id = ecl.id
-      ${whereClause.replace('employee_id', 'e.employee_id').replace('deleted_at', 'e.deleted_at')}
-      ORDER BY e.school_year DESC
     `;
 
-    const result = await manager.query(query, [employee_id]);
-    const data = result.map((row: Record<string, unknown>) =>
+    let whereClause = is_archived
+      ? 'WHERE e.deleted_at IS NOT NULL'
+      : 'WHERE e.deleted_at IS NULL';
+    const queryParams: unknown[] = [];
+    let paramIndex = 1;
+
+    whereClause += ` AND e.employee_id = $${paramIndex}`;
+    queryParams.push(employee_id);
+    paramIndex++;
+
+    if (term) {
+      whereClause += ` AND (e.school_year ILIKE $${paramIndex} OR es.desc1 ILIKE $${paramIndex} OR el.desc1 ILIKE $${paramIndex} OR ec.desc1 ILIKE $${paramIndex} OR ecl.desc1 ILIKE $${paramIndex})`;
+      queryParams.push(searchTerm);
+      paramIndex++;
+    }
+
+    const countQuery = `
+      SELECT COUNT(*) as total
+      ${baseFrom}
+      ${whereClause}
+    `;
+    const countResult = await manager.query(countQuery, queryParams);
+    const totalRecords = parseInt(countResult[0].total, 10);
+
+    const dataQuery = `
+      SELECT e.*,
+        es.desc1 AS education_school,
+        el.desc1 AS education_level,
+        ec.desc1 AS education_course,
+        ecl.desc1 AS education_course_level
+      ${baseFrom}
+      ${whereClause}
+      ORDER BY e.school_year DESC, e.created_at DESC
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+    `;
+    queryParams.push(limit, offset);
+    const dataResult = await manager.query(dataQuery, queryParams);
+
+    const data = dataResult.map((row: Record<string, unknown>) =>
       this.entityToModel(row),
     );
 
-    return { data };
+    return {
+      data,
+      meta: calculatePagination(totalRecords, page, limit),
+    };
   }
 
   private entityToModel(entity: Record<string, unknown>): Education {

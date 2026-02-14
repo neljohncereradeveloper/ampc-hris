@@ -166,7 +166,7 @@ import {
   UpdateEducationUseCase,
   ArchiveEducationUseCase,
   RestoreEducationUseCase,
-  FindEmployeesEducationUseCase,
+  GetPaginatedEducationUseCase,
 } from './application/use-cases/education';
 import {
   BarangayController,
@@ -432,7 +432,7 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     UpdateEducationUseCase,
     ArchiveEducationUseCase,
     RestoreEducationUseCase,
-    FindEmployeesEducationUseCase,
+    GetPaginatedEducationUseCase,
   ],
   exports: [
     // Barangay use cases
@@ -563,7 +563,7 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     UpdateEducationUseCase,
     ArchiveEducationUseCase,
     RestoreEducationUseCase,
-    FindEmployeesEducationUseCase,
+    GetPaginatedEducationUseCase,
     // Export repository tokens for use in other modules
     MANAGEMENT_201_TOKENS.BARANGAY,
     MANAGEMENT_201_TOKENS.CITY,

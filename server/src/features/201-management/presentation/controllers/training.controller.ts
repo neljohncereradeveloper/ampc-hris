@@ -49,6 +49,7 @@ import { Training } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
 import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import { PaginationTrainingQueryDto } from '../dto/training/pagination-training-query.dto';
 
 @ApiTags('Training')
 @Controller('trainings')
@@ -177,15 +178,14 @@ export class TrainingController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
   async getPaginated(
-    @Query() query: PaginationQueryDto,
-    @Query('employee_id', ParseIntPipe) employee_id: number,
+    @Query() query: PaginationTrainingQueryDto,
   ): Promise<PaginatedResult<Training>> {
     return this.getPaginatedTrainingUseCase.execute(
       query.term ?? '',
       query.page,
       query.limit,
       query.is_archived === 'true',
-      employee_id,
+      query.employee_id!,
     );
   }
 }

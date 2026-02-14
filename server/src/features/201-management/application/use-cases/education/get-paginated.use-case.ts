@@ -1,15 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { TOKENS_CORE } from '@/core/domain/constants';
 import { TransactionPort } from '@/core/domain/ports';
 import { EducationRepository } from '@/features/201-management/domain/repositories';
-import { Education } from '@/features/201-management/domain/models';
 import {
   EDUCATION_ACTIONS,
   MANAGEMENT_201_TOKENS,
 } from '@/features/201-management/domain/constants';
+import { PaginatedResult } from '@/core/utils/pagination.util';
+import { Education } from '@/features/201-management/domain/models';
 
 @Injectable()
-export class FindEmployeesEducationUseCase {
+export class GetPaginatedEducationUseCase {
   constructor(
     @Inject(MANAGEMENT_201_TOKENS.EDUCATION)
     private readonly educationRepository: EducationRepository,
@@ -18,17 +19,24 @@ export class FindEmployeesEducationUseCase {
   ) {}
 
   async execute(
-    employee_id: number,
+    term: string,
+    page: number,
+    limit: number,
     is_archived: boolean,
-  ): Promise<{ data: Education[] }> {
+    employee_id: number,
+  ): Promise<PaginatedResult<Education>> {
     return this.transactionHelper.executeTransaction(
-      EDUCATION_ACTIONS.FIND_EMPLOYEES_EDUCATION,
+      EDUCATION_ACTIONS.PAGINATED_LIST,
       async (manager) => {
-        return this.educationRepository.findEmployeesEducation(
-          employee_id,
+        const educations = await this.educationRepository.findPaginatedList(
+          term,
+          page,
+          limit,
           is_archived,
+          employee_id,
           manager,
         );
+        return educations;
       },
     );
   }

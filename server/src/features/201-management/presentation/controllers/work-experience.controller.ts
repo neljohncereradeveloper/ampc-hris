@@ -52,6 +52,7 @@ import {
   RATE_LIMIT_MODERATE,
   RateLimit,
 } from '@/core/infrastructure/decorators';
+import { PaginationWorkExperienceQueryDto } from '../dto/work-experience/pagination-work-experience-query.dto';
 
 @ApiTags('Work Experience')
 @Controller('work-experiences')
@@ -213,15 +214,14 @@ export class WorkExperienceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
   async getPaginated(
-    @Query() query: PaginationQueryDto,
-    @Query('employee_id', ParseIntPipe) employee_id: number,
+    @Query() query: PaginationWorkExperienceQueryDto,
   ): Promise<PaginatedResult<WorkExperience>> {
     return this.getPaginatedWorkExperienceUseCase.execute(
       query.term ?? '',
       query.page,
       query.limit,
       query.is_archived === 'true',
-      employee_id,
+      query.employee_id!,
     );
   }
 }

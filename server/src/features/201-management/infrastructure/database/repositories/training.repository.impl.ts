@@ -127,40 +127,6 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
     return this.entityToModel(result[0]);
   }
 
-  async findByEmployeeId(
-    employee_id: number,
-    manager: EntityManager,
-  ): Promise<Training[]> {
-    const query = `
-      SELECT t.*,
-        tc.certificate_name AS trainings_certificate
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS} t
-      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.TRAINING_CERTIFICATES} tc ON t.trainings_cert_id = tc.id
-      WHERE t.employee_id = $1 AND t.deleted_at IS NULL
-      ORDER BY t.training_date DESC
-    `;
-
-    const result = await manager.query(query, [employee_id]);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
-  }
-
-  async findByTrainingCertificateId(
-    trainings_cert_id: number,
-    manager: EntityManager,
-  ): Promise<Training[]> {
-    const query = `
-      SELECT t.*,
-        tc.certificate_name AS trainings_certificate
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAININGS} t
-      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.TRAINING_CERTIFICATES} tc ON t.trainings_cert_id = tc.id
-      WHERE t.trainings_cert_id = $1 AND t.deleted_at IS NULL
-      ORDER BY t.training_date DESC
-    `;
-
-    const result = await manager.query(query, [trainings_cert_id]);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
-  }
-
   async findPaginatedList(
     term: string,
     page: number,

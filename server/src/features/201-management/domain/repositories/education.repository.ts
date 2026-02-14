@@ -1,3 +1,4 @@
+import { PaginatedResult } from '@/core/utils/pagination.util';
 import { Education } from '../models/education.model';
 
 export interface EducationRepository<Context = unknown> {
@@ -8,9 +9,13 @@ export interface EducationRepository<Context = unknown> {
     context: Context,
   ): Promise<boolean>;
   findById(id: number, context: Context): Promise<Education | null>;
-  findEmployeesEducation(
-    employee_id: number,
+  /** Find paginated list of educations. */
+  findPaginatedList(
+    term: string,
+    page: number,
+    limit: number,
     is_archived: boolean,
+    employee_id: number,
     context: Context,
-  ): Promise<{ data: Education[] }>;
+  ): Promise<PaginatedResult<Education>>;
 }

@@ -35,12 +35,14 @@ import {
   UpdateEducationUseCase,
   ArchiveEducationUseCase,
   RestoreEducationUseCase,
-  FindEmployeesEducationUseCase,
+  GetPaginatedEducationUseCase,
 } from '../../application/use-cases/education';
 import {
   CreateEducationDto as CreateEducationPresentationDto,
   UpdateEducationDto as UpdateEducationPresentationDto,
 } from '../dto/education';
+import { PaginationEducationQueryDto } from '../dto/education/pagination-education-query.dto';
+import { PaginatedResult } from '@/core/utils/pagination.util';
 import {
   CreateEducationCommand,
   UpdateEducationCommand,
@@ -63,8 +65,8 @@ export class EducationController {
     private readonly updateEducationUseCase: UpdateEducationUseCase,
     private readonly archiveEducationUseCase: ArchiveEducationUseCase,
     private readonly restoreEducationUseCase: RestoreEducationUseCase,
-    private readonly findEmployeesEducationUseCase: FindEmployeesEducationUseCase,
-  ) {}
+    private readonly getPaginatedEducationUseCase: GetPaginatedEducationUseCase,
+  ) { }
 
   @Version('1')
   @Post()
@@ -96,39 +98,34 @@ export class EducationController {
     return this.createEducationUseCase.execute(command, requestInfo);
   }
 
+
   @Version('1')
   @Get()
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
   @RequirePermissions(PERMISSIONS.EDUCATIONS.READ)
-  @ApiOperation({ summary: 'Get employee education records' })
+  @ApiOperation({ summary: 'Get paginated list of education records' })
   @ApiQuery({
     name: 'employee_id',
     required: true,
-    description: 'Employee ID',
-    example: '1',
-  })
-  @ApiQuery({
-    name: 'is_archived',
-    required: false,
-    description: 'Filter by archived status',
-    example: 'false',
+    type: Number,
+    description: 'Filter by employee ID',
   })
   @ApiResponse({
     status: 200,
-    description: 'Employee education records retrieved successfully',
+    description: 'Education records retrieved successfully',
   })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
-  async findEmployeesEducation(
-    @Query('employee_id') employee_id: string,
-    @Query('is_archived') is_archived?: string,
-  ): Promise<{ data: Education[] }> {
-    const parsedEmployeeId = parseInt(employee_id || '0', 10);
-    const parsedIsArchived = is_archived === 'true';
-    return this.findEmployeesEducationUseCase.execute(
-      parsedEmployeeId,
-      parsedIsArchived,
+  async getPaginated(
+    @Query() query: PaginationEducationQueryDto,
+  ): Promise<PaginatedResult<Education>> {
+    return this.getPaginatedEducationUseCase.execute(
+      query.term ?? '',
+      query.page,
+      query.limit,
+      query.is_archived === 'true',
+      query.employee_id!,
     );
   }
 

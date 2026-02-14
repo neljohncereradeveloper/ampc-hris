@@ -118,21 +118,6 @@ export class ReferenceRepositoryImpl implements ReferenceRepository<EntityManage
     return this.entityToModel(result[0]);
   }
 
-  async findByEmployeeId(
-    employee_id: number,
-    manager: EntityManager,
-  ): Promise<Reference[]> {
-    const query = `
-      SELECT *
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.REFERENCES}
-      WHERE employee_id = $1 AND deleted_at IS NULL
-      ORDER BY created_at DESC
-    `;
-
-    const result = await manager.query(query, [employee_id]);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
-  }
-
   async findPaginatedList(
     term: string,
     page: number,
@@ -141,6 +126,7 @@ export class ReferenceRepositoryImpl implements ReferenceRepository<EntityManage
     employee_id: number,
     manager: EntityManager,
   ): Promise<PaginatedResult<Reference>> {
+    console.log('employee_id', employee_id);
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
 

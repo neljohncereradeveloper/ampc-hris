@@ -8,8 +8,6 @@ export interface ReferenceRepository<Context = unknown> {
   update(id: number, dto: Partial<Reference>, context: Context): Promise<boolean>;
   /** Find a reference by ID. */
   findById(id: number, context: Context): Promise<Reference | null>;
-  /** Find references by employee ID. */
-  findByEmployeeId(employee_id: number, context: Context): Promise<Reference[]>;
   /** Find paginated list of references. */
   findPaginatedList(
     term: string,

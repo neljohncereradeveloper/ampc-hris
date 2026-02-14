@@ -49,6 +49,7 @@ import { Reference } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
 import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import { PaginationReferenceQueryDto } from '../dto/reference/pagination-reference-query.dto';
 
 @ApiTags('Reference')
 @Controller('references')
@@ -177,15 +178,14 @@ export class ReferenceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
   async getPaginated(
-    @Query() query: PaginationQueryDto,
-    @Query('employee_id', ParseIntPipe) employee_id: number,
+    @Query() query: PaginationReferenceQueryDto,
   ): Promise<PaginatedResult<Reference>> {
     return this.getPaginatedReferenceUseCase.execute(
       query.term ?? '',
       query.page,
       query.limit,
       query.is_archived === 'true',
-      employee_id,
+      query.employee_id!,
     );
   }
 }

@@ -15,11 +15,6 @@ export interface WorkExperienceRepository<Context = unknown> {
   ): Promise<boolean>;
   /** Find a work experience by ID. */
   findById(id: number, context: Context): Promise<WorkExperience | null>;
-  /** Find work experiences by employee ID. */
-  findByEmployeeId(
-    employee_id: number,
-    context: Context,
-  ): Promise<WorkExperience[]>;
   /** Find paginated list of work experiences. */
   findPaginatedList(
     term: string,

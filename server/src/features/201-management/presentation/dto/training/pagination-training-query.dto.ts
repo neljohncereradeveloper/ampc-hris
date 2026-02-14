@@ -4,9 +4,9 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   OptionalStringValidation,
   RequiredNumberValidation,
-} from '../decorators';
+} from '@/core/infrastructure/decorators';
 
-export class PaginationQueryDto {
+export class PaginationTrainingQueryDto {
   @ApiPropertyOptional({
     description: 'Search term to filter results',
     example: '',
@@ -69,4 +69,12 @@ export class PaginationQueryDto {
   })
   is_archived?: string;
 
+  @ApiPropertyOptional({
+    description: 'Filter by employee ID',
+    example: '1',
+    type: Number,
+  })
+  @IsOptional()
+  @Transform(({ value }) => Number(value))
+  employee_id?: number;
 }

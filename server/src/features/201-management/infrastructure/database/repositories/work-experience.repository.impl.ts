@@ -126,27 +126,6 @@ export class WorkExperienceRepositoryImpl
     return this.entityToModel(result[0]);
   }
 
-  async findByEmployeeId(
-    employee_id: number,
-    manager: EntityManager,
-  ): Promise<WorkExperience[]> {
-    const query = `
-      SELECT w.*,
-        wc.desc1 AS company,
-        wj.desc1 AS work_experience_job_title
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCES} w
-      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCE_COMPANIES} wc ON w.company_id = wc.id
-      LEFT JOIN ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCE_JOBTITLES} wj ON w.work_experience_job_title_id = wj.id
-      WHERE w.employee_id = $1 AND w.deleted_at IS NULL
-      ORDER BY w.created_at DESC
-    `;
-
-    const result = await manager.query(query, [employee_id]);
-    return result.map((row: Record<string, unknown>) =>
-      this.entityToModel(row),
-    );
-  }
-
   async findPaginatedList(
     term: string,
     page: number,
