@@ -24,13 +24,15 @@ export class GetPaginatedLeaveRequestUseCase {
     limit: number,
     is_archived: boolean,
   ): Promise<PaginatedResult<LeaveRequest>> {
+    const page_num = Number(page) || 1;
+    const limit_num = Number(limit) || 10;
     return this.transactionHelper.executeTransaction(
       LEAVE_REQUEST_ACTIONS.PAGINATED_LIST,
       async (manager) =>
         this.leaveRequestRepository.findPaginatedList(
           term,
-          page,
-          limit,
+          page_num,
+          limit_num,
           is_archived,
           manager,
         ),

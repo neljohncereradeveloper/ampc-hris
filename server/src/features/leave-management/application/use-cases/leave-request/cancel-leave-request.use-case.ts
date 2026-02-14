@@ -17,7 +17,10 @@ import {
   LEAVE_REQUEST_ACTIONS,
 } from '@/features/leave-management/domain/constants';
 import { UpdateLeaveRequestStatusCommand } from '../../commands/leave-request/update-leave-request-status.command';
-import { EnumLeaveRequestStatus } from '@/features/leave-management/domain/enum';
+import {
+  EnumLeaveRequestStatus,
+  EnumLeaveTransactionType,
+} from '@/features/leave-management/domain/enum';
 
 @Injectable()
 export class CancelLeaveRequestUseCase {
@@ -39,10 +42,15 @@ export class CancelLeaveRequestUseCase {
     command: UpdateLeaveRequestStatusCommand,
     requestInfo?: RequestInfo,
   ): Promise<boolean> {
+    const request_id = Number(id);
+    const approver_id = Number(command.approver_id ?? 0);
     return this.transactionHelper.executeTransaction(
       LEAVE_REQUEST_ACTIONS.CANCEL,
       async (manager) => {
-        const request = await this.leaveRequestRepository.findById(id, manager);
+        const request = await this.leaveRequestRepository.findById(
+          request_id,
+          manager,
+        );
         if (!request) {
           throw new LeaveRequestBusinessException(
             'Leave request not found',
@@ -60,38 +68,42 @@ export class CancelLeaveRequestUseCase {
         }
 
         if (request.status === EnumLeaveRequestStatus.APPROVED) {
+          const balance_id = Number(request.balance_id);
+          const total_days = Number(request.total_days);
           const balance = await this.leaveBalanceRepository.findById(
-            request.balance_id,
+            balance_id,
             manager,
           );
           if (balance) {
             balance.update({
-              used: balance.used - request.total_days,
-              remaining: balance.remaining + request.total_days,
+              used: Number(balance.used) - total_days,
+              remaining: Number(balance.remaining) + total_days,
               last_transaction_date: getPHDateTime(),
               updated_by: requestInfo?.user_name ?? null,
             });
             balance.updated_at = getPHDateTime();
             await this.leaveBalanceRepository.update(
-              balance.id!,
+              Number(balance.id!),
               balance,
               manager,
             );
             await this.leaveTransactionRepository.recordTransaction(
-              request.balance_id,
-              'earn',
-              request.total_days,
-              command.remarks ?? `Cancelled leave request ${id} (reversal)`,
-              command.approver_id ?? 0,
+              balance_id,
+              EnumLeaveTransactionType.ADJUSTMENT,
+              total_days,
+              command.remarks ?? `Cancelled leave request ${request_id} (reversal)`,
+              approver_id,
               manager,
             );
           }
         }
+        // When status is PENDING: no balance was deducted, so only update status below.
+        // When status is APPROVED: balance already reversed above; update status below.
 
         const success = await this.leaveRequestRepository.updateStatus(
-          id,
+          request_id,
           EnumLeaveRequestStatus.CANCELLED,
-          command.approver_id,
+          approver_id,
           command.remarks ?? '',
           manager,
         );
@@ -106,7 +118,7 @@ export class CancelLeaveRequestUseCase {
           action: LEAVE_REQUEST_ACTIONS.CANCEL,
           entity: LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_REQUESTS,
           details: JSON.stringify({
-            id,
+            id: request_id,
             cancelled_by: requestInfo?.user_name ?? '',
             cancelled_at: getPHDateTime(new Date()),
           }),

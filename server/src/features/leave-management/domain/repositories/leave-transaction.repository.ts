@@ -1,4 +1,5 @@
 import { LeaveTransaction } from '../models/leave-transaction.model';
+import { EnumLeaveTransactionType } from '../enum';
 
 export interface LeaveTransactionRepository<Context = unknown> {
   create(
@@ -11,7 +12,7 @@ export interface LeaveTransactionRepository<Context = unknown> {
   ): Promise<LeaveTransaction[]>;
   recordTransaction(
     balance_id: number,
-    type: 'earn' | 'use' | 'carry_over' | 'encash',
+    type: EnumLeaveTransactionType,
     days: number,
     remarks: string,
     user_id: number,

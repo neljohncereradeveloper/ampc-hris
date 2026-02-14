@@ -31,10 +31,15 @@ export class RejectLeaveRequestUseCase {
     command: UpdateLeaveRequestStatusCommand,
     requestInfo?: RequestInfo,
   ): Promise<boolean> {
+    const request_id = Number(id);
+    const approver_id = Number(command.approver_id ?? 0);
     return this.transactionHelper.executeTransaction(
       LEAVE_REQUEST_ACTIONS.REJECT,
       async (manager) => {
-        const request = await this.leaveRequestRepository.findById(id, manager);
+        const request = await this.leaveRequestRepository.findById(
+          request_id,
+          manager,
+        );
         if (!request) {
           throw new LeaveRequestBusinessException(
             'Leave request not found',
@@ -49,9 +54,9 @@ export class RejectLeaveRequestUseCase {
         }
 
         const success = await this.leaveRequestRepository.updateStatus(
-          id,
+          request_id,
           EnumLeaveRequestStatus.REJECTED,
-          command.approver_id,
+          approver_id,
           command.remarks ?? '',
           manager,
         );
@@ -66,7 +71,7 @@ export class RejectLeaveRequestUseCase {
           action: LEAVE_REQUEST_ACTIONS.REJECT,
           entity: LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_REQUESTS,
           details: JSON.stringify({
-            id,
+            id: request_id,
             rejected_by: requestInfo?.user_name ?? '',
             rejected_at: getPHDateTime(new Date()),
           }),

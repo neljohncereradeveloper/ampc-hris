@@ -17,7 +17,10 @@ import {
   LEAVE_REQUEST_ACTIONS,
 } from '@/features/leave-management/domain/constants';
 import { UpdateLeaveRequestStatusCommand } from '../../commands/leave-request/update-leave-request-status.command';
-import { EnumLeaveRequestStatus } from '@/features/leave-management/domain/enum';
+import {
+  EnumLeaveRequestStatus,
+  EnumLeaveTransactionType,
+} from '@/features/leave-management/domain/enum';
 
 @Injectable()
 export class ApproveLeaveRequestUseCase {
@@ -39,10 +42,15 @@ export class ApproveLeaveRequestUseCase {
     command: UpdateLeaveRequestStatusCommand,
     requestInfo?: RequestInfo,
   ): Promise<boolean> {
+    const request_id = Number(id);
+    const approver_id = Number(command.approver_id ?? 0);
     return this.transactionHelper.executeTransaction(
       LEAVE_REQUEST_ACTIONS.APPROVE,
       async (manager) => {
-        const request = await this.leaveRequestRepository.findById(id, manager);
+        const request = await this.leaveRequestRepository.findById(
+          request_id,
+          manager,
+        );
         if (!request) {
           throw new LeaveRequestBusinessException(
             'Leave request not found',
@@ -66,7 +74,8 @@ export class ApproveLeaveRequestUseCase {
             HTTP_STATUS.NOT_FOUND,
           );
         }
-        if (balance.remaining < request.total_days) {
+        const total_days = Number(request.total_days);
+        if (Number(balance.remaining) < total_days) {
           throw new LeaveRequestBusinessException(
             `Insufficient leave balance: remaining ${balance.remaining}, requested ${request.total_days}.`,
             HTTP_STATUS.BAD_REQUEST,
@@ -74,31 +83,31 @@ export class ApproveLeaveRequestUseCase {
         }
 
         balance.update({
-          used: balance.used + request.total_days,
-          remaining: balance.remaining - request.total_days,
+          used: Number(balance.used) + total_days,
+          remaining: Number(balance.remaining) - total_days,
           last_transaction_date: getPHDateTime(),
           updated_by: requestInfo?.user_name ?? null,
         });
         balance.updated_at = getPHDateTime();
         await this.leaveBalanceRepository.update(
-          balance.id!,
+          Number(balance.id!),
           balance,
           manager,
         );
 
         await this.leaveTransactionRepository.recordTransaction(
-          request.balance_id,
-          'use',
-          -request.total_days,
-          command.remarks ?? `Approved leave request ${id}`,
-          command.approver_id ?? 0,
+          Number(request.balance_id),
+          EnumLeaveTransactionType.REQUEST,
+          -total_days,
+          command.remarks ?? `Approved leave request ${request_id}`,
+          approver_id,
           manager,
         );
 
         const success = await this.leaveRequestRepository.updateStatus(
-          id,
+          request_id,
           EnumLeaveRequestStatus.APPROVED,
-          command.approver_id,
+          approver_id,
           command.remarks ?? '',
           manager,
         );
@@ -113,8 +122,8 @@ export class ApproveLeaveRequestUseCase {
           action: LEAVE_REQUEST_ACTIONS.APPROVE,
           entity: LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_REQUESTS,
           details: JSON.stringify({
-            id,
-            approver_id: command.approver_id,
+            id: request_id,
+            approver_id,
             approved_by: requestInfo?.user_name ?? '',
             approved_at: getPHDateTime(new Date()),
           }),
