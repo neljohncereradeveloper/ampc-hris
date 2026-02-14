@@ -22,7 +22,10 @@
       "@/core/infrastructure/*": ["src/core/infrastructure/*"],
       "@/core/utils/*": ["src/core/utils/*"],
       "@/features/*": ["src/features/*"],
-      "@/features/auth/*": ["src/features/auth/*"]
+      "@/features/auth/*": ["src/features/auth/*"],
+      "@/features/rbac/*": ["src/features/rbac/*"],
+      "@/features/user-management/*": ["src/features/user-management/*"],
+      "@/features/shared-domain/*": ["src/features/shared-domain/*"]
     },
     "incremental": true,
     "skipLibCheck": true
