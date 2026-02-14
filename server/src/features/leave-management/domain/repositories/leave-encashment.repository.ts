@@ -1,3 +1,4 @@
+import { PaginatedResult } from '@/core/utils/pagination.util';
 import { LeaveEncashment } from '../models/leave-encashment.model';
 
 export interface LeaveEncashmentRepository<Context = unknown> {
@@ -11,6 +12,13 @@ export interface LeaveEncashmentRepository<Context = unknown> {
     context: Context,
   ): Promise<boolean>;
   findById(id: number, context: Context): Promise<LeaveEncashment | null>;
+  findPaginatedList(
+    term: string,
+    page: number,
+    limit: number,
+    is_archived: boolean,
+    context: Context,
+  ): Promise<PaginatedResult<LeaveEncashment>>;
   findPending(context: Context): Promise<LeaveEncashment[]>;
   markAsPaid(
     id: number,

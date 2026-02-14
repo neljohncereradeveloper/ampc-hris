@@ -10,4 +10,6 @@ export const LEAVE_MANAGEMENT_TOKENS = {
   LEAVE_TRANSACTION: 'LeaveTransactionRepository',
   LEAVE_YEAR_CONFIGURATION: 'LeaveYearConfigurationRepository',
   LEAVE_ENCASHMENT: 'LeaveEncashmentRepository',
+  /** Port: returns active employee ids for balance generation */
+  ACTIVE_EMPLOYEE_IDS_PORT: 'ActiveEmployeeIdsPort',
 } as const;
