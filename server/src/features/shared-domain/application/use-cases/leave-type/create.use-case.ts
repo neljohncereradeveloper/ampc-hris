@@ -34,7 +34,11 @@ export class CreateLeaveTypeUseCase {
       LEAVE_TYPE_ACTIONS.CREATE,
       async (manager) => {
         const new_leaveType = LeaveType.create({
+          name: command.name,
+          code: command.code,
           desc1: command.desc1,
+          paid: command.paid,
+          remarks: command.remarks,
           created_by: requestInfo?.user_name || null,
         });
 
@@ -55,6 +59,8 @@ export class CreateLeaveTypeUseCase {
           entity: SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES,
           details: JSON.stringify({
             id: created_leaveType.id,
+            name: created_leaveType.name,
+            code: created_leaveType.code,
             desc1: created_leaveType.desc1,
             created_by: requestInfo?.user_name || '',
             created_at: getPHDateTime(created_leaveType.created_at),

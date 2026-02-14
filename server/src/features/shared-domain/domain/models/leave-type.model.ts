@@ -4,7 +4,11 @@ import { LeaveTypeBusinessException } from '../exceptions/leave-type-business.ex
 
 export class LeaveType {
   id?: number;
+  name: string;
+  code: string;
   desc1: string;
+  paid: boolean;
+  remarks?: string;
   deleted_by: string | null;
   deleted_at: Date | null;
   created_by: string | null;
@@ -14,7 +18,11 @@ export class LeaveType {
 
   constructor(dto: {
     id?: number;
+    name: string;
+    code: string;
     desc1: string;
+    paid: boolean;
+    remarks?: string;
     deleted_by?: string | null;
     deleted_at?: Date | null;
     created_by?: string | null;
@@ -23,7 +31,11 @@ export class LeaveType {
     updated_at?: Date;
   }) {
     this.id = dto.id;
+    this.name = dto.name;
+    this.code = dto.code;
     this.desc1 = dto.desc1;
+    this.paid = dto.paid;
+    this.remarks = dto.remarks;
     this.deleted_by = dto.deleted_by ?? null;
     this.deleted_at = dto.deleted_at ?? null;
     this.created_by = dto.created_by ?? null;
@@ -34,20 +46,32 @@ export class LeaveType {
 
   /** Static factory: create and validate. */
   static create(params: {
+    name: string;
+    code: string;
     desc1: string;
+    paid: boolean;
+    remarks?: string;
     created_by?: string | null;
   }): LeaveType {
-    const leaveType = new LeaveType({
+    const leave_type = new LeaveType({
+      name: params.name,
+      code: params.code,
       desc1: params.desc1,
+      paid: params.paid,
+      remarks: params.remarks,
       created_by: params.created_by ?? null,
     });
-    leaveType.validate();
-    return leaveType;
+    leave_type.validate();
+    return leave_type;
   }
 
   /** Update details; validate new state before applying. */
   update(dto: {
-    desc1: string;
+    name?: string;
+    code?: string;
+    desc1?: string;
+    paid?: boolean;
+    remarks?: string;
     updated_by?: string | null;
   }): void {
     if (this.deleted_at) {
@@ -56,15 +80,13 @@ export class LeaveType {
         HTTP_STATUS.CONFLICT,
       );
     }
-    const temp_leaveType = new LeaveType({
-      id: this.id,
-      desc1: dto.desc1,
-      created_at: this.created_at,
-      updated_at: this.updated_at,
-    });
-    temp_leaveType.validate();
-    this.desc1 = dto.desc1;
+    if (dto.name !== undefined) this.name = dto.name;
+    if (dto.code !== undefined) this.code = dto.code;
+    if (dto.desc1 !== undefined) this.desc1 = dto.desc1;
+    if (dto.paid !== undefined) this.paid = dto.paid;
+    if (dto.remarks !== undefined) this.remarks = dto.remarks;
     this.updated_by = dto.updated_by ?? null;
+    this.validate();
   }
 
   /** Soft-delete. */
@@ -93,23 +115,55 @@ export class LeaveType {
 
   /** Enforce business rules. */
   validate(): void {
+    if (!this.name || this.name.trim().length === 0) {
+      throw new LeaveTypeBusinessException(
+        'Leave type name is required and cannot be empty.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (this.name.length > 100) {
+      throw new LeaveTypeBusinessException(
+        'Leave type name must not exceed 100 characters.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (!this.code || this.code.trim().length === 0) {
+      throw new LeaveTypeBusinessException(
+        'Leave type code is required and cannot be empty.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (this.code.length > 50) {
+      throw new LeaveTypeBusinessException(
+        'Leave type code must not exceed 50 characters.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
     if (!this.desc1 || this.desc1.trim().length === 0) {
       throw new LeaveTypeBusinessException(
-        'Leave type description (desc1) is required and cannot be empty.',
+        'Leave type description is required and cannot be empty.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     if (this.desc1.length > 255) {
       throw new LeaveTypeBusinessException(
-        'Leave type description (desc1) must not exceed 255 characters.',
+        'Leave type description must not exceed 255 characters.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    if (this.desc1.trim().length < 2) {
-      throw new LeaveTypeBusinessException(
-        'Leave type description (desc1) must be at least 2 characters long.',
-        HTTP_STATUS.BAD_REQUEST,
-      );
+    if (this.remarks !== undefined && this.remarks !== null) {
+      if (this.remarks.trim().length === 0) {
+        throw new LeaveTypeBusinessException(
+          'Remarks cannot be empty if provided.',
+          HTTP_STATUS.BAD_REQUEST,
+        );
+      }
+      if (this.remarks.length > 500) {
+        throw new LeaveTypeBusinessException(
+          'Remarks must not exceed 500 characters.',
+          HTTP_STATUS.BAD_REQUEST,
+        );
+      }
     }
   }
 }

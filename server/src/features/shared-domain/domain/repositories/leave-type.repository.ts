@@ -3,7 +3,7 @@ import { LeaveType } from '../models/leave-type.model';
 
 export interface LeaveTypeRepository<Context = unknown> {
   /** Create a leave type. */
-  create(leaveType: LeaveType, context: Context): Promise<LeaveType>;
+  create(leave_type: LeaveType, context: Context): Promise<LeaveType>;
   /** Update a leave type. */
   update(
     id: number,
@@ -12,7 +12,11 @@ export interface LeaveTypeRepository<Context = unknown> {
   ): Promise<boolean>;
   /** Find a leave type by ID. */
   findById(id: number, context: Context): Promise<LeaveType | null>;
-  /** Find a leave type by description. */
+  /** Find a leave type by name. */
+  findByName(name: string, context: Context): Promise<LeaveType | null>;
+  /** Find a leave type by code. */
+  findByCode(code: string, context: Context): Promise<LeaveType | null>;
+  /** Find a leave type by description (desc1). */
   findByDescription(
     description: string,
     context: Context,

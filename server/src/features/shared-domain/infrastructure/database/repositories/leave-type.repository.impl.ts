@@ -11,30 +11,35 @@ import {
 @Injectable()
 export class LeaveTypeRepositoryImpl implements LeaveTypeRepository<EntityManager> {
   async create(
-    leaveType: LeaveType,
+    leave_type: LeaveType,
     manager: EntityManager,
   ): Promise<LeaveType> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES} (
-        desc1, deleted_by, deleted_at,
+        name, code, desc1, paid, remarks,
+        deleted_by, deleted_at,
         created_by, created_at, updated_by, updated_at
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING *
     `;
 
     const result = await manager.query(query, [
-      leaveType.desc1,
-      leaveType.deleted_by,
-      leaveType.deleted_at,
-      leaveType.created_by,
-      leaveType.created_at,
-      leaveType.updated_by,
-      leaveType.updated_at,
+      leave_type.name,
+      leave_type.code,
+      leave_type.desc1,
+      leave_type.paid,
+      leave_type.remarks ?? null,
+      leave_type.deleted_by,
+      leave_type.deleted_at,
+      leave_type.created_by,
+      leave_type.created_at,
+      leave_type.updated_by,
+      leave_type.updated_at,
     ]);
 
-    const savedEntity = result[0];
-    return this.entityToModel(savedEntity);
+    const saved_entity = result[0];
+    return this.entityToModel(saved_entity);
   }
 
   async update(
@@ -42,43 +47,63 @@ export class LeaveTypeRepositoryImpl implements LeaveTypeRepository<EntityManage
     dto: Partial<LeaveType>,
     manager: EntityManager,
   ): Promise<boolean> {
-    const updateFields: string[] = [];
+    const update_fields: string[] = [];
     const values: unknown[] = [];
-    let paramIndex = 1;
+    let param_index = 1;
 
+    if (dto.name !== undefined) {
+      update_fields.push(`name = $${param_index++}`);
+      values.push(dto.name);
+    }
+    if (dto.code !== undefined) {
+      update_fields.push(`code = $${param_index++}`);
+      values.push(dto.code);
+    }
     if (dto.desc1 !== undefined) {
-      updateFields.push(`desc1 = $${paramIndex++}`);
+      update_fields.push(`desc1 = $${param_index++}`);
       values.push(dto.desc1);
     }
+    if (dto.paid !== undefined) {
+      update_fields.push(`paid = $${param_index++}`);
+      values.push(dto.paid);
+    }
+    if (dto.remarks !== undefined) {
+      update_fields.push(`remarks = $${param_index++}`);
+      values.push(dto.remarks);
+    }
     if (dto.deleted_by !== undefined) {
-      updateFields.push(`deleted_by = $${paramIndex++}`);
+      update_fields.push(`deleted_by = $${param_index++}`);
       values.push(dto.deleted_by);
     }
     if (dto.deleted_at !== undefined) {
-      updateFields.push(`deleted_at = $${paramIndex++}`);
+      update_fields.push(`deleted_at = $${param_index++}`);
       values.push(dto.deleted_at);
     }
     if (dto.updated_by !== undefined) {
-      updateFields.push(`updated_by = $${paramIndex++}`);
+      update_fields.push(`updated_by = $${param_index++}`);
       values.push(dto.updated_by);
     }
+    if (dto.updated_at !== undefined) {
+      update_fields.push(`updated_at = $${param_index++}`);
+      values.push(dto.updated_at);
+    }
 
-    if (updateFields.length === 0) {
+    if (update_fields.length === 0) {
       return false;
     }
 
     values.push(id);
 
-    const isArchiveOrRestore =
+    const is_archive_or_restore =
       dto.deleted_at !== undefined || dto.deleted_by !== undefined;
-    const whereClause = isArchiveOrRestore
-      ? `WHERE id = $${paramIndex}`
-      : `WHERE id = $${paramIndex} AND deleted_at IS NULL`;
+    const where_clause = is_archive_or_restore
+      ? `WHERE id = $${param_index}`
+      : `WHERE id = $${param_index} AND deleted_at IS NULL`;
 
     const query = `
       UPDATE ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES}
-      SET ${updateFields.join(', ')}
-      ${whereClause}
+      SET ${update_fields.join(', ')}
+      ${where_clause}
       RETURNING id
     `;
 
@@ -94,6 +119,42 @@ export class LeaveTypeRepositoryImpl implements LeaveTypeRepository<EntityManage
     `;
 
     const result = await manager.query(query, [id]);
+    if (result.length === 0) {
+      return null;
+    }
+
+    return this.entityToModel(result[0]);
+  }
+
+  async findByName(
+    name: string,
+    manager: EntityManager,
+  ): Promise<LeaveType | null> {
+    const query = `
+      SELECT *
+      FROM ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES}
+      WHERE name = $1 AND deleted_at IS NULL
+    `;
+
+    const result = await manager.query(query, [name]);
+    if (result.length === 0) {
+      return null;
+    }
+
+    return this.entityToModel(result[0]);
+  }
+
+  async findByCode(
+    code: string,
+    manager: EntityManager,
+  ): Promise<LeaveType | null> {
+    const query = `
+      SELECT *
+      FROM ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES}
+      WHERE code = $1 AND deleted_at IS NULL
+    `;
+
+    const result = await manager.query(query, [code]);
     if (result.length === 0) {
       return null;
     }
@@ -127,60 +188,61 @@ export class LeaveTypeRepositoryImpl implements LeaveTypeRepository<EntityManage
     manager: EntityManager,
   ): Promise<PaginatedResult<LeaveType>> {
     const offset = (page - 1) * limit;
-    const searchTerm = term ? `%${term}%` : '%';
+    const search_term = term ? `%${term}%` : '%';
 
-    let whereClause = '';
-    const queryParams: unknown[] = [];
-    let paramIndex = 1;
+    let where_clause = '';
+    const query_params: unknown[] = [];
+    let param_index = 1;
 
     if (is_archived) {
-      whereClause = 'WHERE deleted_at IS NOT NULL';
+      where_clause = 'WHERE deleted_at IS NOT NULL';
     } else {
-      whereClause = 'WHERE deleted_at IS NULL';
+      where_clause = 'WHERE deleted_at IS NULL';
     }
 
     if (term) {
-      whereClause += ` AND desc1 ILIKE $${paramIndex}`;
-      queryParams.push(searchTerm);
-      paramIndex++;
+      where_clause += ` AND (name ILIKE $${param_index} OR code ILIKE $${param_index} OR desc1 ILIKE $${param_index})`;
+      query_params.push(search_term);
+      param_index++;
     }
 
-    const countQuery = `
+    const count_query = `
       SELECT COUNT(*) as total
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES}
-      ${whereClause}
+      ${where_clause}
     `;
 
-    const countResult = await manager.query(countQuery, queryParams);
-    const totalRecords = parseInt(countResult[0].total, 10);
+    const count_result = await manager.query(count_query, query_params);
+    const total_records = parseInt(count_result[0].total, 10);
 
-    const dataQuery = `
+    const data_query = `
       SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES}
-      ${whereClause}
-      ORDER BY desc1 ASC, created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      ${where_clause}
+      ORDER BY name ASC, created_at DESC
+      LIMIT $${param_index} OFFSET $${param_index + 1}
     `;
 
-    queryParams.push(limit, offset);
-    const dataResult = await manager.query(dataQuery, queryParams);
+    query_params.push(limit, offset);
+    const data_result = await manager.query(data_query, query_params);
 
-    const leaveTypes = dataResult.map((row: Record<string, unknown>) =>
+    const leave_types = data_result.map((row: Record<string, unknown>) =>
       this.entityToModel(row),
     );
 
     return {
-      data: leaveTypes,
-      meta: calculatePagination(totalRecords, page, limit),
+      data: leave_types,
+      meta: calculatePagination(total_records, page, limit),
     };
   }
 
   async combobox(manager: EntityManager): Promise<LeaveType[]> {
     const query = `
-      SELECT id, desc1
+      SELECT id, name, code, desc1, paid, remarks,
+        deleted_by, deleted_at, created_by, created_at, updated_by, updated_at
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES}
       WHERE deleted_at IS NULL
-      ORDER BY desc1 ASC
+      ORDER BY name ASC
     `;
 
     const result = await manager.query(query);
@@ -192,7 +254,11 @@ export class LeaveTypeRepositoryImpl implements LeaveTypeRepository<EntityManage
   private entityToModel(entity: Record<string, unknown>): LeaveType {
     return new LeaveType({
       id: entity.id as number,
+      name: (entity.name as string) ?? (entity.desc1 as string) ?? '',
+      code: (entity.code as string) ?? '',
       desc1: entity.desc1 as string,
+      paid: entity.paid !== undefined ? (entity.paid as boolean) : true,
+      remarks: (entity.remarks as string) ?? undefined,
       deleted_by: (entity.deleted_by as string) ?? null,
       deleted_at: (entity.deleted_at as Date) ?? null,
       created_by: (entity.created_by as string) ?? null,

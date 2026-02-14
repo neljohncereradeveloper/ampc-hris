@@ -9,15 +9,20 @@ export class SeedLeaveTypes {
   constructor(private readonly entityManager: EntityManager) {}
 
   async run(): Promise<void> {
-    for (const desc1 of LEAVE_TYPES) {
+    for (const item of LEAVE_TYPES) {
       const existing = await this.entityManager.findOne(LeaveTypeEntity, {
-        where: { desc1 },
+        where: { code: item.code },
       });
 
       if (!existing) {
-        const entity = this.entityManager.create(LeaveTypeEntity, { desc1 });
+        const entity = this.entityManager.create(LeaveTypeEntity, {
+          name: item.name,
+          code: item.code,
+          desc1: item.desc1,
+          paid: item.paid,
+        });
         await this.entityManager.save(entity);
-        this.logger.log(`Created leave type: ${desc1}`);
+        this.logger.log(`Created leave type: ${item.name} (${item.code})`);
       }
     }
   }

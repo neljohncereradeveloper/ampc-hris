@@ -48,7 +48,11 @@ export class UpdateLeaveTypeUseCase {
         }
 
         const tracking_config: FieldExtractorConfig[] = [
+          { field: 'name' },
+          { field: 'code' },
           { field: 'desc1' },
+          { field: 'paid' },
+          { field: 'remarks' },
           {
             field: 'updated_at',
             transform: (val) => (val ? getPHDateTime(val) : null),
@@ -59,9 +63,14 @@ export class UpdateLeaveTypeUseCase {
         const before_state = extractEntityState(leaveType, tracking_config);
 
         leaveType.update({
+          name: command.name,
+          code: command.code,
           desc1: command.desc1,
+          paid: command.paid,
+          remarks: command.remarks,
           updated_by: requestInfo?.user_name || null,
         });
+        leaveType.updated_at = getPHDateTime();
 
         const success = await this.leaveTypeRepository.update(
           id,

@@ -21,12 +21,9 @@ export class ComboboxLeaveTypeUseCase {
       LEAVE_TYPE_ACTIONS.COMBOBOX,
       async (manager) => {
         const leaveTypes = await this.leaveTypeRepository.combobox(manager);
-        return leaveTypes.map((leaveType: { desc1: string }) => ({
-          value: leaveType.desc1 || '',
-          label: leaveType.desc1
-            ? leaveType.desc1.charAt(0).toUpperCase() +
-            leaveType.desc1.slice(1).toLowerCase()
-            : '',
+        return leaveTypes.map((leaveType) => ({
+          value: String(leaveType.id ?? ''),
+          label: leaveType.name || leaveType.desc1 || '',
         }));
       },
     );

@@ -83,7 +83,11 @@ export class LeaveTypeController {
   ): Promise<LeaveType> {
     const requestInfo = createRequestInfo(request);
     const command: CreateLeaveTypeCommand = {
+      name: presentationDto.name,
+      code: presentationDto.code,
       desc1: presentationDto.desc1,
+      paid: presentationDto.paid,
+      remarks: presentationDto.remarks,
     };
     return this.createLeaveTypeUseCase.execute(command, requestInfo);
   }
@@ -107,7 +111,11 @@ export class LeaveTypeController {
   ): Promise<LeaveType | null> {
     const requestInfo = createRequestInfo(request);
     const command: UpdateLeaveTypeCommand = {
+      name: presentationDto.name,
+      code: presentationDto.code,
       desc1: presentationDto.desc1,
+      paid: presentationDto.paid,
+      remarks: presentationDto.remarks,
     };
     return this.updateLeaveTypeUseCase.execute(id, command, requestInfo);
   }
