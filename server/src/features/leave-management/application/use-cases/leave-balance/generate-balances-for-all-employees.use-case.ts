@@ -53,7 +53,7 @@ export class GenerateBalancesForAllEmployeesUseCase {
     @Inject(LEAVE_MANAGEMENT_TOKENS.LEAVE_POLICY)
     private readonly policyRepo: LeavePolicyRepository,
     private readonly bulkCreateService: LeaveBalanceBulkCreateService,
-  ) {}
+  ) { }
 
   async execute(
     year: string,
@@ -171,9 +171,9 @@ export class GenerateBalancesForAllEmployeesUseCase {
     policy: LeavePolicy,
     asOfDate: Date,
   ): { eligible: boolean; reason?: string } {
-    const allowedTypes = policy.allowed_employment_types ?? [];
-    if (allowedTypes.length > 0) {
-      const typeMatch = allowedTypes.some(
+    const allowedEmploymentTypes = policy.allowed_employment_types ?? [];
+    if (allowedEmploymentTypes.length > 0) {
+      const typeMatch = allowedEmploymentTypes.some(
         (t) =>
           String(t).trim().toLowerCase() ===
           String(employee.employment_type ?? '').trim().toLowerCase(),
@@ -181,14 +181,14 @@ export class GenerateBalancesForAllEmployeesUseCase {
       if (!typeMatch) {
         return {
           eligible: false,
-          reason: `Employment type "${employee.employment_type ?? 'N/A'}" is not in policy's allowed types (${allowedTypes.join(', ')})`,
+          reason: `Employment type "${employee.employment_type ?? 'N/A'}" is not in policy's allowed types (${allowedEmploymentTypes.join(', ')})`,
         };
       }
     }
 
-    const allowedStatuses = policy.allowed_employee_statuses ?? [];
-    if (allowedStatuses.length > 0) {
-      const statusMatch = allowedStatuses.some(
+    const allowedEmployeeStatuses = policy.allowed_employee_statuses ?? [];
+    if (allowedEmployeeStatuses.length > 0) {
+      const statusMatch = allowedEmployeeStatuses.some(
         (s) =>
           String(s).trim().toLowerCase() ===
           String(employee.employment_status ?? '').trim().toLowerCase(),
@@ -196,13 +196,13 @@ export class GenerateBalancesForAllEmployeesUseCase {
       if (!statusMatch) {
         return {
           eligible: false,
-          reason: `Employment status "${employee.employment_status ?? 'N/A'}" is not in policy's allowed statuses (${allowedStatuses.join(', ')})`,
+          reason: `Employment status "${employee.employment_status ?? 'N/A'}" is not in policy's allowed statuses (${allowedEmployeeStatuses.join(', ')})`,
         };
       }
     }
 
-    const minMonths = toNumber(policy.minimum_service_months);
-    if (minMonths > 0 && employee.hire_date != null) {
+    const minimumServiceMonths = toNumber(policy.minimum_service_months);
+    if (minimumServiceMonths > 0 && employee.hire_date != null) {
       const hireDate = toDate(employee.hire_date);
       if (!hireDate) {
         return {
@@ -211,10 +211,10 @@ export class GenerateBalancesForAllEmployeesUseCase {
         };
       }
       const tenureMonths = getCompletedMonthsBetween(hireDate, asOfDate);
-      if (tenureMonths < minMonths) {
+      if (tenureMonths < minimumServiceMonths) {
         return {
           eligible: false,
-          reason: `Tenure (${tenureMonths} months) is less than policy minimum (${minMonths} months)`,
+          reason: `Tenure (${tenureMonths} months) is less than policy minimum (${minimumServiceMonths} months)`,
         };
       }
     }

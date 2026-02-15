@@ -27,6 +27,7 @@ Leave policies define entitlements and rules per **leave type** (e.g. annual ent
 | **RestoreLeavePolicyUseCase** | Restore an archived policy. |
 | **GetPaginatedLeavePolicyUseCase** | List policies with pagination and optional archive filter. |
 | **GetActivePolicyUseCase** | Get the current ACTIVE policy for a leave type. |
+| **RetrieveActivePoliciesUseCase** | Get all currently ACTIVE policies (e.g. for dropdown when creating a leave balance). |
 | **ActivatePolicyUseCase** | Set policy to ACTIVE; retires existing ACTIVE policy for same leave type if any. |
 | **RetirePolicyUseCase** | Set policy to RETIRED (optional expiry date). |
 
@@ -206,7 +207,23 @@ Located in `domain/services/policy/policy-activation.service.ts`. Used by create
 
 ---
 
-### 7. ActivatePolicyUseCase
+### 7. RetrieveActivePoliciesUseCase
+
+**Purpose:** Return all currently ACTIVE leave policies. Use when the client needs to list policies (e.g. dropdown for policy_id when creating a leave balance).
+
+**Input:** None.
+
+**Process:**
+
+1. Run in transaction.
+2. Call `LeavePolicyRepository.retrieveActivePolicies(manager)`.
+3. Return `LeavePolicy[]`.
+
+**Errors:** None (returns empty array if no active policies).
+
+---
+
+### 8. ActivatePolicyUseCase
 
 **Purpose:** Set a policy to ACTIVE. Enforces “one active policy per leave type”: if another ACTIVE policy exists for the same leave type, it is retired first (expiry = day before new policy’s effective date, or today if no effective date).
 
@@ -233,7 +250,7 @@ Located in `domain/services/policy/policy-activation.service.ts`. Used by create
 
 ---
 
-### 8. RetirePolicyUseCase
+### 9. RetirePolicyUseCase
 
 **Purpose:** Set a policy to RETIRED. Optional `expiry_date` can be passed for the retirement date.
 

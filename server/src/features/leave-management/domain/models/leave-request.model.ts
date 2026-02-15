@@ -5,24 +5,43 @@ import { LeaveRequestBusinessException } from '../exceptions';
 import type { LeaveBalance } from './leave-balance.model';
 
 export class LeaveRequest {
+  /** Primary key; set after persistence. */
   id?: number;
+  /** Employee requesting leave. */
   employee_id: number;
+  /** Leave type (e.g. VL, SL) being requested. */
   leave_type_id: number;
+  /** Leave type name (denormalized for display). */
   leave_type?: string;
+  /** First day of the leave period. */
   start_date: Date;
+  /** Last day of the leave period. */
   end_date: Date;
+  /** Number of leave days (business/calendar days as per policy). */
   total_days: number;
+  /** Reason or purpose for the leave. */
   reason: string;
+  /** Leave balance record that will be debited for this request. */
   balance_id: number;
+  /** When the request was approved or rejected (if applicable). */
   approval_date?: Date;
+  /** User/approver ID who approved or rejected (if applicable). */
   approval_by?: number;
+  /** Optional remarks (e.g. from approver). */
   remarks?: string;
+  /** Current state: PENDING, APPROVED, REJECTED, CANCELLED. */
   status: EnumLeaveRequestStatus;
+  /** User who soft-deleted this record. */
   deleted_by: string | null;
+  /** When this record was soft-deleted. */
   deleted_at: Date | null;
+  /** User who created this record. */
   created_by: string | null;
+  /** When this record was created. */
   created_at: Date;
+  /** User who last updated this record. */
   updated_by: string | null;
+  /** When this record was last updated. */
   updated_at: Date;
 
   constructor(dto: {

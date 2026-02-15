@@ -4,26 +4,47 @@ import { EnumLeavePolicyStatus } from '../enum';
 import { LeavePolicyBusinessException } from '../exceptions';
 
 export class LeavePolicy {
+  /** Primary key; set after persistence. */
   id?: number;
+  /** Leave type (e.g. VL, SL) this policy applies to. */
   leave_type_id: number;
+  /** Leave type name (denormalized for display). */
   leave_type?: string;
+  /** Number of leave days granted per year under this policy. */
   annual_entitlement: number;
+  /** Maximum days that can be carried over to the next year. */
   carry_limit: number;
+  /** Maximum days that can be encashed (converted to pay) per year. */
   encash_limit: number;
+  /** Number of years from which unused days can be carried over. */
   carried_over_years: number;
+  /** Date when this policy becomes effective (optional for draft/retired). */
   effective_date?: Date;
+  /** Date when this policy stops being in effect (set when retired). */
   expiry_date?: Date;
+  /** Current state: DRAFT, ACTIVE, RETIRED, etc. */
   status: EnumLeavePolicyStatus;
+  /** Optional notes. */
   remarks?: string;
+  /** Minimum months of service required for an employee to be eligible. */
   minimum_service_months?: number;
+  /** Employment types allowed (e.g. ["regular", "probationary"]); empty = no restriction. */
   allowed_employment_types?: string[];
+  /** Employment statuses allowed (e.g. ["active"]); empty = no restriction. */
   allowed_employee_statuses?: string[];
+  /** Weekday numbers to exclude from leave days (0=Sun, 1=Mon, ..., 6=Sat). */
   excluded_weekdays?: number[];
+  /** User who soft-deleted this record. */
   deleted_by: string | null;
+  /** When this record was soft-deleted. */
   deleted_at: Date | null;
+  /** User who created this record. */
   created_by: string | null;
+  /** When this record was created. */
   created_at: Date;
+  /** User who last updated this record. */
   updated_by: string | null;
+  /** When this record was last updated. */
   updated_at: Date;
 
   constructor(dto: {

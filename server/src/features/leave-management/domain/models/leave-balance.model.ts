@@ -4,26 +4,47 @@ import { EnumLeaveBalanceStatus } from '../enum';
 import { LeaveBalanceBusinessException } from '../exceptions';
 
 export class LeaveBalance {
+  /** Primary key; set after persistence. */
   id?: number;
+  /** Employee who owns this balance. */
   employee_id: number;
+  /** Leave type (e.g. VL, SL) this balance applies to. */
   leave_type_id: number;
+  /** Leave type name (denormalized for display). */
   leave_type?: string;
+  /** Policy that defines entitlement and rules for this balance. */
   policy_id: number;
+  /** Leave year (e.g. "2025") this balance is for. */
   year: string;
+  /** Opening balance at the start of the year (before earned/carried_over). */
   beginning_balance: number;
+  /** Days earned for this year (from policy entitlement). */
   earned: number;
+  /** Days consumed by approved leave in this year. */
   used: number;
+  /** Days brought forward from the previous year (within carry limit). */
   carried_over: number;
+  /** Days encashed (converted to pay) in this year. */
   encashed: number;
+  /** Available days: (beginning_balance + earned + carried_over) - (used + encashed). */
   remaining: number;
+  /** Date of the last transaction that changed this balance. */
   last_transaction_date?: Date;
+  /** Current state: OPEN, CLOSED, REOPENED, etc. */
   status: EnumLeaveBalanceStatus;
+  /** Optional notes (e.g. adjustment reason). */
   remarks?: string;
+  /** User who soft-deleted this record. */
   deleted_by: string | null;
+  /** When this record was soft-deleted. */
   deleted_at: Date | null;
+  /** User who created this record. */
   created_by: string | null;
+  /** When this record was created. */
   created_at: Date;
+  /** User who last updated this record. */
   updated_by: string | null;
+  /** When this record was last updated. */
   updated_at: Date;
 
   constructor(dto: {

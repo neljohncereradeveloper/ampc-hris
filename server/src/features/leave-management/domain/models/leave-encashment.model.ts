@@ -4,17 +4,29 @@ import { EnumLeaveEncashmentStatus } from '../enum';
 import { LeaveEncashmentBusinessException } from '../exceptions';
 
 export class LeaveEncashment {
+  /** Primary key; set after persistence. */
   id?: number;
+  /** Employee whose leave is being encashed. */
   employee_id: number;
+  /** Leave balance record being debited for this encashment. */
   balance_id: number;
+  /** Number of leave days being converted to pay. */
   total_days: number;
+  /** Monetary amount paid for the encashed days. */
   amount: number;
+  /** Current state: PENDING, PAID, etc. */
   status: EnumLeaveEncashmentStatus;
+  /** User who soft-deleted this record. */
   deleted_by: string | null;
+  /** When this record was soft-deleted. */
   deleted_at: Date | null;
+  /** User who created this record. */
   created_by: string | null;
+  /** When this record was created. */
   created_at: Date;
+  /** User who last updated this record. */
   updated_by: string | null;
+  /** When this record was last updated. */
   updated_at: Date;
 
   constructor(dto: {

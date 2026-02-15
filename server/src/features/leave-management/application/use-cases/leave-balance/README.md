@@ -83,17 +83,18 @@ Tenure is computed as completed full months (UTC) between hire date and year sta
 
 ### 1. CreateLeaveBalanceUseCase
 
-**Purpose:** Create a single leave balance for an employee, leave type, policy, and year with given amounts and status.
+**Purpose:** Create a single leave balance for an employee and policy for a year. Amounts are derived from the policy: earned = policy annual_entitlement, beginning_balance/used/carried_over/encashed = 0, remaining = earned, status = OPEN.
 
-**Input:** `CreateLeaveBalanceCommand`, optional `RequestInfo`.
+**Input:** `CreateLeaveBalanceCommand` (employee_id, policy_id, year, remarks?), optional `RequestInfo`.
 
 **Process:**
 
 1. Run in transaction.
-2. Build entity: `LeaveBalance.create({ ...command, created_by })`. Domain validates.
-3. Persist: `LeaveBalanceRepository.create(entity, manager)`. If create fails → throw (500).
-4. Activity log: CREATE with id, employee_id, leave_type_id, year, created_by, created_at.
-5. Return created balance.
+2. Load and validate policy, leave type, and employee exist and are not archived.
+3. Build entity: `LeaveBalance.create({ employee_id, leave_type_id, policy_id, year, beginning_balance: 0, earned: policy.annual_entitlement, used: 0, carried_over: 0, encashed: 0, remaining: earned, status: OPEN, remarks, created_by })`. Domain validates.
+4. Persist: `LeaveBalanceRepository.create(entity, manager)`. If create fails → throw (500).
+5. Activity log: CREATE with id, employee_id, leave_type_id, year, created_by, created_at.
+6. Return created balance.
 
 **Errors:** 400 (domain validation), 500 (create failed).
 
@@ -227,7 +228,7 @@ Tenure is computed as completed full months (UTC) between hire date and year sta
 
 | Command / Type | Description |
 |----------------|-------------|
-| **CreateLeaveBalanceCommand** | `employee_id`, `leave_type_id`, `policy_id`, `year`, `beginning_balance`, `earned`, `used`, `carried_over`, `encashed`, `remaining`, `status`, `remarks?` |
+| **CreateLeaveBalanceCommand** | `employee_id`, `policy_id`, `year`, `remarks?` (amounts and status are set by the use case from the policy). |
 | **GenerateBalancesForYearEntry** | `employee_id`, `leave_type_id`, `policy_id`, optional numeric fields and `remarks?` (used by bulk-create service). |
 | **ActiveEmployeeIdsFilters** | `employment_types?: string[]`, `employment_statuses?: string[]`. |
 | **EmployeeEligibilityInfo** | `id`, `first_name`, `last_name`, `employment_type`, `employment_status`, `hire_date`. |

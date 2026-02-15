@@ -4,16 +4,27 @@ import { EnumLeaveTransactionType } from '../enum';
 import { LeaveTransactionBusinessException } from '../exceptions';
 
 export class LeaveTransaction {
+  /** Primary key; set after persistence. */
   id?: number;
+  /** Leave balance record affected by this transaction. */
   balance_id: number;
+  /** Kind of movement: e.g. EARN, USE, CARRY_OVER, ENCASH, ADJUSTMENT. */
   transaction_type: EnumLeaveTransactionType;
+  /** Number of days added or deducted (signed per transaction type). */
   days: number;
+  /** Reason or reference for the transaction. */
   remarks: string;
+  /** User who soft-deleted this record. */
   deleted_by: string | null;
+  /** When this record was soft-deleted. */
   deleted_at: Date | null;
+  /** User who created this record. */
   created_by: string | null;
+  /** When this record was created. */
   created_at: Date;
+  /** User who last updated this record. */
   updated_by: string | null;
+  /** When this record was last updated. */
   updated_at: Date;
 
   constructor(dto: {

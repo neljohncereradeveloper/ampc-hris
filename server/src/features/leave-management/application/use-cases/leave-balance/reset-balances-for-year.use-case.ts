@@ -16,6 +16,8 @@ import {
 /**
  * Resets leave balances for a given year (bulk year-end operation).
  * Repository implementation defines what "reset" means (e.g. close all OPEN balances for that year).
+ * This process does not reset all balance amounts to zero; it changes status only.
+ * Typically: balances with status OPEN or REOPENED for the year are changed to CLOSED.
  */
 @Injectable()
 export class ResetBalancesForYearUseCase {

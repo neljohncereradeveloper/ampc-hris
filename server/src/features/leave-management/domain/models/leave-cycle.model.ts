@@ -4,19 +4,33 @@ import { EnumLeaveCycleStatus } from '../enum';
 import { LeaveCycleBusinessException } from '../exceptions';
 
 export class LeaveCycle {
+  /** Primary key; set after persistence. */
   id?: number;
+  /** Employee this cycle belongs to. */
   employee_id: number;
+  /** Leave type (e.g. VL, SL) this cycle is for. */
   leave_type_id: number;
+  /** Leave type name (denormalized for display). */
   leave_type?: string;
+  /** First year of the cycle. */
   cycle_start_year: number;
+  /** Last year of the cycle. */
   cycle_end_year: number;
+  /** Total days carried over within this cycle. */
   total_carried: number;
+  /** Current state of the cycle. */
   status: EnumLeaveCycleStatus;
+  /** User who soft-deleted this record. */
   deleted_by: string | null;
+  /** When this record was soft-deleted. */
   deleted_at: Date | null;
+  /** User who created this record. */
   created_by: string | null;
+  /** When this record was created. */
   created_at: Date;
+  /** User who last updated this record. */
   updated_by: string | null;
+  /** When this record was last updated. */
   updated_at: Date;
 
   constructor(dto: {

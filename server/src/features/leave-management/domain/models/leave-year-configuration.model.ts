@@ -3,16 +3,27 @@ import { getPHDateTime } from '@/core/utils/date.util';
 import { LeaveYearConfigurationBusinessException } from '../exceptions';
 
 export class LeaveYearConfiguration {
+  /** Primary key; set after persistence. */
   id?: number;
+  /** Start date of the leave year (e.g. Jan 1). */
   cutoff_start_date: Date;
+  /** End date of the leave year (e.g. Dec 31). */
   cutoff_end_date: Date;
+  /** Leave year label (e.g. "2025"). */
   year: string;
+  /** Optional notes. */
   remarks?: string;
+  /** User who soft-deleted this record. */
   deleted_by: string | null;
+  /** When this record was soft-deleted. */
   deleted_at: Date | null;
+  /** User who created this record. */
   created_by: string | null;
+  /** When this record was created. */
   created_at: Date;
+  /** User who last updated this record. */
   updated_by: string | null;
+  /** When this record was last updated. */
   updated_at: Date;
 
   constructor(dto: {
