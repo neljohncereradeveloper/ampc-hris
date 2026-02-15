@@ -49,6 +49,20 @@ export interface LeaveRequestRepository<Context = unknown> {
   findPending(context: Context): Promise<LeaveRequest[]>;
 
   /**
+   * List leave requests with status PENDING only, with search and pagination.
+   * @param term - Search term
+   * @param page - Page number (1-based)
+   * @param limit - Page size
+   * @param context - Transaction or connection
+   */
+  findPaginatedPending(
+    term: string,
+    page: number,
+    limit: number,
+    context: Context,
+  ): Promise<PaginatedResult<LeaveRequest>>;
+
+  /**
    * List leave requests with search, pagination, and archive filter.
    * @param term - Search term
    * @param page - Page number (1-based)
@@ -65,17 +79,35 @@ export interface LeaveRequestRepository<Context = unknown> {
   ): Promise<PaginatedResult<LeaveRequest>>;
 
   /**
+   * List leave requests for a single employee with search, pagination, and archive filter.
+   * @param employee_id - Employee primary key
+   * @param term - Search term
+   * @param page - Page number (1-based)
+   * @param limit - Page size
+   * @param is_archived - If true, only archived; if false, exclude archived
+   * @param context - Transaction or connection
+   */
+  findPaginatedByEmployee(
+    employee_id: number,
+    term: string,
+    page: number,
+    limit: number,
+    is_archived: boolean,
+    context: Context,
+  ): Promise<PaginatedResult<LeaveRequest>>;
+
+  /**
    * Set request status and approver (e.g. APPROVED, REJECTED, CANCELLED).
    * @param id - Request primary key
    * @param status - New status value
-   * @param approver_id - User who approved/rejected (optional)
+   * @param user_id - User who approved/rejected/cancelled
    * @param remarks - Optional remarks
    * @param context - Transaction or connection
    */
   updateStatus(
     id: number,
     status: string,
-    approver_id: number | undefined,
+    user_id: number,
     remarks: string,
     context: Context,
   ): Promise<boolean>;

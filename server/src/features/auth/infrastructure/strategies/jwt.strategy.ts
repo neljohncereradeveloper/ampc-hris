@@ -56,9 +56,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         throw new UnauthorizedException('User account is inactive');
       }
 
-      // Return user object that will be attached to request.user
+      // Return user object attached to request.user; createRequestInfo() uses id and username for RequestInfo.user_id and user_name
       return {
-        id: user.id,
+        id: user.id!,
         username: user.username,
         email: user.email,
         first_name: user.first_name,

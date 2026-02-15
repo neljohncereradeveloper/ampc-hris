@@ -16,7 +16,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_REQUEST_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { UpdateLeaveRequestStatusCommand } from '../../commands/leave-request/update-leave-request-status.command';
+import { CancelLeaveRequestCommand } from '../../commands/leave-request/cancel-leave-request.command';
 import {
   EnumLeaveRequestStatus,
   EnumLeaveTransactionType,
@@ -35,18 +35,27 @@ export class CancelLeaveRequestUseCase {
     private readonly leaveTransactionRepository: LeaveTransactionRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
-    command: UpdateLeaveRequestStatusCommand,
+    command: CancelLeaveRequestCommand,
     requestInfo?: RequestInfo,
   ): Promise<boolean> {
     const request_id = Number(id);
-    const approver_id = Number(command.approver_id ?? 0);
+    if (requestInfo?.user_id == null) {
+      throw new LeaveRequestBusinessException(
+        'Authentication required. User ID is required to cancel a leave request.',
+        HTTP_STATUS.UNAUTHORIZED,
+      );
+    }
+    const userId = Number(requestInfo.user_id);
     return this.transactionHelper.executeTransaction(
       LEAVE_REQUEST_ACTIONS.CANCEL,
       async (manager) => {
+        /**
+         * Validate that the leave request is valid and not archived.
+         */
         const request = await this.leaveRequestRepository.findById(
           request_id,
           manager,
@@ -57,6 +66,9 @@ export class CancelLeaveRequestUseCase {
             HTTP_STATUS.NOT_FOUND,
           );
         }
+        /**
+         * Validate that the leave request is PENDING or APPROVED.
+         */
         if (
           request.status !== EnumLeaveRequestStatus.PENDING &&
           request.status !== EnumLeaveRequestStatus.APPROVED
@@ -67,6 +79,9 @@ export class CancelLeaveRequestUseCase {
           );
         }
 
+        /**
+         * If the leave request is APPROVED, reverse the balance.
+         */
         if (request.status === EnumLeaveRequestStatus.APPROVED) {
           const balance_id = Number(request.balance_id);
           const total_days = Number(request.total_days);
@@ -74,6 +89,9 @@ export class CancelLeaveRequestUseCase {
             balance_id,
             manager,
           );
+          /**
+           * Validate that the balance is valid and not archived.
+           */
           if (balance) {
             balance.update({
               used: Number(balance.used) - total_days,
@@ -81,29 +99,35 @@ export class CancelLeaveRequestUseCase {
               last_transaction_date: getPHDateTime(),
               updated_by: requestInfo?.user_name ?? null,
             });
-            balance.updated_at = getPHDateTime();
+            /**
+             * Update the balance.
+             */
             await this.leaveBalanceRepository.update(
               Number(balance.id!),
               balance,
               manager,
             );
+            /**
+             * Record the transaction.
+             */
             await this.leaveTransactionRepository.recordTransaction(
               balance_id,
               EnumLeaveTransactionType.ADJUSTMENT,
               total_days,
               command.remarks ?? `Cancelled leave request ${request_id} (reversal)`,
-              approver_id,
+              userId,
               manager,
             );
           }
         }
-        // When status is PENDING: no balance was deducted, so only update status below.
-        // When status is APPROVED: balance already reversed above; update status below.
 
+        /**
+         * Update the leave request status to CANCELLED.
+         */
         const success = await this.leaveRequestRepository.updateStatus(
           request_id,
           EnumLeaveRequestStatus.CANCELLED,
-          approver_id,
+          userId,
           command.remarks ?? '',
           manager,
         );

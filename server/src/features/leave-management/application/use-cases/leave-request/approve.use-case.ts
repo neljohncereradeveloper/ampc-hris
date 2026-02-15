@@ -16,7 +16,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_REQUEST_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { UpdateLeaveRequestStatusCommand } from '../../commands/leave-request/update-leave-request-status.command';
+import { ApproveLeaveRequestCommand } from '../../commands/leave-request/approve-leave-request.command';
 import {
   EnumLeaveRequestStatus,
   EnumLeaveTransactionType,
@@ -35,18 +35,27 @@ export class ApproveLeaveRequestUseCase {
     private readonly leaveTransactionRepository: LeaveTransactionRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
-    command: UpdateLeaveRequestStatusCommand,
+    command: ApproveLeaveRequestCommand,
     requestInfo?: RequestInfo,
   ): Promise<boolean> {
     const request_id = Number(id);
-    const approver_id = Number(command.approver_id ?? 0);
+    if (requestInfo?.user_id == null) {
+      throw new LeaveRequestBusinessException(
+        'Authentication required. User ID is required to approve a leave request.',
+        HTTP_STATUS.UNAUTHORIZED,
+      );
+    }
+    const userId = Number(requestInfo.user_id);
     return this.transactionHelper.executeTransaction(
       LEAVE_REQUEST_ACTIONS.APPROVE,
       async (manager) => {
+        /**
+         * Validate that the leave request is valid and not archived.
+         */
         const request = await this.leaveRequestRepository.findById(
           request_id,
           manager,
@@ -57,6 +66,9 @@ export class ApproveLeaveRequestUseCase {
             HTTP_STATUS.NOT_FOUND,
           );
         }
+        /**
+         * Validate that the leave request is PENDING.
+         */
         if (request.status !== EnumLeaveRequestStatus.PENDING) {
           throw new LeaveRequestBusinessException(
             'Only PENDING leave requests can be approved',
@@ -64,6 +76,9 @@ export class ApproveLeaveRequestUseCase {
           );
         }
 
+        /**
+         * Validate that the leave balance exist.
+         */
         const balance = await this.leaveBalanceRepository.findById(
           request.balance_id,
           manager,
@@ -74,40 +89,54 @@ export class ApproveLeaveRequestUseCase {
             HTTP_STATUS.NOT_FOUND,
           );
         }
+        /**
+         * Validate that the leave balance has enough remaining days.
+         */
         const total_days = Number(request.total_days);
-        if (Number(balance.remaining) < total_days) {
+        const remaining_days = Number(balance.remaining);
+        const used_days = Number(balance.used);
+        if (remaining_days < total_days) {
           throw new LeaveRequestBusinessException(
-            `Insufficient leave balance: remaining ${balance.remaining}, requested ${request.total_days}.`,
+            `Insufficient leave balance: remaining ${remaining_days}, requested ${total_days}.`,
             HTTP_STATUS.BAD_REQUEST,
           );
         }
 
+        /**
+         * Update the leave balance.
+         */
         balance.update({
-          used: Number(balance.used) + total_days,
-          remaining: Number(balance.remaining) - total_days,
+          used: used_days + total_days,
+          remaining: remaining_days - total_days,
           last_transaction_date: getPHDateTime(),
           updated_by: requestInfo?.user_name ?? null,
         });
-        balance.updated_at = getPHDateTime();
+
+        /**
+         * Update the leave balance.
+         */
         await this.leaveBalanceRepository.update(
           Number(balance.id!),
           balance,
           manager,
         );
 
+        /**
+         * Record the leave transaction.
+         */
         await this.leaveTransactionRepository.recordTransaction(
           Number(request.balance_id),
           EnumLeaveTransactionType.REQUEST,
           -total_days,
           command.remarks ?? `Approved leave request ${request_id}`,
-          approver_id,
+          userId,
           manager,
         );
 
         const success = await this.leaveRequestRepository.updateStatus(
           request_id,
           EnumLeaveRequestStatus.APPROVED,
-          approver_id,
+          userId,
           command.remarks ?? '',
           manager,
         );
@@ -123,7 +152,6 @@ export class ApproveLeaveRequestUseCase {
           entity: LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_REQUESTS,
           details: JSON.stringify({
             id: request_id,
-            approver_id,
             approved_by: requestInfo?.user_name ?? '',
             approved_at: getPHDateTime(new Date()),
           }),

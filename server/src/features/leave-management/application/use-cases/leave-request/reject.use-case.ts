@@ -12,7 +12,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_REQUEST_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { UpdateLeaveRequestStatusCommand } from '../../commands/leave-request/update-leave-request-status.command';
+import { RejectLeaveRequestCommand } from '../../commands/leave-request/reject-leave-request.command';
 import { EnumLeaveRequestStatus } from '@/features/leave-management/domain/enum';
 
 @Injectable()
@@ -24,18 +24,27 @@ export class RejectLeaveRequestUseCase {
     private readonly leaveRequestRepository: LeaveRequestRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
-    command: UpdateLeaveRequestStatusCommand,
+    command: RejectLeaveRequestCommand,
     requestInfo?: RequestInfo,
   ): Promise<boolean> {
     const request_id = Number(id);
-    const approver_id = Number(command.approver_id ?? 0);
+    if (requestInfo?.user_id == null) {
+      throw new LeaveRequestBusinessException(
+        'Authentication required. User ID is required to reject a leave request.',
+        HTTP_STATUS.UNAUTHORIZED,
+      );
+    }
+    const userId = Number(requestInfo.user_id);
     return this.transactionHelper.executeTransaction(
       LEAVE_REQUEST_ACTIONS.REJECT,
       async (manager) => {
+        /**
+         * Validate that the leave request is valid and not archived.
+         */
         const request = await this.leaveRequestRepository.findById(
           request_id,
           manager,
@@ -46,6 +55,9 @@ export class RejectLeaveRequestUseCase {
             HTTP_STATUS.NOT_FOUND,
           );
         }
+        /**
+         * Validate that the leave request is PENDING.
+         */
         if (request.status !== EnumLeaveRequestStatus.PENDING) {
           throw new LeaveRequestBusinessException(
             'Only PENDING leave requests can be rejected',
@@ -53,10 +65,13 @@ export class RejectLeaveRequestUseCase {
           );
         }
 
+        /**
+         * Update the leave request status to REJECTED.
+         */
         const success = await this.leaveRequestRepository.updateStatus(
           request_id,
           EnumLeaveRequestStatus.REJECTED,
-          approver_id,
+          userId,
           command.remarks ?? '',
           manager,
         );
