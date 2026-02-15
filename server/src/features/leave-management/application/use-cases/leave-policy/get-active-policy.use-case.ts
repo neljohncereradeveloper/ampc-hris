@@ -15,11 +15,11 @@ export class GetActivePolicyUseCase {
     private readonly leavePolicyRepository: LeavePolicyRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) {}
+  ) { }
 
   async execute(leave_type_id: number): Promise<LeavePolicy | null> {
     return this.transactionHelper.executeTransaction(
-      LEAVE_POLICY_ACTIONS.PAGINATED_LIST,
+      LEAVE_POLICY_ACTIONS.GET_ACTIVE_POLICY,
       async (manager) =>
         this.leavePolicyRepository.getActivePolicy(leave_type_id, manager),
     );

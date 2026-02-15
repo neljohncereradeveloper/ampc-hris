@@ -21,6 +21,10 @@ import {
 import { CreateLeaveRequestCommand } from '../../commands/leave-request/create-leave-request.command';
 import { EnumLeaveRequestStatus } from '@/features/leave-management/domain/enum';
 import {
+  isSameCalendarDay,
+  getCalendarDaysInclusive,
+} from '@/core/utils/date.util';
+import {
   LeaveTypeRepository,
   HolidayRepository,
 } from '@/features/shared-domain/domain/repositories';
@@ -78,8 +82,7 @@ export class CreateLeaveRequestUseCase {
     this.validateDates(start_date, end_date);
 
     const is_half_day = Boolean(command.is_half_day);
-    const is_same_day =
-      start_date.toDateString() === end_date.toDateString();
+    const is_same_day = isSameCalendarDay(start_date, end_date);
     if (is_half_day && !is_same_day) {
       throw new LeaveRequestBusinessException(
         'Half-day leave requires start date and end date to be the same',
@@ -292,7 +295,7 @@ export class CreateLeaveRequestUseCase {
     start.setHours(0, 0, 0, 0);
     end.setHours(0, 0, 0, 0);
 
-    const calendar_days = this.getCalendarDays(start, end);
+    const calendar_days = getCalendarDaysInclusive(start, end);
     const holidays = await this.holidayRepository.findByDateRange(
       start,
       end,
@@ -328,9 +331,8 @@ export class CreateLeaveRequestUseCase {
     while (current <= end) {
       const day = current.getDay();
       if (excluded_weekdays.includes(day)) {
-        const is_holiday = holidays.some(
-          (h) =>
-            new Date(h.date).toDateString() === current.toDateString(),
+        const is_holiday = holidays.some((h) =>
+          isSameCalendarDay(new Date(h.date), current),
         );
         if (!is_holiday) count++;
       }
@@ -354,12 +356,4 @@ export class CreateLeaveRequestUseCase {
     return false;
   }
 
-  private getCalendarDays(start_date: Date, end_date: Date): number {
-    const start = new Date(start_date);
-    const end = new Date(end_date);
-    start.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
-    const diff_ms = end.getTime() - start.getTime();
-    return Math.ceil(diff_ms / (1000 * 60 * 60 * 24)) + 1;
-  }
 }

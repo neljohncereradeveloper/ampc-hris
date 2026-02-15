@@ -2,7 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { TOKENS_CORE, HTTP_STATUS } from '@/core/domain/constants';
 import { ActivityLogRepository } from '@/core/domain/repositories';
 import { RequestInfo } from '@/core/utils/request-info.util';
-import { getPHDateTime } from '@/core/utils/date.util';
+import {
+  getPHDateTime,
+  isSameCalendarDay,
+  getCalendarDaysInclusive,
+} from '@/core/utils/date.util';
 import { ActivityLog } from '@/core/domain/models';
 import { TransactionPort } from '@/core/domain/ports';
 import { LeaveRequestBusinessException } from '@/features/leave-management/domain/exceptions';
@@ -131,7 +135,7 @@ export class UpdateLeaveRequestUseCase {
 
           let holidays: Holiday[] = [];
           const is_same_day =
-            start_date.toDateString() === end_date.toDateString();
+            isSameCalendarDay(start_date, end_date);
           const excluded_weekdays = policy.excluded_weekdays ?? [];
 
           if (excluded_weekdays.length > 0) {
@@ -163,7 +167,7 @@ export class UpdateLeaveRequestUseCase {
           }
 
           if (total_days <= 0) {
-            const calendar_days = this.getCalendarDays(start_date, end_date);
+            const calendar_days = getCalendarDaysInclusive(start_date, end_date);
             if (holidays.length >= calendar_days) {
               throw new LeaveRequestBusinessException(
                 'All dates in the leave request period are holidays. Cannot update leave request for holiday dates only.',
@@ -332,7 +336,7 @@ export class UpdateLeaveRequestUseCase {
     start.setHours(0, 0, 0, 0);
     end.setHours(0, 0, 0, 0);
 
-    const calendar_days = this.getCalendarDays(start, end);
+    const calendar_days = getCalendarDaysInclusive(start, end);
     const holidays = await this.holidayRepository.findByDateRange(
       start,
       end,
@@ -364,9 +368,8 @@ export class UpdateLeaveRequestUseCase {
     while (current <= end) {
       const day = current.getDay();
       if (excluded_weekdays.includes(day)) {
-        const is_holiday = holidays.some(
-          (h) =>
-            new Date(h.date).toDateString() === current.toDateString(),
+        const is_holiday = holidays.some((h) =>
+          isSameCalendarDay(new Date(h.date), current),
         );
         if (!is_holiday) count++;
       }
@@ -390,12 +393,4 @@ export class UpdateLeaveRequestUseCase {
     return false;
   }
 
-  private getCalendarDays(start_date: Date, end_date: Date): number {
-    const start = new Date(start_date);
-    const end = new Date(end_date);
-    start.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
-    const diff_ms = end.getTime() - start.getTime();
-    return Math.ceil(diff_ms / (1000 * 60 * 60 * 24)) + 1;
-  }
 }

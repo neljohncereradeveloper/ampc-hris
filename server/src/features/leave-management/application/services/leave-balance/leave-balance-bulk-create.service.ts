@@ -13,12 +13,7 @@ import {
   LEAVE_BALANCE_ACTIONS,
 } from '@/features/leave-management/domain/constants';
 import type { GenerateBalancesForYearEntry } from '@/features/leave-management/application/commands/leave-balance/generate-balances-for-year.command';
-
-/** Coerce unknown to number; use default if not a finite number. */
-function toNumber(value: unknown, defaultVal = 0): number {
-  const n = typeof value === 'number' ? value : Number(value);
-  return Number.isFinite(n) ? n : defaultVal;
-}
+import { toNumber } from '@/core/utils/coercion.util';
 
 /**
  * Application-level service: creates leave balances from entries (create-or-skip) and writes one activity log.

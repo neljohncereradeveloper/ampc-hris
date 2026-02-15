@@ -6,4 +6,5 @@
 export * from './pagination.util';
 export * from './request-info.util';
 export * from './change-tracking.util';
+export * from './coercion.util';
 export * from './date.util';

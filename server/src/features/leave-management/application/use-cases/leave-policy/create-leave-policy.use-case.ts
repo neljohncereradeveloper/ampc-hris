@@ -32,7 +32,7 @@ export class CreateLeavePolicyUseCase {
     private readonly leaveTypeRepository: LeaveTypeRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     command: CreateLeavePolicyCommand,
@@ -92,6 +92,8 @@ export class CreateLeavePolicyUseCase {
           details: JSON.stringify({
             id: created.id,
             leave_type_id: created.leave_type_id,
+            leave_type_name: created.leave_type,
+            status: EnumLeavePolicyStatus.DRAFT,
             created_by: requestInfo?.user_name ?? '',
             created_at: getPHDateTime(created.created_at),
           }),

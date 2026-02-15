@@ -15,20 +15,12 @@ import {
 } from '@/features/leave-management/domain/constants';
 import type { GenerateBalancesForYearEntry } from '../../commands/leave-balance/generate-balances-for-year.command';
 import { RequestInfo } from '@/core/utils/request-info.util';
+import { toNumber, toDate } from '@/core/utils/coercion.util';
+import {
+  parseYearStart,
+  getCompletedMonthsBetween,
+} from '@/core/utils/date.util';
 import { LeaveBalanceBulkCreateService } from '@/features/leave-management/application/services/leave-balance';
-
-/** Coerce unknown to number; use default if not a finite number. */
-function toNumber(value: unknown, defaultVal = 0): number {
-  const n = typeof value === 'number' ? value : Number(value);
-  return Number.isFinite(n) ? n : defaultVal;
-}
-
-/** Coerce to Date; return null if invalid. */
-function toDate(value: unknown): Date | null {
-  if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
-  const d = new Date(value as string | number);
-  return isNaN(d.getTime()) ? null : d;
-}
 
 /** One record for the response when an employee is skipped for a leave type (ineligible). */
 export interface SkippedEmployeeItem {
@@ -94,7 +86,7 @@ export class GenerateBalancesForAllEmployeesUseCase {
           );
         const policies = await this.policyRepo.retrieveActivePolicies(manager);
 
-        const yearStart = this.parseYearStart(year);
+        const yearStart = this.parseYearStartOrThrow(year);
         const entries: GenerateBalancesForYearEntry[] = [];
         const skipped_employees: SkippedEmployeeItem[] = [];
 
@@ -163,23 +155,15 @@ export class GenerateBalancesForAllEmployeesUseCase {
     return [first, last].filter(Boolean).join(' ') || `Employee #${employee.id}`;
   }
 
-  private parseYearStart(year: string): Date {
-    const yearNum = toNumber(year, NaN);
-    const y = Number.isFinite(yearNum) ? Math.floor(yearNum) : parseInt(String(year).trim(), 10);
-    if (!Number.isInteger(y) || y < 1900 || y > 2100) {
+  private parseYearStartOrThrow(year: string): Date {
+    try {
+      return parseYearStart(year, { minYear: 1900, maxYear: 2100 });
+    } catch {
       throw new LeaveBalanceBusinessException(
         'Year must be a valid year (e.g. 2025)',
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    const parsed = new Date(Date.UTC(y, 0, 1));
-    if (isNaN(parsed.getTime())) {
-      throw new LeaveBalanceBusinessException(
-        'Year must be a valid year (e.g. 2025)',
-        HTTP_STATUS.BAD_REQUEST,
-      );
-    }
-    return parsed;
   }
 
   private checkEmployeeEligibleForPolicy(
@@ -226,7 +210,7 @@ export class GenerateBalancesForAllEmployeesUseCase {
           reason: 'Invalid hire date; cannot verify minimum service months',
         };
       }
-      const tenureMonths = this.getCompletedMonthsBetween(hireDate, asOfDate);
+      const tenureMonths = getCompletedMonthsBetween(hireDate, asOfDate);
       if (tenureMonths < minMonths) {
         return {
           eligible: false,
@@ -238,14 +222,4 @@ export class GenerateBalancesForAllEmployeesUseCase {
     return { eligible: true };
   }
 
-  /** Completed full months between two dates (inclusive of start month, exclusive of end month semantics: months of service). */
-  private getCompletedMonthsBetween(from: Date, to: Date): number {
-    const fromTime = from.getTime();
-    const toTime = to.getTime();
-    if (isNaN(fromTime) || isNaN(toTime) || toTime < fromTime) return 0;
-    const years = to.getUTCFullYear() - from.getUTCFullYear();
-    const months = to.getUTCMonth() - from.getUTCMonth();
-    const totalMonths = years * 12 + months;
-    return Math.max(0, Math.floor(totalMonths));
-  }
 }

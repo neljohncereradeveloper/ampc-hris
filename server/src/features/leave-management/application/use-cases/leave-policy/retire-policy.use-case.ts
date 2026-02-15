@@ -13,6 +13,7 @@ import {
   LEAVE_POLICY_ACTIONS,
 } from '@/features/leave-management/domain/constants';
 import { PolicyActivationService } from '@/features/leave-management/domain/services';
+import { EnumLeavePolicyStatus } from '@/features/leave-management/domain';
 
 @Injectable()
 export class RetirePolicyUseCase {
@@ -25,7 +26,7 @@ export class RetirePolicyUseCase {
     private readonly leavePolicyRepository: LeavePolicyRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -70,7 +71,8 @@ export class RetirePolicyUseCase {
           details: JSON.stringify({
             id,
             leave_type_id: policy.leave_type_id,
-            status: 'retired',
+            leave_type_name: policy.leave_type,
+            status: EnumLeavePolicyStatus.RETIRED,
             retired_by: requestInfo?.user_name ?? '',
             retired_at: getPHDateTime(new Date()),
           }),

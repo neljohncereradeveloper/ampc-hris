@@ -13,6 +13,7 @@ import {
   LEAVE_POLICY_ACTIONS,
 } from '@/features/leave-management/domain/constants';
 import { PolicyActivationService } from '@/features/leave-management/domain/services';
+import { EnumLeavePolicyStatus } from '@/features/leave-management/domain';
 
 @Injectable()
 export class ActivatePolicyUseCase {
@@ -25,7 +26,7 @@ export class ActivatePolicyUseCase {
     private readonly leavePolicyRepository: LeavePolicyRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -56,7 +57,13 @@ export class ActivatePolicyUseCase {
           );
         }
 
+        // When another policy is already active for this leave type, we must retire it first
+        // so that only one policy per leave type is active at a time.
+        // Retire the current active policy with an end date of (new policy effective date − 1 day),
+        // or today if there's no effective date; then activation continues with the new policy.
         if (validation.shouldRetireExisting && validation.existingPolicyId) {
+          // Set the old policy’s end date: the day before the new policy’s effective date,
+          // so there is no gap and no overlap. If the new policy has no effective_date, end the old one today.
           let old_policy_expiry_date: Date | undefined;
           if (policy.effective_date) {
             old_policy_expiry_date = new Date(policy.effective_date);
@@ -97,7 +104,8 @@ export class ActivatePolicyUseCase {
           details: JSON.stringify({
             id,
             leave_type_id: policy.leave_type_id,
-            status: 'active',
+            leave_type_name: policy.leave_type,
+            status: EnumLeavePolicyStatus.ACTIVE,
             activated_by: requestInfo?.user_name ?? '',
             activated_at: getPHDateTime(new Date()),
           }),

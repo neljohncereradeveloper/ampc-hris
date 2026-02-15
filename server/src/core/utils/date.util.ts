@@ -101,3 +101,64 @@ export function getPHDateTime(date?: Date): Date {
 
   return phTime;
 }
+
+/**
+ * Parse a year string or number to UTC January 1st 00:00:00.
+ * @param year - Year as string (e.g. "2025") or number
+ * @param options - Optional min/max year bounds (default 1900–2100). Set to undefined to skip range check.
+ * @returns Date at start of year in UTC
+ * @throws Error if year is invalid or out of range
+ */
+export function parseYearStart(
+  year: string | number,
+  options?: { minYear?: number; maxYear?: number },
+): Date {
+  const minYear = options?.minYear ?? 1900;
+  const maxYear = options?.maxYear ?? 2100;
+  const y =
+    typeof year === 'number'
+      ? Math.floor(year)
+      : parseInt(String(year).trim(), 10);
+  if (!Number.isInteger(y) || y < minYear || y > maxYear) {
+    throw new Error(`Year must be between ${minYear} and ${maxYear}`);
+  }
+  const parsed = new Date(Date.UTC(y, 0, 1));
+  if (isNaN(parsed.getTime())) {
+    throw new Error('Invalid year');
+  }
+  return parsed;
+}
+
+/**
+ * Completed full months between two dates (calendar months, not exact days).
+ * Uses UTC components. Returns 0 if from > to or either date is invalid.
+ */
+export function getCompletedMonthsBetween(from: Date, to: Date): number {
+  const fromTime = from.getTime();
+  const toTime = to.getTime();
+  if (isNaN(fromTime) || isNaN(toTime) || toTime < fromTime) return 0;
+  const years = to.getUTCFullYear() - from.getUTCFullYear();
+  const months = to.getUTCMonth() - from.getUTCMonth();
+  const totalMonths = years * 12 + months;
+  return Math.max(0, Math.floor(totalMonths));
+}
+
+/**
+ * Calendar days between start and end (inclusive).
+ * Times are normalized to midnight for comparison.
+ */
+export function getCalendarDaysInclusive(start: Date, end: Date): number {
+  const startNorm = new Date(start);
+  const endNorm = new Date(end);
+  startNorm.setHours(0, 0, 0, 0);
+  endNorm.setHours(0, 0, 0, 0);
+  const diffMs = endNorm.getTime() - startNorm.getTime();
+  return Math.ceil(diffMs / (1000 * 60 * 60 * 24)) + 1;
+}
+
+/**
+ * Whether two dates fall on the same calendar day (ignoring time).
+ */
+export function isSameCalendarDay(a: Date, b: Date): boolean {
+  return new Date(a).toDateString() === new Date(b).toDateString();
+}
