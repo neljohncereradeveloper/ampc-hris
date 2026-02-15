@@ -12,7 +12,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_ENCASHMENT_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { MarkAsPaidLeaveEncashmentCommand } from '../../commands/leave-encashment/mark-as-paid-leave-encashment.command';
+import { MarkAsPaidLeaveEncashmentCommand } from '../../commands/leave-encashment/mark-as-paid.command';
 import { EnumLeaveEncashmentStatus } from '@/features/leave-management/domain/enum';
 
 @Injectable()

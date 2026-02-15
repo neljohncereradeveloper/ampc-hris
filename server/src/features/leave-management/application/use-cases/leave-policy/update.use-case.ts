@@ -13,7 +13,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_POLICY_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { UpdateLeavePolicyCommand } from '../../commands/leave-policy/update-leave-policy.command';
+import { UpdateLeavePolicyCommand } from '../../commands/leave-policy/update.command';
 import {
   getChangedFields,
   extractEntityState,

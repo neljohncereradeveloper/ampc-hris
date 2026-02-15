@@ -20,7 +20,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_REQUEST_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { CreateLeaveRequestCommand } from '../../commands/leave-request/create-leave-request.command';
+import { CreateLeaveRequestCommand } from '../../commands/leave-request/create.command';
 import { EnumLeaveRequestStatus } from '@/features/leave-management/domain/enum';
 import {
   isSameCalendarDay,

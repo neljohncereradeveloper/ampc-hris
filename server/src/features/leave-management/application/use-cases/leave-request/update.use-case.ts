@@ -25,7 +25,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_REQUEST_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { UpdateLeaveRequestCommand } from '../../commands/leave-request/update-leave-request.command';
+import { UpdateLeaveRequestCommand } from '../../commands/leave-request/update.command';
 import {
   EnumLeaveRequestStatus,
   EnumLeaveBalanceStatus,

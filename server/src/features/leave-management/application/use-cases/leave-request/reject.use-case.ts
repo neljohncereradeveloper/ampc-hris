@@ -12,7 +12,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_REQUEST_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { RejectLeaveRequestCommand } from '../../commands/leave-request/reject-leave-request.command';
+import { RejectLeaveRequestCommand } from '../../commands/leave-request/reject.command';
 import { EnumLeaveRequestStatus } from '@/features/leave-management/domain/enum';
 
 @Injectable()

@@ -13,7 +13,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_BALANCE_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { CreateLeaveBalanceCommand } from '../../commands/leave-balance/create-leave-balance.command';
+import { CreateLeaveBalanceCommand } from '../../commands/leave-balance/create.command';
 import { EnumLeaveBalanceStatus } from '@/features/leave-management/domain/enum';
 import { EmployeeRepository, LeaveTypeRepository } from '@/features/shared-domain/domain/repositories';
 import { SHARED_DOMAIN_TOKENS } from '@/features/shared-domain/domain/constants';

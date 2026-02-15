@@ -13,7 +13,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_POLICY_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { CreateLeavePolicyCommand } from '../../commands/leave-policy/create-leave-policy.command';
+import { CreateLeavePolicyCommand } from '../../commands/leave-policy/create.command';
 import { EnumLeavePolicyStatus } from '@/features/leave-management/domain/enum';
 import { PolicyActivationService } from '@/features/leave-management/domain/services';
 import { LeaveTypeRepository } from '@/features/shared-domain/domain/repositories';

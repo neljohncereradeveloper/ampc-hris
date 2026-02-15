@@ -13,7 +13,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_YEAR_CONFIGURATION_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { UpdateLeaveYearConfigurationCommand } from '../../commands/leave-year-configuration/update-leave-year-configuration.command';
+import { UpdateLeaveYearConfigurationCommand } from '../../commands/leave-year-configuration/update.command';
 import {
   getChangedFields,
   extractEntityState,

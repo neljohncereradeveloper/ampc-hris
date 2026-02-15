@@ -13,7 +13,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_YEAR_CONFIGURATION_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { CreateLeaveYearConfigurationCommand } from '../../commands/leave-year-configuration/create-leave-year-configuration.command';
+import { CreateLeaveYearConfigurationCommand } from '../../commands/leave-year-configuration/create.command';
 
 @Injectable()
 export class CreateLeaveYearConfigurationUseCase {

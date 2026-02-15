@@ -13,7 +13,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_ENCASHMENT_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { CreateLeaveEncashmentCommand } from '../../commands/leave-encashment/create-leave-encashment.command';
+import { CreateLeaveEncashmentCommand } from '../../commands/leave-encashment/create.command';
 import { EnumLeaveEncashmentStatus } from '@/features/leave-management/domain/enum';
 
 @Injectable()

@@ -13,7 +13,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_BALANCE_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import type { GenerateBalancesForYearEntry } from '../../commands/leave-balance/generate-balances-for-year.command';
+import type { GenerateBalancesForYearEntry } from '../../commands/leave-balance/generate-for-year.command';
 import { RequestInfo } from '@/core/utils/request-info.util';
 import { toNumber, toDate } from '@/core/utils/coercion.util';
 import {

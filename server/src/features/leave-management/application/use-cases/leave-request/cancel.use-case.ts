@@ -16,7 +16,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_REQUEST_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { CancelLeaveRequestCommand } from '../../commands/leave-request/cancel-leave-request.command';
+import { CancelLeaveRequestCommand } from '../../commands/leave-request/cancel.command';
 import {
   EnumLeaveRequestStatus,
   EnumLeaveTransactionType,

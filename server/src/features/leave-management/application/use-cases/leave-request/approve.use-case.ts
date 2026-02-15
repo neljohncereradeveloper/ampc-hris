@@ -16,7 +16,7 @@ import {
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_REQUEST_ACTIONS,
 } from '@/features/leave-management/domain/constants';
-import { ApproveLeaveRequestCommand } from '../../commands/leave-request/approve-leave-request.command';
+import { ApproveLeaveRequestCommand } from '../../commands/leave-request/approve.command';
 import {
   EnumLeaveRequestStatus,
   EnumLeaveTransactionType,
