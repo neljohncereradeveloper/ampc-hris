@@ -7,6 +7,7 @@ import {
   isSameCalendarDay,
   getCalendarDaysInclusive,
 } from '@/core/utils/date.util';
+import { toDate } from '@/core/utils/coercion.util';
 import { ActivityLog } from '@/core/domain/models';
 import { TransactionPort } from '@/core/domain/ports';
 import { LeaveRequestBusinessException } from '@/features/leave-management/domain/exceptions';
@@ -18,6 +19,7 @@ import {
 } from '@/features/leave-management/domain/repositories';
 import { LeavePolicy } from '@/features/leave-management/domain/models/leave-policy.model';
 import {
+  DAY_NAMES,
   LEAVE_MANAGEMENT_DATABASE_MODELS,
   LEAVE_MANAGEMENT_TOKENS,
   LEAVE_REQUEST_ACTIONS,
@@ -36,15 +38,7 @@ import {
   FieldExtractorConfig,
 } from '@/core/utils/change-tracking.util';
 
-const DAY_NAMES = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-];
+
 
 @Injectable()
 export class UpdateLeaveRequestUseCase {
@@ -61,7 +55,7 @@ export class UpdateLeaveRequestUseCase {
     private readonly holidayRepository: HolidayRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -286,30 +280,24 @@ export class UpdateLeaveRequestUseCase {
     );
   }
 
+  /**
+   * Converts command input to a valid Date using core toDate(); throws with label for required/invalid.
+   */
   private normalizeDate(value: unknown, label: string): Date {
-    if (value instanceof Date) {
-      if (Number.isNaN(value.getTime())) {
-        throw new LeaveRequestBusinessException(
-          `Invalid ${label.toLowerCase()}`,
-          HTTP_STATUS.BAD_REQUEST,
-        );
-      }
-      return value;
+    if (value == null) {
+      throw new LeaveRequestBusinessException(
+        `${label} is required`,
+        HTTP_STATUS.BAD_REQUEST,
+      );
     }
-    if (value != null) {
-      const d = new Date(value as string | number);
-      if (Number.isNaN(d.getTime())) {
-        throw new LeaveRequestBusinessException(
-          `Invalid ${label.toLowerCase()}`,
-          HTTP_STATUS.BAD_REQUEST,
-        );
-      }
-      return d;
+    const d = toDate(value);
+    if (d === null) {
+      throw new LeaveRequestBusinessException(
+        `Invalid ${label.toLowerCase()}`,
+        HTTP_STATUS.BAD_REQUEST,
+      );
     }
-    throw new LeaveRequestBusinessException(
-      `${label} is required`,
-      HTTP_STATUS.BAD_REQUEST,
-    );
+    return d;
   }
 
   private validateDates(start_date: Date, end_date: Date): void {

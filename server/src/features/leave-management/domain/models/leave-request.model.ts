@@ -1,6 +1,6 @@
 import { HTTP_STATUS } from '@/core/domain/constants';
 import { getPHDateTime } from '@/core/utils/date.util';
-import { EnumLeaveRequestStatus } from '../enum';
+import { EnumLeaveBalanceStatus, EnumLeaveRequestStatus } from '../enum';
 import { LeaveRequestBusinessException } from '../exceptions';
 import type { LeaveBalance } from './leave-balance.model';
 
@@ -269,8 +269,10 @@ export class LeaveRequest {
   }
 
   /**
-   * Throws if the given balance does not have enough remaining days for this request.
-   * Call this before persisting a new or updated leave request (with the balance that matches balance_id).
+   * Throws if the given balance cannot be used for this request.
+   * Call before persisting a new or updated leave request with the balance that matches balance_id.
+   *
+   * Checks: balance identity (id), balance is usable (OPEN/REOPENED), and remaining >= total_days.
    */
   assertBalanceSufficient(balance: LeaveBalance): void {
     if (balance.id !== undefined && this.balance_id !== undefined && balance.id !== this.balance_id) {
@@ -279,15 +281,10 @@ export class LeaveRequest {
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    if (balance.employee_id !== this.employee_id) {
+    const usableStatuses = [EnumLeaveBalanceStatus.OPEN, EnumLeaveBalanceStatus.REOPENED];
+    if (!usableStatuses.includes(balance.status)) {
       throw new LeaveRequestBusinessException(
-        'Balance employee does not match this request.',
-        HTTP_STATUS.BAD_REQUEST,
-      );
-    }
-    if (balance.leave_type_id !== this.leave_type_id) {
-      throw new LeaveRequestBusinessException(
-        'Balance leave type does not match this request.',
+        'Leave balance is not available for use (closed or finalized).',
         HTTP_STATUS.BAD_REQUEST,
       );
     }

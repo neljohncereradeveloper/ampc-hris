@@ -9,3 +9,14 @@ export const LEAVE_REQUEST_ACTIONS = {
   REJECT: 'REJECT_LEAVE_REQUEST',
   CANCEL: 'CANCEL_LEAVE_REQUEST',
 } as const;
+
+
+export const DAY_NAMES = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
