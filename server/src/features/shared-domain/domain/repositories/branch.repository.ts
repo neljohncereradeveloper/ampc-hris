@@ -5,15 +5,14 @@ export interface BranchRepository<Context = unknown> {
   /** Create a branch. */
   create(branch: Branch, context: Context): Promise<Branch>;
   /** Update a branch. */
-  update(
-    id: number,
-    dto: Partial<Branch>,
-    context: Context,
-  ): Promise<boolean>;
+  update(id: number, dto: Partial<Branch>, context: Context): Promise<boolean>;
   /** Find a branch by ID. */
   findById(id: number, context: Context): Promise<Branch | null>;
   /** Find a branch by description. */
-  findByDescription(description: string, context: Context): Promise<Branch | null>;
+  findByDescription(
+    description: string,
+    context: Context,
+  ): Promise<Branch | null>;
   /** Find paginated list of branches. */
   findPaginatedList(
     term: string,

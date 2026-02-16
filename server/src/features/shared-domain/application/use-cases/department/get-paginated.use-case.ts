@@ -16,7 +16,7 @@ export class GetPaginatedDepartmentUseCase {
     private readonly departmentRepository: DepartmentRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,

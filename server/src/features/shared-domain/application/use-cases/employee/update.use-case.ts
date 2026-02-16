@@ -69,7 +69,7 @@ export class UpdateEmployeeUseCase {
     private readonly provinceRepository: ProvinceRepository,
     @Inject(SHARED_DOMAIN_TOKENS.LEAVE_TYPE)
     private readonly leaveTypeRepository: LeaveTypeRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,
@@ -112,31 +112,49 @@ export class UpdateEmployeeUseCase {
             ? this.validateBranchByDescription(command.branch, manager)
             : Promise.resolve(null),
           command.citizenship != null
-            ? this.validateCitizenshipByDescription(command.citizenship, manager)
+            ? this.validateCitizenshipByDescription(
+                command.citizenship,
+                manager,
+              )
             : Promise.resolve(null),
           command.job_title != null
             ? this.validateJobTitleByDescription(command.job_title, manager)
             : Promise.resolve(null),
           command.employment_type != null
-            ? this.validateEmploymentTypeByDescription(command.employment_type, manager)
+            ? this.validateEmploymentTypeByDescription(
+                command.employment_type,
+                manager,
+              )
             : Promise.resolve(null),
           command.employment_status != null
-            ? this.validateEmploymentStatusByDescription(command.employment_status, manager)
+            ? this.validateEmploymentStatusByDescription(
+                command.employment_status,
+                manager,
+              )
             : Promise.resolve(null),
           command.religion != null
             ? this.validateReligionByDescription(command.religion, manager)
             : Promise.resolve(null),
           command.civil_status != null
-            ? this.validateCivilStatusByDescription(command.civil_status, manager)
+            ? this.validateCivilStatusByDescription(
+                command.civil_status,
+                manager,
+              )
             : Promise.resolve(null),
           command.home_address_barangay != null
-            ? this.validateBarangayByDescription(command.home_address_barangay, manager)
+            ? this.validateBarangayByDescription(
+                command.home_address_barangay,
+                manager,
+              )
             : Promise.resolve(null),
           command.home_address_city != null
             ? this.validateCityByDescription(command.home_address_city, manager)
             : Promise.resolve(null),
           command.home_address_province != null
-            ? this.validateProvinceByDescription(command.home_address_province, manager)
+            ? this.validateProvinceByDescription(
+                command.home_address_province,
+                manager,
+              )
             : Promise.resolve(null),
           command.department != null
             ? this.validateDepartmentByDescription(command.department, manager)
@@ -145,22 +163,35 @@ export class UpdateEmployeeUseCase {
             ? this.validateLeaveTypeByDescription(command.leave_type, manager)
             : Promise.resolve(null),
           command.present_address_barangay != null
-            ? this.validateBarangayByDescription(command.present_address_barangay, manager)
+            ? this.validateBarangayByDescription(
+                command.present_address_barangay,
+                manager,
+              )
             : Promise.resolve(null),
           command.present_address_city != null
-            ? this.validateCityByDescription(command.present_address_city, manager)
+            ? this.validateCityByDescription(
+                command.present_address_city,
+                manager,
+              )
             : Promise.resolve(null),
           command.present_address_province != null
-            ? this.validateProvinceByDescription(command.present_address_province, manager)
+            ? this.validateProvinceByDescription(
+                command.present_address_province,
+                manager,
+              )
             : Promise.resolve(null),
         ]);
 
         // Validate employment status and leave type requirement
         const effectiveEmploymentStatus =
           employmentStatus ??
-          (employee.employment_status ? { desc1: employee.employment_status } : null);
+          (employee.employment_status
+            ? { desc1: employee.employment_status }
+            : null);
         if (
-          effectiveEmploymentStatus?.desc1?.toLowerCase().includes('on-leave') &&
+          effectiveEmploymentStatus?.desc1
+            ?.toLowerCase()
+            .includes('on-leave') &&
           !(leaveType?.id ?? employee.leave_type_id)
         ) {
           throw new EmployeeBusinessException(
@@ -251,13 +282,15 @@ export class UpdateEmployeeUseCase {
         employee.update({
           job_title_id: jobTitle?.id ?? employee.job_title_id,
           employment_type_id: employmentType?.id ?? employee.employment_type_id,
-          employment_status_id: employmentStatus?.id ?? employee.employment_status_id,
+          employment_status_id:
+            employmentStatus?.id ?? employee.employment_status_id,
           leave_type_id: leaveType?.id ?? employee.leave_type_id,
           branch_id: branch?.id ?? employee.branch_id,
           department_id: department?.id ?? employee.department_id,
           hire_date: command.hire_date ?? employee.hire_date,
           end_date: command.end_date ?? employee.end_date,
-          regularization_date: command.regularization_date ?? employee.regularization_date,
+          regularization_date:
+            command.regularization_date ?? employee.regularization_date,
           id_number: command.id_number ?? employee.id_number,
           bio_number: command.bio_number ?? employee.bio_number,
           image_path: command.image_path ?? employee.image_path,
@@ -273,37 +306,70 @@ export class UpdateEmployeeUseCase {
           citizen_ship_id: citizenship?.id ?? employee.citizen_ship_id,
           height: command.height ?? employee.height,
           weight: command.weight ?? employee.weight,
-          home_address_street: command.home_address_street ?? employee.home_address_street,
-          home_address_barangay_id: homeAddressBarangay?.id ?? employee.home_address_barangay_id,
-          home_address_city_id: homeAddressCity?.id ?? employee.home_address_city_id,
-          home_address_province_id: homeAddressProvince?.id ?? employee.home_address_province_id,
-          home_address_zip_code: command.home_address_zip_code ?? employee.home_address_zip_code,
-          present_address_street: command.present_address_street ?? employee.present_address_street,
-          present_address_barangay_id: presentAddressBarangay?.id ?? employee.present_address_barangay_id,
-          present_address_city_id: presentAddressCity?.id ?? employee.present_address_city_id,
-          present_address_province_id: presentAddressProvince?.id ?? employee.present_address_province_id,
-          present_address_zip_code: command.present_address_zip_code ?? employee.present_address_zip_code,
-          cellphone_number: command.cellphone_number ?? employee.cellphone_number,
-          telephone_number: command.telephone_number ?? employee.telephone_number,
+          home_address_street:
+            command.home_address_street ?? employee.home_address_street,
+          home_address_barangay_id:
+            homeAddressBarangay?.id ?? employee.home_address_barangay_id,
+          home_address_city_id:
+            homeAddressCity?.id ?? employee.home_address_city_id,
+          home_address_province_id:
+            homeAddressProvince?.id ?? employee.home_address_province_id,
+          home_address_zip_code:
+            command.home_address_zip_code ?? employee.home_address_zip_code,
+          present_address_street:
+            command.present_address_street ?? employee.present_address_street,
+          present_address_barangay_id:
+            presentAddressBarangay?.id ?? employee.present_address_barangay_id,
+          present_address_city_id:
+            presentAddressCity?.id ?? employee.present_address_city_id,
+          present_address_province_id:
+            presentAddressProvince?.id ?? employee.present_address_province_id,
+          present_address_zip_code:
+            command.present_address_zip_code ??
+            employee.present_address_zip_code,
+          cellphone_number:
+            command.cellphone_number ?? employee.cellphone_number,
+          telephone_number:
+            command.telephone_number ?? employee.telephone_number,
           email: command.email ?? employee.email,
-          emergency_contact_name: command.emergency_contact_name ?? employee.emergency_contact_name,
-          emergency_contact_number: command.emergency_contact_number ?? employee.emergency_contact_number,
-          emergency_contact_relationship: command.emergency_contact_relationship ?? employee.emergency_contact_relationship,
-          emergency_contact_address: command.emergency_contact_address ?? employee.emergency_contact_address,
-          husband_or_wife_name: command.husband_or_wife_name ?? employee.husband_or_wife_name,
-          husband_or_wife_birth_date: command.husband_or_wife_birth_date ?? employee.husband_or_wife_birth_date,
-          husband_or_wife_occupation: command.husband_or_wife_occupation ?? employee.husband_or_wife_occupation,
-          number_of_children: command.number_of_children ?? employee.number_of_children,
+          emergency_contact_name:
+            command.emergency_contact_name ?? employee.emergency_contact_name,
+          emergency_contact_number:
+            command.emergency_contact_number ??
+            employee.emergency_contact_number,
+          emergency_contact_relationship:
+            command.emergency_contact_relationship ??
+            employee.emergency_contact_relationship,
+          emergency_contact_address:
+            command.emergency_contact_address ??
+            employee.emergency_contact_address,
+          husband_or_wife_name:
+            command.husband_or_wife_name ?? employee.husband_or_wife_name,
+          husband_or_wife_birth_date:
+            command.husband_or_wife_birth_date ??
+            employee.husband_or_wife_birth_date,
+          husband_or_wife_occupation:
+            command.husband_or_wife_occupation ??
+            employee.husband_or_wife_occupation,
+          number_of_children:
+            command.number_of_children ?? employee.number_of_children,
           fathers_name: command.fathers_name ?? employee.fathers_name,
-          fathers_birth_date: command.fathers_birth_date ?? employee.fathers_birth_date,
-          fathers_occupation: command.fathers_occupation ?? employee.fathers_occupation,
+          fathers_birth_date:
+            command.fathers_birth_date ?? employee.fathers_birth_date,
+          fathers_occupation:
+            command.fathers_occupation ?? employee.fathers_occupation,
           mothers_name: command.mothers_name ?? employee.mothers_name,
-          mothers_birth_date: command.mothers_birth_date ?? employee.mothers_birth_date,
-          mothers_occupation: command.mothers_occupation ?? employee.mothers_occupation,
+          mothers_birth_date:
+            command.mothers_birth_date ?? employee.mothers_birth_date,
+          mothers_occupation:
+            command.mothers_occupation ?? employee.mothers_occupation,
           remarks: command.remarks ?? employee.remarks,
           is_active: command.is_active ?? employee.is_active,
-          labor_classification: command.labor_classification ?? employee.labor_classification,
-          labor_classification_status: command.labor_classification_status ?? employee.labor_classification_status,
+          labor_classification:
+            command.labor_classification ?? employee.labor_classification,
+          labor_classification_status:
+            command.labor_classification_status ??
+            employee.labor_classification_status,
           updated_by: requestInfo?.user_name || null,
         });
 
@@ -350,11 +416,10 @@ export class UpdateEmployeeUseCase {
     manager: EntityManager,
   ): Promise<void> {
     if (command.id_number) {
-      const existingByIdNumber =
-        await this.employeeRepository.findByIdNumber(
-          command.id_number,
-          manager,
-        );
+      const existingByIdNumber = await this.employeeRepository.findByIdNumber(
+        command.id_number,
+        manager,
+      );
       if (existingByIdNumber && existingByIdNumber.id !== currentEmployeeId) {
         throw new EmployeeBusinessException(
           `Employee with ID number ${command.id_number} already exists`,
@@ -364,11 +429,10 @@ export class UpdateEmployeeUseCase {
     }
 
     if (command.bio_number) {
-      const existingByBioNumber =
-        await this.employeeRepository.findByBioNumber(
-          command.bio_number,
-          manager,
-        );
+      const existingByBioNumber = await this.employeeRepository.findByBioNumber(
+        command.bio_number,
+        manager,
+      );
       if (existingByBioNumber && existingByBioNumber.id !== currentEmployeeId) {
         throw new EmployeeBusinessException(
           `Employee with bio number ${command.bio_number} already exists`,
@@ -378,7 +442,10 @@ export class UpdateEmployeeUseCase {
     }
   }
 
-  private async validateBranchByDescription(desc: string, manager: EntityManager) {
+  private async validateBranchByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
     const branch = await this.branchRepository.findByDescription(desc, manager);
     if (!branch) {
       throw new EmployeeBusinessException(
@@ -389,8 +456,14 @@ export class UpdateEmployeeUseCase {
     return branch;
   }
 
-  private async validateCitizenshipByDescription(desc: string, manager: EntityManager) {
-    const citizenship = await this.citizenshipRepository.findByDescription(desc, manager);
+  private async validateCitizenshipByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const citizenship = await this.citizenshipRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!citizenship) {
       throw new EmployeeBusinessException(
         `Citizenship "${desc}" not found`,
@@ -400,8 +473,14 @@ export class UpdateEmployeeUseCase {
     return citizenship;
   }
 
-  private async validateJobTitleByDescription(desc: string, manager: EntityManager) {
-    const jobTitle = await this.jobTitleRepository.findByDescription(desc, manager);
+  private async validateJobTitleByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const jobTitle = await this.jobTitleRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!jobTitle) {
       throw new EmployeeBusinessException(
         `Job title "${desc}" not found`,
@@ -411,8 +490,12 @@ export class UpdateEmployeeUseCase {
     return jobTitle;
   }
 
-  private async validateEmploymentTypeByDescription(desc: string, manager: EntityManager) {
-    const employmentType = await this.employmentTypeRepository.findByDescription(desc, manager);
+  private async validateEmploymentTypeByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const employmentType =
+      await this.employmentTypeRepository.findByDescription(desc, manager);
     if (!employmentType) {
       throw new EmployeeBusinessException(
         `Employment type "${desc}" not found`,
@@ -422,11 +505,12 @@ export class UpdateEmployeeUseCase {
     return employmentType;
   }
 
-  private async validateEmploymentStatusByDescription(desc: string, manager: EntityManager) {
-    const employmentStatus = await this.employmentStatusRepository.findByDescription(
-      desc,
-      manager,
-    );
+  private async validateEmploymentStatusByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const employmentStatus =
+      await this.employmentStatusRepository.findByDescription(desc, manager);
     if (!employmentStatus) {
       throw new EmployeeBusinessException(
         `Employment status "${desc}" not found`,
@@ -436,8 +520,14 @@ export class UpdateEmployeeUseCase {
     return employmentStatus;
   }
 
-  private async validateReligionByDescription(desc: string, manager: EntityManager) {
-    const religion = await this.religionRepository.findByDescription(desc, manager);
+  private async validateReligionByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const religion = await this.religionRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!religion) {
       throw new EmployeeBusinessException(
         `Religion "${desc}" not found`,
@@ -447,8 +537,14 @@ export class UpdateEmployeeUseCase {
     return religion;
   }
 
-  private async validateCivilStatusByDescription(desc: string, manager: EntityManager) {
-    const civilStatus = await this.civilStatusRepository.findByDescription(desc, manager);
+  private async validateCivilStatusByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const civilStatus = await this.civilStatusRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!civilStatus) {
       throw new EmployeeBusinessException(
         `Civil status "${desc}" not found`,
@@ -458,7 +554,10 @@ export class UpdateEmployeeUseCase {
     return civilStatus;
   }
 
-  private async validateCityByDescription(desc: string, manager: EntityManager) {
+  private async validateCityByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
     const city = await this.cityRepository.findByDescription(desc, manager);
     if (!city) {
       throw new EmployeeBusinessException(
@@ -469,8 +568,14 @@ export class UpdateEmployeeUseCase {
     return city;
   }
 
-  private async validateProvinceByDescription(desc: string, manager: EntityManager) {
-    const province = await this.provinceRepository.findByDescription(desc, manager);
+  private async validateProvinceByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const province = await this.provinceRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!province) {
       throw new EmployeeBusinessException(
         `Province "${desc}" not found`,
@@ -480,8 +585,14 @@ export class UpdateEmployeeUseCase {
     return province;
   }
 
-  private async validateDepartmentByDescription(desc: string, manager: EntityManager) {
-    const department = await this.departmentRepository.findByDescription(desc, manager);
+  private async validateDepartmentByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const department = await this.departmentRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!department) {
       throw new EmployeeBusinessException(
         `Department "${desc}" not found`,
@@ -491,8 +602,14 @@ export class UpdateEmployeeUseCase {
     return department;
   }
 
-  private async validateBarangayByDescription(desc: string, manager: EntityManager) {
-    const barangay = await this.barangayRepository.findByDescription(desc, manager);
+  private async validateBarangayByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const barangay = await this.barangayRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!barangay) {
       throw new EmployeeBusinessException(
         `Barangay "${desc}" not found`,
@@ -502,8 +619,14 @@ export class UpdateEmployeeUseCase {
     return barangay;
   }
 
-  private async validateLeaveTypeByDescription(desc: string, manager: EntityManager) {
-    const leaveType = await this.leaveTypeRepository.findByDescription(desc, manager);
+  private async validateLeaveTypeByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const leaveType = await this.leaveTypeRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!leaveType) {
       throw new EmployeeBusinessException(
         `Leave type "${desc}" not found`,

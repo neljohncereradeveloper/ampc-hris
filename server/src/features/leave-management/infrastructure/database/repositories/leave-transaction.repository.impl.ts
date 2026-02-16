@@ -7,9 +7,7 @@ import { toNumber } from '@/core/utils/coercion.util';
 import { EnumLeaveTransactionType } from '@/features/leave-management/domain/enum';
 
 @Injectable()
-export class LeaveTransactionRepositoryImpl
-  implements LeaveTransactionRepository<EntityManager>
-{
+export class LeaveTransactionRepositoryImpl implements LeaveTransactionRepository<EntityManager> {
   async create(
     leave_transaction: LeaveTransaction,
     manager: EntityManager,
@@ -47,7 +45,9 @@ export class LeaveTransactionRepositoryImpl
       ORDER BY created_at DESC
     `;
     const result = await manager.query(query, [balance_id]);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
   }
 
   async recordTransaction(

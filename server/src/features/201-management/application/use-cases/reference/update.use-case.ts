@@ -30,7 +30,7 @@ export class UpdateReferenceUseCase {
     private readonly referenceRepository: ReferenceRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,
@@ -40,10 +40,7 @@ export class UpdateReferenceUseCase {
     return this.transactionHelper.executeTransaction(
       REFERENCE_ACTIONS.UPDATE,
       async (manager) => {
-        const reference = await this.referenceRepository.findById(
-          id,
-          manager,
-        );
+        const reference = await this.referenceRepository.findById(id, manager);
         if (!reference) {
           throw new ReferenceBusinessException(
             'Reference not found',

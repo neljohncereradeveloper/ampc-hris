@@ -33,7 +33,7 @@ export class CreateWorkExperienceUseCase {
     private readonly workExperienceJobTitleRepository: WorkExperienceJobTitleRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateWorkExperienceCommand,
@@ -51,10 +51,7 @@ export class CreateWorkExperienceUseCase {
         });
 
         // Validate company exists if company_id is provided
-        if (
-          command.company_id !== undefined &&
-          command.company_id !== null
-        ) {
+        if (command.company_id !== undefined && command.company_id !== null) {
           const work_experience_company =
             await this.workExperienceCompanyRepository.findById(
               command.company_id,

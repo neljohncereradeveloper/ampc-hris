@@ -10,9 +10,7 @@ import {
 import { getPHDateTime } from '@/core/utils/date.util';
 
 @Injectable()
-export class EducationCourseLevelRepositoryImpl
-  implements EducationCourseLevelRepository<EntityManager>
-{
+export class EducationCourseLevelRepositoryImpl implements EducationCourseLevelRepository<EntityManager> {
   async create(
     education_course_level: EducationCourseLevel,
     manager: EntityManager,
@@ -183,9 +181,7 @@ export class EducationCourseLevelRepositoryImpl
     };
   }
 
-  async combobox(
-    manager: EntityManager,
-  ): Promise<EducationCourseLevel[]> {
+  async combobox(manager: EntityManager): Promise<EducationCourseLevel[]> {
     const query = `
       SELECT id, desc1
       FROM ${MANAGEMENT_201_DATABASE_MODELS.EDUCATION_COURSE_LEVELS}
@@ -202,9 +198,7 @@ export class EducationCourseLevelRepositoryImpl
   /**
    * Converts database entity to domain model
    */
-  private entityToModel(
-    entity: Record<string, unknown>,
-  ): EducationCourseLevel {
+  private entityToModel(entity: Record<string, unknown>): EducationCourseLevel {
     return new EducationCourseLevel({
       id: entity.id as number,
       desc1: entity.desc1 as string,

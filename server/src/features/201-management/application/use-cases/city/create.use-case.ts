@@ -25,7 +25,7 @@ export class CreateCityUseCase {
     private readonly cityRepository: CityRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateCityCommand,
@@ -39,7 +39,10 @@ export class CreateCityUseCase {
           created_by: requestInfo?.user_name || null,
         });
 
-        const created_city = await this.cityRepository.create(new_city, manager);
+        const created_city = await this.cityRepository.create(
+          new_city,
+          manager,
+        );
 
         if (!created_city) {
           throw new CityBusinessException(

@@ -16,7 +16,7 @@ export class FindByIdNumberEmployeeUseCase {
     private readonly employeeRepository: EmployeeRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(id_number: string): Promise<Employee> {
     return this.transactionHelper.executeTransaction(

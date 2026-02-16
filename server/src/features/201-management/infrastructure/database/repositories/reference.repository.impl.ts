@@ -8,11 +8,17 @@ import {
   calculatePagination,
 } from '@/core/utils/pagination.util';
 
+/** Table name quoted for PostgreSQL (reserved word). */
+const REFERENCES_TABLE = `"${MANAGEMENT_201_DATABASE_MODELS.REFERENCES}"`;
+
 @Injectable()
 export class ReferenceRepositoryImpl implements ReferenceRepository<EntityManager> {
-  async create(reference: Reference, manager: EntityManager): Promise<Reference> {
+  async create(
+    reference: Reference,
+    manager: EntityManager,
+  ): Promise<Reference> {
     const query = `
-      INSERT INTO ${MANAGEMENT_201_DATABASE_MODELS.REFERENCES} (
+      INSERT INTO ${REFERENCES_TABLE} (
         employee_id, fname, mname, lname, suffix, cellphone_number,
         deleted_by, deleted_at,
         created_by, created_at, updated_by, updated_at
@@ -93,7 +99,7 @@ export class ReferenceRepositoryImpl implements ReferenceRepository<EntityManage
     values.push(id);
 
     const query = `
-      UPDATE ${MANAGEMENT_201_DATABASE_MODELS.REFERENCES}
+      UPDATE ${REFERENCES_TABLE}
       SET ${updateFields.join(', ')}
       WHERE id = $${paramIndex} AND deleted_at IS NULL
       RETURNING id
@@ -103,10 +109,13 @@ export class ReferenceRepositoryImpl implements ReferenceRepository<EntityManage
     return result.length > 0;
   }
 
-  async findById(id: number, manager: EntityManager): Promise<Reference | null> {
+  async findById(
+    id: number,
+    manager: EntityManager,
+  ): Promise<Reference | null> {
     const query = `
       SELECT *
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.REFERENCES}
+      FROM ${REFERENCES_TABLE}
       WHERE id = $1
     `;
 
@@ -156,7 +165,7 @@ export class ReferenceRepositoryImpl implements ReferenceRepository<EntityManage
     // Count total records
     const countQuery = `
       SELECT COUNT(*) as total
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.REFERENCES}
+      FROM ${REFERENCES_TABLE}
       ${whereClause}
     `;
 
@@ -166,7 +175,7 @@ export class ReferenceRepositoryImpl implements ReferenceRepository<EntityManage
     // Fetch paginated data
     const dataQuery = `
       SELECT *
-      FROM ${MANAGEMENT_201_DATABASE_MODELS.REFERENCES}
+      FROM ${REFERENCES_TABLE}
       ${whereClause}
       ORDER BY lname ASC, fname ASC, created_at DESC
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}

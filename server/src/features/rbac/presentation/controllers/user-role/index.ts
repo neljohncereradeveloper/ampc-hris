@@ -56,7 +56,7 @@ export class UserRoleController {
     private readonly assignRolesToUserUseCase: AssignRolesToUserUseCase,
     private readonly getUserRolesUseCase: GetUserRolesUseCase,
     // Note: RemoveRolesFromUserUseCase removed - not used in web app (assign with replace=true handles role removal)
-  ) { }
+  ) {}
 
   @Version('1')
   @Get()
@@ -64,7 +64,10 @@ export class UserRoleController {
   @RequirePermissions(PERMISSIONS.USER_ROLES.READ)
   @ApiOperation({ summary: 'Get roles assigned to a user' })
   @ApiParam({ name: 'userId', description: 'User ID', example: 1 })
-  @ApiResponse({ status: 200, description: 'User roles retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'User roles retrieved successfully',
+  })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')

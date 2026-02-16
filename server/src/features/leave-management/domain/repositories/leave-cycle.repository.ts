@@ -36,10 +36,7 @@ export interface LeaveCycleRepository<Context = unknown> {
    * @param employee_id - Employee primary key
    * @param context - Transaction or connection
    */
-  findByEmployee(
-    employee_id: number,
-    context: Context,
-  ): Promise<LeaveCycle[]>;
+  findByEmployee(employee_id: number, context: Context): Promise<LeaveCycle[]>;
 
   /**
    * Load the active cycle for an employee and leave type (if any).

@@ -66,7 +66,7 @@ export class EducationController {
     private readonly archiveEducationUseCase: ArchiveEducationUseCase,
     private readonly restoreEducationUseCase: RestoreEducationUseCase,
     private readonly getPaginatedEducationUseCase: GetPaginatedEducationUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
@@ -97,7 +97,6 @@ export class EducationController {
     };
     return this.createEducationUseCase.execute(command, requestInfo);
   }
-
 
   @Version('1')
   @Get()

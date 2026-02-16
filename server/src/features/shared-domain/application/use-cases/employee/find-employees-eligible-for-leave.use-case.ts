@@ -15,7 +15,7 @@ export class FindEmployeesEligibleForLeaveUseCase {
     private readonly employeeRepository: EmployeeRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     employment_type_names: string[],

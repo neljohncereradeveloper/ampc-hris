@@ -1,8 +1,4 @@
-import {
-  Controller,
-  Get,
-  Version,
-} from '@nestjs/common';
+import { Controller, Get, Version } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -36,7 +32,7 @@ export class PermissionController {
     // Note: CreatePermissionUseCase, UpdatePermissionUseCase, ArchivePermissionUseCase, RestorePermissionUseCase, GetPermissionByIdUseCase, ComboboxPermissionUseCase removed
     // Permissions are statically defined and managed via seeders only
     private readonly getAllPermissionsUseCase: GetAllPermissionsUseCase,
-  ) { }
+  ) {}
 
   // Note: Create, Update, Archive, Restore, and GetById endpoints removed - permissions are statically defined
   // and managed via seeders only. Modifying or archiving them would break authorization checks.
@@ -45,7 +41,9 @@ export class PermissionController {
   @Get()
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
   @RequirePermissions(PERMISSIONS.PERMISSIONS.PAGINATED_LIST)
-  @ApiOperation({ summary: 'Get all permissions (no pagination, no filtering)' })
+  @ApiOperation({
+    summary: 'Get all permissions (no pagination, no filtering)',
+  })
   @ApiResponse({
     status: 200,
     description: 'Permissions retrieved successfully',

@@ -16,7 +16,7 @@ export class GetPaginatedBarangayUseCase {
     private readonly barangayRepository: BarangayRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,

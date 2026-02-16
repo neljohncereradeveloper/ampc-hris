@@ -7,7 +7,10 @@ import { SHARED_DOMAIN_DATABASE_MODELS } from '@/features/shared-domain/domain/c
 
 const LP = LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES;
 const LT = SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES;
-import { PaginatedResult, calculatePagination } from '@/core/utils/pagination.util';
+import {
+  PaginatedResult,
+  calculatePagination,
+} from '@/core/utils/pagination.util';
 import { toNumber } from '@/core/utils/coercion.util';
 import { EnumLeavePolicyStatus } from '@/features/leave-management/domain/enum';
 
@@ -41,7 +44,10 @@ function parseJsonNumberArray(value: unknown): number[] | undefined {
 
 @Injectable()
 export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityManager> {
-  async create(leave_policy: LeavePolicy, manager: EntityManager): Promise<LeavePolicy> {
+  async create(
+    leave_policy: LeavePolicy,
+    manager: EntityManager,
+  ): Promise<LeavePolicy> {
     const query = `
       INSERT INTO ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES} (
         leave_type_id, annual_entitlement, carry_limit, encash_limit,
@@ -63,9 +69,15 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
       leave_policy.status,
       leave_policy.remarks ?? null,
       leave_policy.minimum_service_months ?? null,
-      leave_policy.allowed_employment_types ? JSON.stringify(leave_policy.allowed_employment_types) : null,
-      leave_policy.allowed_employee_statuses ? JSON.stringify(leave_policy.allowed_employee_statuses) : null,
-      leave_policy.excluded_weekdays ? JSON.stringify(leave_policy.excluded_weekdays) : null,
+      leave_policy.allowed_employment_types
+        ? JSON.stringify(leave_policy.allowed_employment_types)
+        : null,
+      leave_policy.allowed_employee_statuses
+        ? JSON.stringify(leave_policy.allowed_employee_statuses)
+        : null,
+      leave_policy.excluded_weekdays
+        ? JSON.stringify(leave_policy.excluded_weekdays)
+        : null,
       leave_policy.deleted_by ?? null,
       leave_policy.deleted_at ?? null,
       leave_policy.created_by ?? null,
@@ -76,7 +88,11 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     return this.entityToModel(result[0]);
   }
 
-  async update(id: number, dto: Partial<LeavePolicy>, manager: EntityManager): Promise<boolean> {
+  async update(
+    id: number,
+    dto: Partial<LeavePolicy>,
+    manager: EntityManager,
+  ): Promise<boolean> {
     const updateFields: string[] = [];
     const values: unknown[] = [];
     let paramIndex = 1;
@@ -144,7 +160,10 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     return result.length > 0;
   }
 
-  async findById(id: number, manager: EntityManager): Promise<LeavePolicy | null> {
+  async findById(
+    id: number,
+    manager: EntityManager,
+  ): Promise<LeavePolicy | null> {
     const query = `
       SELECT lp.*, lt.name AS leave_type_name
       FROM ${LP} lp
@@ -195,7 +214,9 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
     const dataResult = await manager.query(dataQuery, queryParams);
-    const data = dataResult.map((row: Record<string, unknown>) => this.entityToModel(row));
+    const data = dataResult.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
     return { data, meta: calculatePagination(totalRecords, page, limit) };
   }
 
@@ -208,17 +229,25 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
       ORDER BY lp.leave_type_id
     `;
     const result = await manager.query(query, [EnumLeavePolicyStatus.ACTIVE]);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
   }
 
-  async getActivePolicy(leave_type_id: number, manager: EntityManager): Promise<LeavePolicy | null> {
+  async getActivePolicy(
+    leave_type_id: number,
+    manager: EntityManager,
+  ): Promise<LeavePolicy | null> {
     const query = `
       SELECT lp.*, lt.name AS leave_type_name
       FROM ${LP} lp
       LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
       WHERE lp.leave_type_id = $1 AND lp.status = $2 AND lp.deleted_at IS NULL
     `;
-    const result = await manager.query(query, [leave_type_id, EnumLeavePolicyStatus.ACTIVE]);
+    const result = await manager.query(query, [
+      leave_type_id,
+      EnumLeavePolicyStatus.ACTIVE,
+    ]);
     if (result.length === 0) return null;
     return this.entityToModel(result[0]);
   }
@@ -228,24 +257,38 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
       UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
       SET status = $1 WHERE id = $2 AND deleted_at IS NULL RETURNING id
     `;
-    const result = await manager.query(query, [EnumLeavePolicyStatus.ACTIVE, id]);
+    const result = await manager.query(query, [
+      EnumLeavePolicyStatus.ACTIVE,
+      id,
+    ]);
     return result.length > 0;
   }
 
-  async retirePolicy(id: number, manager: EntityManager, expiry_date?: Date): Promise<boolean> {
+  async retirePolicy(
+    id: number,
+    manager: EntityManager,
+    expiry_date?: Date,
+  ): Promise<boolean> {
     if (expiry_date) {
       const query = `
         UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
         SET status = $1, expiry_date = $2 WHERE id = $3 AND deleted_at IS NULL RETURNING id
       `;
-      const result = await manager.query(query, [EnumLeavePolicyStatus.RETIRED, expiry_date, id]);
+      const result = await manager.query(query, [
+        EnumLeavePolicyStatus.RETIRED,
+        expiry_date,
+        id,
+      ]);
       return result.length > 0;
     }
     const query = `
       UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
       SET status = $1 WHERE id = $2 AND deleted_at IS NULL RETURNING id
     `;
-    const result = await manager.query(query, [EnumLeavePolicyStatus.RETIRED, id]);
+    const result = await manager.query(query, [
+      EnumLeavePolicyStatus.RETIRED,
+      id,
+    ]);
     return result.length > 0;
   }
 
@@ -262,9 +305,12 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
       expiry_date: (entity.expiry_date as Date) ?? undefined,
       status: entity.status as EnumLeavePolicyStatus,
       remarks: (entity.remarks as string) ?? undefined,
-      minimum_service_months: (entity.minimum_service_months as number) ?? undefined,
+      minimum_service_months:
+        (entity.minimum_service_months as number) ?? undefined,
       allowed_employment_types: parseJsonArray(entity.allowed_employment_types),
-      allowed_employee_statuses: parseJsonArray(entity.allowed_employee_statuses),
+      allowed_employee_statuses: parseJsonArray(
+        entity.allowed_employee_statuses,
+      ),
       excluded_weekdays: parseJsonNumberArray(entity.excluded_weekdays),
       deleted_by: (entity.deleted_by as string) ?? null,
       deleted_at: (entity.deleted_at as Date) ?? null,

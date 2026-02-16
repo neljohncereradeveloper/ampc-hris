@@ -23,16 +23,13 @@ export class RestoreTrainingUseCase {
     private readonly trainingRepository: TrainingRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
       TRAINING_ACTIONS.RESTORE,
       async (manager) => {
-        const training = await this.trainingRepository.findById(
-          id,
-          manager,
-        );
+        const training = await this.trainingRepository.findById(id, manager);
         if (!training) {
           throw new TrainingBusinessException(
             `Training with ID ${id} not found.`,
@@ -63,8 +60,9 @@ export class RestoreTrainingUseCase {
             training_date: getPHDateTime(training.training_date),
             trainings_cert_id: training.trainings_cert_id,
             training_title: training.training_title,
-            explanation: `Training with ID : ${id} restored by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Training with ID : ${id} restored by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             restored_by: requestInfo?.user_name || '',
             restored_at: getPHDateTime(new Date()),
           }),

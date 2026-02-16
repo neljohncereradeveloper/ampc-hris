@@ -16,7 +16,7 @@ export class GetPaginatedWorkExperienceJobTitleUseCase {
     private readonly workExperienceJobTitleRepository: WorkExperienceJobTitleRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,

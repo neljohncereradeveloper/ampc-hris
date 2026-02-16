@@ -9,8 +9,7 @@ import {
 } from '@/core/utils/pagination.util';
 
 @Injectable()
-export class EmploymentStatusRepositoryImpl
-  implements EmploymentStatusRepository<EntityManager> {
+export class EmploymentStatusRepositoryImpl implements EmploymentStatusRepository<EntityManager> {
   async create(
     employment_status: EmploymentStatus,
     manager: EntityManager,

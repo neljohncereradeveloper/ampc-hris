@@ -25,7 +25,7 @@ export class CreateWorkExperienceJobTitleUseCase {
     private readonly workExperienceJobTitleRepository: WorkExperienceJobTitleRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateWorkExperienceJobTitleCommand,

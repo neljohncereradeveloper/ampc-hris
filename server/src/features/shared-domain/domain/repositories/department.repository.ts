@@ -13,7 +13,10 @@ export interface DepartmentRepository<Context = unknown> {
   /** Find a department by ID. */
   findById(id: number, context: Context): Promise<Department | null>;
   /** Find a department by description. */
-  findByDescription(description: string, context: Context): Promise<Department | null>;
+  findByDescription(
+    description: string,
+    context: Context,
+  ): Promise<Department | null>;
   /** Find paginated list of departments. */
   findPaginatedList(
     term: string,

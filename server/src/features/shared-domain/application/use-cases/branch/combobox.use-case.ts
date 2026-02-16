@@ -14,7 +14,7 @@ export class ComboboxBranchUseCase {
     private readonly branchRepository: BranchRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(
@@ -25,7 +25,7 @@ export class ComboboxBranchUseCase {
           value: branch.desc1 || '',
           label: branch.desc1
             ? branch.desc1.charAt(0).toUpperCase() +
-            branch.desc1.slice(1).toLowerCase()
+              branch.desc1.slice(1).toLowerCase()
             : '',
         }));
       },

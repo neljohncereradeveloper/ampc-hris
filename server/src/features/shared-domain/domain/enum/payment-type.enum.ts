@@ -7,4 +7,3 @@ export enum PaymentTypeEnum {
   MONTHLY = 'monthly',
   HOURLY = 'hourly',
 }
-

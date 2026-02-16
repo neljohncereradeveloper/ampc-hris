@@ -111,7 +111,10 @@ export class LeaveTypeRepositoryImpl implements LeaveTypeRepository<EntityManage
     return result.length > 0;
   }
 
-  async findById(id: number, manager: EntityManager): Promise<LeaveType | null> {
+  async findById(
+    id: number,
+    manager: EntityManager,
+  ): Promise<LeaveType | null> {
     const query = `
       SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES}

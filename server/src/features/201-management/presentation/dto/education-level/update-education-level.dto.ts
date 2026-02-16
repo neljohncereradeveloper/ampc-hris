@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class UpdateEducationLevelDto {
   @ApiProperty({
     description: 'Education level description (desc1)',
-    example: 'Bachelor\'s Degree',
+    example: "Bachelor's Degree",
     minLength: 3,
     maxLength: 255,
   })

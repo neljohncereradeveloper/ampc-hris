@@ -48,7 +48,10 @@ import {
 import { Reference } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 import { PaginationReferenceQueryDto } from '../dto/reference/pagination-reference-query.dto';
 
 @ApiTags('Reference')
@@ -64,7 +67,7 @@ export class ReferenceController {
     private readonly archiveReferenceUseCase: ArchiveReferenceUseCase,
     private readonly restoreReferenceUseCase: RestoreReferenceUseCase,
     private readonly getPaginatedReferenceUseCase: GetPaginatedReferenceUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
@@ -169,7 +172,12 @@ export class ReferenceController {
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
   @RequirePermissions(PERMISSIONS.REFERENCES.READ)
   @ApiOperation({ summary: 'Get paginated list of references' })
-  @ApiQuery({ name: 'employee_id', required: true, type: Number, description: 'Filter by employee ID' })
+  @ApiQuery({
+    name: 'employee_id',
+    required: true,
+    type: Number,
+    description: 'Filter by employee ID',
+  })
   @ApiResponse({
     status: 200,
     description: 'References retrieved successfully',

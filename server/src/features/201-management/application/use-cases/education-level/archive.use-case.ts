@@ -30,8 +30,10 @@ export class ArchiveEducationLevelUseCase {
       EDUCATION_LEVEL_ACTIONS.ARCHIVE,
       async (manager) => {
         // Validate existence
-        const education_level =
-          await this.educationLevelRepository.findById(id, manager);
+        const education_level = await this.educationLevelRepository.findById(
+          id,
+          manager,
+        );
         if (!education_level) {
           throw new EducationLevelBusinessException(
             `Education level with ID ${id} not found.`,
@@ -64,7 +66,9 @@ export class ArchiveEducationLevelUseCase {
             desc1: education_level.desc1,
             explanation: `Education level with ID : ${id} archived by USER : ${requestInfo?.user_name || ''}`,
             archived_by: requestInfo?.user_name || '',
-            archived_at: getPHDateTime(education_level.deleted_at || new Date()),
+            archived_at: getPHDateTime(
+              education_level.deleted_at || new Date(),
+            ),
           }),
           request_info: requestInfo || { user_name: '' },
         });

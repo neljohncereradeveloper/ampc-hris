@@ -1,13 +1,5 @@
-import {
-  Controller,
-  Get,
-  Version,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-} from '@nestjs/swagger';
+import { Controller, Get, Version } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
   HealthCheck,
   HealthCheckService,
@@ -30,7 +22,7 @@ export class HealthCheckController {
     private readonly db: TypeOrmHealthIndicator,
     private readonly http: HttpHealthIndicator,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   @Version('1')
   @Get()
@@ -49,7 +41,10 @@ export class HealthCheckController {
   async check() {
     const port = this.configService.get<number>('PORT', 3220);
     const server = this.configService.get<string>('SERVER', 'localhost');
-    const protocol = this.configService.get<string>('NODE_ENV') === 'production' ? 'https' : 'http';
+    const protocol =
+      this.configService.get<string>('NODE_ENV') === 'production'
+        ? 'https'
+        : 'http';
     const swaggerUrl = `${protocol}://${server}:${port}/api/docs`;
 
     return this.health.check([
@@ -98,7 +93,10 @@ export class HealthCheckController {
   async checkSwagger() {
     const port = this.configService.get<number>('PORT', 3220);
     const server = this.configService.get<string>('SERVER', 'localhost');
-    const protocol = this.configService.get<string>('NODE_ENV') === 'production' ? 'https' : 'http';
+    const protocol =
+      this.configService.get<string>('NODE_ENV') === 'production'
+        ? 'https'
+        : 'http';
     const swaggerUrl = `${protocol}://${server}:${port}/api/docs`;
 
     return this.health.check([

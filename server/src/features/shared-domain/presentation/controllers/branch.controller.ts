@@ -48,7 +48,10 @@ import {
 import { Branch } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Branch')
 @Controller('branches')
@@ -64,7 +67,7 @@ export class BranchController {
     private readonly restoreBranchUseCase: RestoreBranchUseCase,
     private readonly getPaginatedBranchUseCase: GetPaginatedBranchUseCase,
     private readonly comboboxBranchUseCase: ComboboxBranchUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

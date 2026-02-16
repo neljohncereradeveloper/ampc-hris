@@ -48,7 +48,10 @@ import {
 import { Barangay } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Barangay')
 @Controller('barangays')
@@ -64,7 +67,7 @@ export class BarangayController {
     private readonly restoreBarangayUseCase: RestoreBarangayUseCase,
     private readonly getPaginatedBarangayUseCase: GetPaginatedBarangayUseCase,
     private readonly comboboxBarangayUseCase: ComboboxBarangayUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

@@ -10,9 +10,7 @@ import {
 import { getPHDateTime } from '@/core/utils/date.util';
 
 @Injectable()
-export class EducationLevelRepositoryImpl
-  implements EducationLevelRepository<EntityManager>
-{
+export class EducationLevelRepositoryImpl implements EducationLevelRepository<EntityManager> {
   async create(
     education_level: EducationLevel,
     manager: EntityManager,
@@ -173,8 +171,8 @@ export class EducationLevelRepositoryImpl
     queryParams.push(limit, offset);
     const dataResult = await manager.query(dataQuery, queryParams);
 
-    const education_levels = dataResult.map(
-      (row: Record<string, unknown>) => this.entityToModel(row),
+    const education_levels = dataResult.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
     );
 
     return {

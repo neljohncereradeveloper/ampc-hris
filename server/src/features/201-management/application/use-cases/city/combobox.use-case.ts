@@ -14,7 +14,7 @@ export class ComboboxCityUseCase {
     private readonly cityRepository: CityRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(
@@ -25,7 +25,7 @@ export class ComboboxCityUseCase {
           value: city.desc1 || '',
           label: city.desc1
             ? city.desc1.charAt(0).toUpperCase() +
-            city.desc1.slice(1).toLowerCase()
+              city.desc1.slice(1).toLowerCase()
             : '',
         }));
       },

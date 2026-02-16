@@ -16,12 +16,8 @@ import {
 } from '@/features/shared-domain/domain/enum';
 
 @Injectable()
-export class EmployeeRepositoryImpl
-  implements EmployeeRepository<EntityManager> {
-  async create(
-    employee: Employee,
-    manager: EntityManager,
-  ): Promise<Employee> {
+export class EmployeeRepositoryImpl implements EmployeeRepository<EntityManager> {
+  async create(employee: Employee, manager: EntityManager): Promise<Employee> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.EMPLOYEES} (
         job_title_id, employment_type_id, employment_status_id, leave_type_id,
@@ -526,10 +522,7 @@ export class EmployeeRepositoryImpl
     `;
   }
 
-  async findById(
-    id: number,
-    manager: EntityManager,
-  ): Promise<Employee | null> {
+  async findById(id: number, manager: EntityManager): Promise<Employee | null> {
     const query = `
       ${this.buildEmployeeSelectQuery()}
       WHERE e.id = $1
@@ -804,9 +797,7 @@ export class EmployeeRepositoryImpl
     return result.length > 0;
   }
 
-  async retrieveActiveEmployees(
-    manager: EntityManager,
-  ): Promise<Employee[]> {
+  async retrieveActiveEmployees(manager: EntityManager): Promise<Employee[]> {
     const query = `
       SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.EMPLOYEES}
@@ -885,29 +876,45 @@ export class EmployeeRepositoryImpl
       weight: (entity.weight as number) ?? undefined,
       home_address_street: entity.home_address_street as string,
       home_address_barangay_id: entity.home_address_barangay_id as number,
-      home_address_barangay: (entity.home_address_barangay as string) ?? undefined,
+      home_address_barangay:
+        (entity.home_address_barangay as string) ?? undefined,
       home_address_city_id: entity.home_address_city_id as number,
       home_address_city: (entity.home_address_city as string) ?? undefined,
       home_address_province_id: entity.home_address_province_id as number,
-      home_address_province: (entity.home_address_province as string) ?? undefined,
+      home_address_province:
+        (entity.home_address_province as string) ?? undefined,
       home_address_zip_code: entity.home_address_zip_code as string,
-      present_address_street: (entity.present_address_street as string) ?? undefined,
-      present_address_barangay_id: (entity.present_address_barangay_id as number) ?? undefined,
-      present_address_barangay: (entity.present_address_barangay as string) ?? undefined,
-      present_address_city_id: (entity.present_address_city_id as number) ?? undefined,
-      present_address_city: (entity.present_address_city as string) ?? undefined,
-      present_address_province_id: (entity.present_address_province_id as number) ?? undefined,
-      present_address_zip_code: (entity.present_address_zip_code as string) ?? undefined,
+      present_address_street:
+        (entity.present_address_street as string) ?? undefined,
+      present_address_barangay_id:
+        (entity.present_address_barangay_id as number) ?? undefined,
+      present_address_barangay:
+        (entity.present_address_barangay as string) ?? undefined,
+      present_address_city_id:
+        (entity.present_address_city_id as number) ?? undefined,
+      present_address_city:
+        (entity.present_address_city as string) ?? undefined,
+      present_address_province_id:
+        (entity.present_address_province_id as number) ?? undefined,
+      present_address_zip_code:
+        (entity.present_address_zip_code as string) ?? undefined,
       cellphone_number: (entity.cellphone_number as string) ?? undefined,
       telephone_number: (entity.telephone_number as string) ?? undefined,
       email: (entity.email as string) ?? undefined,
-      emergency_contact_name: (entity.emergency_contact_name as string) ?? undefined,
-      emergency_contact_number: (entity.emergency_contact_number as string) ?? undefined,
-      emergency_contact_relationship: (entity.emergency_contact_relationship as string) ?? undefined,
-      emergency_contact_address: (entity.emergency_contact_address as string) ?? undefined,
-      husband_or_wife_name: (entity.husband_or_wife_name as string) ?? undefined,
-      husband_or_wife_birth_date: (entity.husband_or_wife_birth_date as Date) ?? undefined,
-      husband_or_wife_occupation: (entity.husband_or_wife_occupation as string) ?? undefined,
+      emergency_contact_name:
+        (entity.emergency_contact_name as string) ?? undefined,
+      emergency_contact_number:
+        (entity.emergency_contact_number as string) ?? undefined,
+      emergency_contact_relationship:
+        (entity.emergency_contact_relationship as string) ?? undefined,
+      emergency_contact_address:
+        (entity.emergency_contact_address as string) ?? undefined,
+      husband_or_wife_name:
+        (entity.husband_or_wife_name as string) ?? undefined,
+      husband_or_wife_birth_date:
+        (entity.husband_or_wife_birth_date as Date) ?? undefined,
+      husband_or_wife_occupation:
+        (entity.husband_or_wife_occupation as string) ?? undefined,
       number_of_children: (entity.number_of_children as number) ?? undefined,
       fathers_name: (entity.fathers_name as string) ?? undefined,
       fathers_birth_date: (entity.fathers_birth_date as Date) ?? undefined,
@@ -930,11 +937,15 @@ export class EmployeeRepositoryImpl
       tin_no: (entity.tin_no as string) ?? undefined,
       tax_exempt_code: (entity.tax_exempt_code as string) ?? undefined,
       is_active: entity.is_active as boolean,
-      labor_classification: (entity.labor_classification as LaborClassificationEnum) ?? undefined,
-      labor_classification_status: (entity.labor_classification_status as LaborClassificationStatusEnum) ?? undefined,
+      labor_classification:
+        (entity.labor_classification as LaborClassificationEnum) ?? undefined,
+      labor_classification_status:
+        (entity.labor_classification_status as LaborClassificationStatusEnum) ??
+        undefined,
       remarks: (entity.remarks as string) ?? undefined,
       last_entry_date: (entity.last_entry_date as Date) ?? undefined,
-      retention_expiry_date: (entity.retention_expiry_date as Date) ?? undefined,
+      retention_expiry_date:
+        (entity.retention_expiry_date as Date) ?? undefined,
       deleted_by: (entity.deleted_by as string) ?? null,
       deleted_at: (entity.deleted_at as Date) ?? null,
       created_by: (entity.created_by as string) ?? null,

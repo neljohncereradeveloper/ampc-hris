@@ -17,7 +17,7 @@ export class GetUserPermissionsUseCase {
     private readonly userPermissionRepository: UserPermissionRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(user_id: number): Promise<UserPermission[]> {
     if (!user_id || user_id <= 0) {

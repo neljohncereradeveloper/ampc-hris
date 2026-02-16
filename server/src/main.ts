@@ -58,8 +58,8 @@ async function bootstrap() {
     .setTitle('RBAC API')
     .setDescription(
       'Role-Based Access Control (RBAC) API - A comprehensive system for managing user authentication, authorization, roles, and permissions. ' +
-      'This API provides complete RBAC functionality including user management, role assignment, permission management, and fine-grained access control. ' +
-      'All endpoints are protected by JWT authentication and enforce role-based and permission-based access policies.',
+        'This API provides complete RBAC functionality including user management, role assignment, permission management, and fine-grained access control. ' +
+        'All endpoints are protected by JWT authentication and enforce role-based and permission-based access policies.',
     )
     .setVersion('1.0')
     .addBearerAuth(
@@ -89,7 +89,10 @@ async function bootstrap() {
     .addTag('Permission', 'Permission management endpoints')
 
     // RBAC - Role-Permission Relationships
-    .addTag('Role-Permission', 'Role-Permission relationship management endpoints')
+    .addTag(
+      'Role-Permission',
+      'Role-Permission relationship management endpoints',
+    )
 
     // RBAC - User-Role Relationships
     .addTag('User-Role', 'User-Role relationship management endpoints')
@@ -107,21 +110,15 @@ async function bootstrap() {
   (document as any)['x-tagGroups'] = [
     {
       name: 'System',
-      tags: [
-        'Health',
-      ],
+      tags: ['Health'],
     },
     {
       name: 'Authentication & Authorization',
-      tags: [
-        'Auth',
-      ],
+      tags: ['Auth'],
     },
     {
       name: 'User Management',
-      tags: [
-        'User',
-      ],
+      tags: ['User'],
     },
     {
       name: 'RBAC (Role-Based Access Control)',
@@ -135,9 +132,7 @@ async function bootstrap() {
     },
     {
       name: 'Holiday Management',
-      tags: [
-        'Holiday',
-      ],
+      tags: ['Holiday'],
     },
   ];
 

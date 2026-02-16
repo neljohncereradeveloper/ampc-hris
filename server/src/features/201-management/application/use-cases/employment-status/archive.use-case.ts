@@ -23,7 +23,7 @@ export class ArchiveEmploymentStatusUseCase {
     private readonly employmentStatusRepository: EmploymentStatusRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -58,10 +58,13 @@ export class ArchiveEmploymentStatusUseCase {
           details: JSON.stringify({
             id,
             desc1: employment_status.desc1,
-            explanation: `Employment status with ID : ${id} archived by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Employment status with ID : ${id} archived by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             archived_by: requestInfo?.user_name || '',
-            archived_at: getPHDateTime(employment_status.deleted_at || new Date()),
+            archived_at: getPHDateTime(
+              employment_status.deleted_at || new Date(),
+            ),
           }),
           request_info: requestInfo || { user_name: '' },
         });

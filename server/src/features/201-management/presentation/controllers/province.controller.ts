@@ -48,7 +48,10 @@ import {
 import { Province } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Province')
 @Controller('provinces')
@@ -64,7 +67,7 @@ export class ProvinceController {
     private readonly restoreProvinceUseCase: RestoreProvinceUseCase,
     private readonly getPaginatedProvinceUseCase: GetPaginatedProvinceUseCase,
     private readonly comboboxProvinceUseCase: ComboboxProvinceUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

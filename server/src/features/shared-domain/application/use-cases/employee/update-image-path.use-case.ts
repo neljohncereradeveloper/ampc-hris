@@ -27,7 +27,7 @@ export class UpdateImagePathEmployeeUseCase {
     private readonly employeeRepository: EmployeeRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     employee_id: number,

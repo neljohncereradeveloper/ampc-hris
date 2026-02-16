@@ -7,7 +7,7 @@ import { HOLIDAYS_2026 } from './data';
 export class SeedHolidays {
   private readonly logger = new Logger(SeedHolidays.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';

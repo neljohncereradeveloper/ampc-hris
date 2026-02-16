@@ -67,7 +67,7 @@ export class WorkExperienceJobTitleController {
     private readonly restoreWorkExperienceJobTitleUseCase: RestoreWorkExperienceJobTitleUseCase,
     private readonly getPaginatedWorkExperienceJobTitleUseCase: GetPaginatedWorkExperienceJobTitleUseCase,
     private readonly comboboxWorkExperienceJobTitleUseCase: ComboboxWorkExperienceJobTitleUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

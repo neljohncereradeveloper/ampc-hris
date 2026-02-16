@@ -30,8 +30,10 @@ export class RestoreEducationLevelUseCase {
       EDUCATION_LEVEL_ACTIONS.RESTORE,
       async (manager) => {
         // Validate existence
-        const education_level =
-          await this.educationLevelRepository.findById(id, manager);
+        const education_level = await this.educationLevelRepository.findById(
+          id,
+          manager,
+        );
         if (!education_level) {
           throw new EducationLevelBusinessException(
             `Education level with ID ${id} not found.`,

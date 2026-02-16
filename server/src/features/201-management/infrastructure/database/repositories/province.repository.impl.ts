@@ -10,10 +10,7 @@ import {
 
 @Injectable()
 export class ProvinceRepositoryImpl implements ProvinceRepository<EntityManager> {
-  async create(
-    province: Province,
-    manager: EntityManager,
-  ): Promise<Province> {
+  async create(province: Province, manager: EntityManager): Promise<Province> {
     const query = `
       INSERT INTO ${MANAGEMENT_201_DATABASE_MODELS.PROVINCES} (
         desc1, deleted_by, deleted_at,
@@ -80,10 +77,7 @@ export class ProvinceRepositoryImpl implements ProvinceRepository<EntityManager>
     return result.length > 0;
   }
 
-  async findById(
-    id: number,
-    manager: EntityManager,
-  ): Promise<Province | null> {
+  async findById(id: number, manager: EntityManager): Promise<Province | null> {
     const query = `
       SELECT *
       FROM ${MANAGEMENT_201_DATABASE_MODELS.PROVINCES}

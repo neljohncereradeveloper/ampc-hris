@@ -30,7 +30,7 @@ export class UpdateTrainingCertificateUseCase {
     private readonly trainingCertificateRepository: TrainingCertificateRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,
@@ -95,10 +95,8 @@ export class UpdateTrainingCertificateUseCase {
           );
         }
 
-        const updated_result = await this.trainingCertificateRepository.findById(
-          id,
-          manager,
-        );
+        const updated_result =
+          await this.trainingCertificateRepository.findById(id, manager);
         const after_state = extractEntityState(updated_result, tracking_config);
         const changed_fields = getChangedFields(before_state, after_state);
 

@@ -161,7 +161,10 @@ export class TrainingCertificate {
       );
     }
 
-    if (!this.issuing_organization || this.issuing_organization.trim().length === 0) {
+    if (
+      !this.issuing_organization ||
+      this.issuing_organization.trim().length === 0
+    ) {
       throw new TrainingCertificateBusinessException(
         'Issuing organization is required and cannot be empty.',
         HTTP_STATUS.BAD_REQUEST,
@@ -189,7 +192,10 @@ export class TrainingCertificate {
       );
     }
 
-    if (this.certificate_number !== null && this.certificate_number !== undefined) {
+    if (
+      this.certificate_number !== null &&
+      this.certificate_number !== undefined
+    ) {
       if (this.certificate_number.trim().length === 0) {
         throw new TrainingCertificateBusinessException(
           'Certificate number cannot be empty if provided.',

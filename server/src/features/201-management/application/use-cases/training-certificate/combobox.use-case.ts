@@ -14,7 +14,7 @@ export class ComboboxTrainingCertificateUseCase {
     private readonly trainingCertificateRepository: TrainingCertificateRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(

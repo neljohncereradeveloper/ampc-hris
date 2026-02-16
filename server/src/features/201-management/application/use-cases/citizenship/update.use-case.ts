@@ -30,7 +30,7 @@ export class UpdateCitizenshipUseCase {
     private readonly citizenshipRepository: CitizenshipRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,

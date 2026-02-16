@@ -31,7 +31,7 @@ import {
 export class SeedPermissions {
   private readonly logger = new Logger(SeedPermissions.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   /**
    * Executes the seed operation to create default permission entries.

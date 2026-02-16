@@ -6,7 +6,7 @@ import { RBAC_DATABASE_MODELS } from '@/features/rbac/domain/constants';
 
 @Injectable()
 export class RoleRepositoryImpl implements RoleRepository<EntityManager> {
-  constructor(private readonly dataSource: DataSource) { }
+  constructor(private readonly dataSource: DataSource) {}
 
   // Note: create() and update() methods removed
   // Roles are statically defined (Admin, Editor, Viewer) and managed via seeders only

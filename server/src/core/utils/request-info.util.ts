@@ -13,7 +13,8 @@ export interface RequestInfo {
  * @returns RequestInfo object with user_name, user_id, ip_address, user_agent, and session_id
  */
 export function createRequestInfo(request: any): RequestInfo {
-  const rawId = request?.user?.id ?? request?.user?.sub ?? request?.user?.userId;
+  const rawId =
+    request?.user?.id ?? request?.user?.sub ?? request?.user?.userId;
   const parsed = rawId != null ? Number(rawId) : NaN;
   const user_id = Number.isNaN(parsed) ? undefined : parsed;
   return {

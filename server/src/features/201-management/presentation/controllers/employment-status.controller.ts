@@ -48,7 +48,10 @@ import {
 import { EmploymentStatus } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Employment Status')
 @Controller('employment-statuses')
@@ -64,7 +67,7 @@ export class EmploymentStatusController {
     private readonly restoreEmploymentStatusUseCase: RestoreEmploymentStatusUseCase,
     private readonly getPaginatedEmploymentStatusUseCase: GetPaginatedEmploymentStatusUseCase,
     private readonly comboboxEmploymentStatusUseCase: ComboboxEmploymentStatusUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
@@ -73,7 +76,10 @@ export class EmploymentStatusController {
   @RequirePermissions(PERMISSIONS.EMPLOYMENT_STATUSES.CREATE)
   @ApiOperation({ summary: 'Create a new employment status' })
   @ApiBody({ type: CreateEmploymentStatusPresentationDto })
-  @ApiResponse({ status: 201, description: 'Employment status created successfully' })
+  @ApiResponse({
+    status: 201,
+    description: 'Employment status created successfully',
+  })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
@@ -95,7 +101,10 @@ export class EmploymentStatusController {
   @ApiOperation({ summary: 'Update employment status information' })
   @ApiParam({ name: 'id', description: 'Employment status ID', example: 1 })
   @ApiBody({ type: UpdateEmploymentStatusPresentationDto })
-  @ApiResponse({ status: 200, description: 'Employment status updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Employment status updated successfully',
+  })
   @ApiResponse({ status: 404, description: 'Employment status not found' })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -119,7 +128,10 @@ export class EmploymentStatusController {
   @RequirePermissions(PERMISSIONS.EMPLOYMENT_STATUSES.ARCHIVE)
   @ApiOperation({ summary: 'Archive an employment status' })
   @ApiParam({ name: 'id', description: 'Employment status ID', example: 1 })
-  @ApiResponse({ status: 200, description: 'Employment status archived successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Employment status archived successfully',
+  })
   @ApiResponse({ status: 404, description: 'Employment status not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')

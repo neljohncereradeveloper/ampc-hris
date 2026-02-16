@@ -71,7 +71,10 @@ export class PolicyActivationService {
     reason?: string;
   } {
     if (policy.annual_entitlement < 0) {
-      return { isValid: false, reason: 'Annual entitlement cannot be negative.' };
+      return {
+        isValid: false,
+        reason: 'Annual entitlement cannot be negative.',
+      };
     }
     if (policy.carry_limit < 0) {
       return { isValid: false, reason: 'Carry limit cannot be negative.' };
@@ -80,7 +83,10 @@ export class PolicyActivationService {
       return { isValid: false, reason: 'Encash limit cannot be negative.' };
     }
     if (policy.carried_over_years < 1) {
-      return { isValid: false, reason: 'Cycle length must be at least 1 year.' };
+      return {
+        isValid: false,
+        reason: 'Cycle length must be at least 1 year.',
+      };
     }
     if (
       policy.minimum_service_months != null &&
@@ -98,7 +104,10 @@ export class PolicyActivationService {
    * Only DRAFT or INACTIVE policies can be updated.
    * ACTIVE and RETIRED cannot be modified.
    */
-  canUpdatePolicy(policy: LeavePolicy): { canUpdate: boolean; reason?: string } {
+  canUpdatePolicy(policy: LeavePolicy): {
+    canUpdate: boolean;
+    reason?: string;
+  } {
     if (policy.status === EnumLeavePolicyStatus.ACTIVE) {
       return {
         canUpdate: false,

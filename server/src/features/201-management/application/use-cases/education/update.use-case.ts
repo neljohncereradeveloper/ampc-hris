@@ -44,7 +44,7 @@ export class UpdateEducationUseCase {
     private readonly educationCourseLevelRepository: EducationCourseLevelRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,
@@ -144,10 +144,18 @@ export class UpdateEducationUseCase {
         const originalState = extractEntityState(education, tracking_config);
 
         education.update({
-          education_school_id: command.education_school_id ?? education.education_school_id,
-          education_level_id: command.education_level_id ?? education.education_level_id,
-          education_course_id: command.education_course_id === undefined ? education.education_course_id : (command.education_course_id ?? undefined),
-          education_course_level_id: command.education_course_level_id === undefined ? education.education_course_level_id : (command.education_course_level_id ?? undefined),
+          education_school_id:
+            command.education_school_id ?? education.education_school_id,
+          education_level_id:
+            command.education_level_id ?? education.education_level_id,
+          education_course_id:
+            command.education_course_id === undefined
+              ? education.education_course_id
+              : (command.education_course_id ?? undefined),
+          education_course_level_id:
+            command.education_course_level_id === undefined
+              ? education.education_course_level_id
+              : (command.education_course_level_id ?? undefined),
           school_year: command.school_year ?? education.school_year,
           updated_by: requestInfo?.user_name || null,
         });
@@ -168,7 +176,7 @@ export class UpdateEducationUseCase {
           id,
           manager,
         );
-        const newState = extractEntityState(updated_result!, tracking_config);
+        const newState = extractEntityState(updated_result, tracking_config);
         const changedFields = getChangedFields(originalState, newState);
 
         const log = ActivityLog.create({
@@ -178,9 +186,7 @@ export class UpdateEducationUseCase {
             id,
             changed_fields: changedFields,
             updated_by: requestInfo?.user_name || '',
-            updated_at: getPHDateTime(
-              updated_result?.updated_at || new Date(),
-            ),
+            updated_at: getPHDateTime(updated_result?.updated_at || new Date()),
           }),
           request_info: requestInfo || { user_name: '' },
         });

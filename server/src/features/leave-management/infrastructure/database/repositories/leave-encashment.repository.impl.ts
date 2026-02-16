@@ -11,8 +11,7 @@ import { toNumber } from '@/core/utils/coercion.util';
 import { EnumLeaveEncashmentStatus } from '@/features/leave-management/domain/enum';
 
 @Injectable()
-export class LeaveEncashmentRepositoryImpl
-  implements LeaveEncashmentRepository<EntityManager> {
+export class LeaveEncashmentRepositoryImpl implements LeaveEncashmentRepository<EntityManager> {
   async create(
     leave_encashment: LeaveEncashment,
     manager: EntityManager,
@@ -140,8 +139,12 @@ export class LeaveEncashmentRepositoryImpl
       WHERE status = $1 AND deleted_at IS NULL
       ORDER BY created_at DESC
     `;
-    const result = await manager.query(query, [EnumLeaveEncashmentStatus.PENDING]);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
+    const result = await manager.query(query, [
+      EnumLeaveEncashmentStatus.PENDING,
+    ]);
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
   }
 
   async markAsPaid(
@@ -175,7 +178,9 @@ export class LeaveEncashmentRepositoryImpl
       ORDER BY created_at DESC
     `;
     const result = await manager.query(query, [employee_id]);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
   }
 
   private entityToModel(entity: Record<string, unknown>): LeaveEncashment {

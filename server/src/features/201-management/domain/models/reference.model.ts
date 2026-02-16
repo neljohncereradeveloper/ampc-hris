@@ -278,10 +278,7 @@ export class Reference {
     }
 
     // Validate optional cellphone_number if provided
-    if (
-      this.cellphone_number !== undefined &&
-      this.cellphone_number !== null
-    ) {
+    if (this.cellphone_number !== undefined && this.cellphone_number !== null) {
       if (this.cellphone_number.trim().length === 0) {
         throw new ReferenceBusinessException(
           'Cellphone number cannot be empty if provided.',

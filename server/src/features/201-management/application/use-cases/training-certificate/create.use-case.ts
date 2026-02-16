@@ -25,7 +25,7 @@ export class CreateTrainingCertificateUseCase {
     private readonly trainingCertificateRepository: TrainingCertificateRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateTrainingCertificateCommand,
@@ -44,10 +44,11 @@ export class CreateTrainingCertificateUseCase {
           created_by: requestInfo?.user_name || null,
         });
 
-        const created_certificate = await this.trainingCertificateRepository.create(
-          new_certificate,
-          manager,
-        );
+        const created_certificate =
+          await this.trainingCertificateRepository.create(
+            new_certificate,
+            manager,
+          );
 
         if (!created_certificate) {
           throw new TrainingCertificateBusinessException(
@@ -64,7 +65,9 @@ export class CreateTrainingCertificateUseCase {
             certificate_name: created_certificate.certificate_name,
             issuing_organization: created_certificate.issuing_organization,
             issue_date: getPHDateTime(created_certificate.issue_date),
-            expiry_date: created_certificate.expiry_date ? getPHDateTime(created_certificate.expiry_date) : null,
+            expiry_date: created_certificate.expiry_date
+              ? getPHDateTime(created_certificate.expiry_date)
+              : null,
             certificate_number: created_certificate.certificate_number,
             created_by: requestInfo?.user_name || '',
             created_at: getPHDateTime(created_certificate.created_at),

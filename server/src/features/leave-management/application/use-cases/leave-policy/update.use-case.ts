@@ -50,8 +50,7 @@ export class UpdateLeavePolicyUseCase {
           );
         }
 
-        const can_update =
-          this.activation_service.canUpdatePolicy(policy);
+        const can_update = this.activation_service.canUpdatePolicy(policy);
         if (!can_update.canUpdate) {
           throw new LeavePolicyBusinessException(
             can_update.reason ?? 'Policy cannot be updated',

@@ -23,7 +23,7 @@ export class ArchiveBarangayUseCase {
     private readonly barangayRepository: BarangayRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -61,8 +61,9 @@ export class ArchiveBarangayUseCase {
           details: JSON.stringify({
             id,
             desc1: barangay.desc1,
-            explanation: `Barangay with ID : ${id} archived by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Barangay with ID : ${id} archived by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             archived_by: requestInfo?.user_name || '',
             archived_at: getPHDateTime(barangay.deleted_at || new Date()),
           }),

@@ -30,10 +30,7 @@ export class ResetBalancesForYearUseCase {
     private readonly activityLogRepository: ActivityLogRepository,
   ) {}
 
-  async execute(
-    year: string,
-    requestInfo?: RequestInfo,
-  ): Promise<boolean> {
+  async execute(year: string, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
       LEAVE_BALANCE_ACTIONS.RESET_FOR_YEAR,
       async (manager) => {

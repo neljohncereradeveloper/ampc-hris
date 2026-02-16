@@ -14,7 +14,7 @@ export class ComboboxProvinceUseCase {
     private readonly provinceRepository: ProvinceRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(
@@ -25,7 +25,7 @@ export class ComboboxProvinceUseCase {
           value: province.desc1 || '',
           label: province.desc1
             ? province.desc1.charAt(0).toUpperCase() +
-            province.desc1.slice(1).toLowerCase()
+              province.desc1.slice(1).toLowerCase()
             : '',
         }));
       },

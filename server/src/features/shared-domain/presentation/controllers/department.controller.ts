@@ -48,7 +48,10 @@ import {
 import { Department } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Department')
 @Controller('departments')
@@ -64,7 +67,7 @@ export class DepartmentController {
     private readonly restoreDepartmentUseCase: RestoreDepartmentUseCase,
     private readonly getPaginatedDepartmentUseCase: GetPaginatedDepartmentUseCase,
     private readonly comboboxDepartmentUseCase: ComboboxDepartmentUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

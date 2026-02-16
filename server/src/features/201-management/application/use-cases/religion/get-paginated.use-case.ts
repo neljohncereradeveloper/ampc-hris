@@ -16,7 +16,7 @@ export class GetPaginatedReligionUseCase {
     private readonly religionRepository: ReligionRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,

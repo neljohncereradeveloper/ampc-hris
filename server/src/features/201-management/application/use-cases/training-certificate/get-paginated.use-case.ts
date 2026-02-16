@@ -16,7 +16,7 @@ export class GetPaginatedTrainingCertificateUseCase {
     private readonly trainingCertificateRepository: TrainingCertificateRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,
@@ -27,13 +27,14 @@ export class GetPaginatedTrainingCertificateUseCase {
     return this.transactionHelper.executeTransaction(
       TRAINING_CERTIFICATE_ACTIONS.PAGINATED_LIST,
       async (manager) => {
-        const certificates = await this.trainingCertificateRepository.findPaginatedList(
-          term,
-          page,
-          limit,
-          is_archived,
-          manager,
-        );
+        const certificates =
+          await this.trainingCertificateRepository.findPaginatedList(
+            term,
+            page,
+            limit,
+            is_archived,
+            manager,
+          );
         return certificates;
       },
     );

@@ -7,7 +7,7 @@ import { PROVINCES } from './data';
 export class SeedProvinces {
   private readonly logger = new Logger(SeedProvinces.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';

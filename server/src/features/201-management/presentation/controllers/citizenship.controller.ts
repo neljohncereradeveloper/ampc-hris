@@ -48,7 +48,10 @@ import {
 import { Citizenship } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Citizenship')
 @Controller('citizenships')
@@ -64,7 +67,7 @@ export class CitizenshipController {
     private readonly restoreCitizenshipUseCase: RestoreCitizenshipUseCase,
     private readonly getPaginatedCitizenshipUseCase: GetPaginatedCitizenshipUseCase,
     private readonly comboboxCitizenshipUseCase: ComboboxCitizenshipUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
@@ -119,7 +122,10 @@ export class CitizenshipController {
   @RequirePermissions(PERMISSIONS.CITIZENSHIPS.ARCHIVE)
   @ApiOperation({ summary: 'Archive a citizenship' })
   @ApiParam({ name: 'id', description: 'Citizenship ID', example: 1 })
-  @ApiResponse({ status: 200, description: 'Citizenship archived successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Citizenship archived successfully',
+  })
   @ApiResponse({ status: 404, description: 'Citizenship not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')

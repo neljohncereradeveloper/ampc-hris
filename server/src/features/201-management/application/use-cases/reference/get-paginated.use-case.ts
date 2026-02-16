@@ -16,7 +16,7 @@ export class GetPaginatedReferenceUseCase {
     private readonly referenceRepository: ReferenceRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,

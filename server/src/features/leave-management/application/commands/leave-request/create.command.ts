@@ -1,4 +1,3 @@
-
 export interface CreateLeaveRequestCommand {
   /** Employee requesting the leave. */
   employee_id: number;

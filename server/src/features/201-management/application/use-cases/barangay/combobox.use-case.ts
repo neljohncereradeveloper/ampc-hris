@@ -14,7 +14,7 @@ export class ComboboxBarangayUseCase {
     private readonly barangayRepository: BarangayRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(
@@ -25,7 +25,7 @@ export class ComboboxBarangayUseCase {
           value: barangay.desc1 || '',
           label: barangay.desc1
             ? barangay.desc1.charAt(0).toUpperCase() +
-            barangay.desc1.slice(1).toLowerCase()
+              barangay.desc1.slice(1).toLowerCase()
             : '',
         }));
       },

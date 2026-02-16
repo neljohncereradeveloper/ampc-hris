@@ -8,7 +8,7 @@ export class CheckHealthUseCase {
   constructor(
     @Inject(HEALTH_CHECK_TOKENS.DATABASE_HEALTH)
     private readonly databaseHealthService: DatabaseHealthService,
-  ) { }
+  ) {}
 
   async execute(version: string): Promise<HealthCheckResponse> {
     const database_health = await this.databaseHealthService.checkHealth();

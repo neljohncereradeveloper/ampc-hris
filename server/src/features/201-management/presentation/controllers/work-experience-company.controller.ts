@@ -67,7 +67,7 @@ export class WorkExperienceCompanyController {
     private readonly restoreWorkExperienceCompanyUseCase: RestoreWorkExperienceCompanyUseCase,
     private readonly getPaginatedWorkExperienceCompanyUseCase: GetPaginatedWorkExperienceCompanyUseCase,
     private readonly comboboxWorkExperienceCompanyUseCase: ComboboxWorkExperienceCompanyUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

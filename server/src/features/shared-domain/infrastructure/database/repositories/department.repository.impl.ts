@@ -9,8 +9,7 @@ import {
 } from '@/core/utils/pagination.util';
 
 @Injectable()
-export class DepartmentRepositoryImpl
-  implements DepartmentRepository<EntityManager> {
+export class DepartmentRepositoryImpl implements DepartmentRepository<EntityManager> {
   async create(
     department: Department,
     manager: EntityManager,

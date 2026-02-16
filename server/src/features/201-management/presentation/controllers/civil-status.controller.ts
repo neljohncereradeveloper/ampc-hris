@@ -48,7 +48,10 @@ import {
 import { CivilStatus } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Civil Status')
 @Controller('civil-statuses')
@@ -64,7 +67,7 @@ export class CivilStatusController {
     private readonly restoreCivilStatusUseCase: RestoreCivilStatusUseCase,
     private readonly getPaginatedCivilStatusUseCase: GetPaginatedCivilStatusUseCase,
     private readonly comboboxCivilStatusUseCase: ComboboxCivilStatusUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
@@ -73,7 +76,10 @@ export class CivilStatusController {
   @RequirePermissions(PERMISSIONS.CIVIL_STATUSES.CREATE)
   @ApiOperation({ summary: 'Create a new civil status' })
   @ApiBody({ type: CreateCivilStatusPresentationDto })
-  @ApiResponse({ status: 201, description: 'Civil status created successfully' })
+  @ApiResponse({
+    status: 201,
+    description: 'Civil status created successfully',
+  })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
@@ -95,7 +101,10 @@ export class CivilStatusController {
   @ApiOperation({ summary: 'Update civil status information' })
   @ApiParam({ name: 'id', description: 'Civil status ID', example: 1 })
   @ApiBody({ type: UpdateCivilStatusPresentationDto })
-  @ApiResponse({ status: 200, description: 'Civil status updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Civil status updated successfully',
+  })
   @ApiResponse({ status: 404, description: 'Civil status not found' })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -119,7 +128,10 @@ export class CivilStatusController {
   @RequirePermissions(PERMISSIONS.CIVIL_STATUSES.ARCHIVE)
   @ApiOperation({ summary: 'Archive a civil status' })
   @ApiParam({ name: 'id', description: 'Civil status ID', example: 1 })
-  @ApiResponse({ status: 200, description: 'Civil status archived successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Civil status archived successfully',
+  })
   @ApiResponse({ status: 404, description: 'Civil status not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')

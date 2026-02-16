@@ -91,10 +91,7 @@ export class EducationCourseLevelController {
     const command: CreateEducationCourseLevelCommand = {
       desc1: presentationDto.desc1,
     };
-    return this.createEducationCourseLevelUseCase.execute(
-      command,
-      requestInfo,
-    );
+    return this.createEducationCourseLevelUseCase.execute(command, requestInfo);
   }
 
   @Version('1')

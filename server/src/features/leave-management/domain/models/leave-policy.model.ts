@@ -150,18 +150,25 @@ export class LeavePolicy {
         HTTP_STATUS.CONFLICT,
       );
     }
-    if (dto.annual_entitlement !== undefined) this.annual_entitlement = dto.annual_entitlement;
+    if (dto.annual_entitlement !== undefined)
+      this.annual_entitlement = dto.annual_entitlement;
     if (dto.carry_limit !== undefined) this.carry_limit = dto.carry_limit;
     if (dto.encash_limit !== undefined) this.encash_limit = dto.encash_limit;
-    if (dto.carried_over_years !== undefined) this.carried_over_years = dto.carried_over_years;
-    if (dto.effective_date !== undefined) this.effective_date = dto.effective_date;
+    if (dto.carried_over_years !== undefined)
+      this.carried_over_years = dto.carried_over_years;
+    if (dto.effective_date !== undefined)
+      this.effective_date = dto.effective_date;
     if (dto.expiry_date !== undefined) this.expiry_date = dto.expiry_date;
     if (dto.status !== undefined) this.status = dto.status;
     if (dto.remarks !== undefined) this.remarks = dto.remarks;
-    if (dto.minimum_service_months !== undefined) this.minimum_service_months = dto.minimum_service_months;
-    if (dto.allowed_employment_types !== undefined) this.allowed_employment_types = dto.allowed_employment_types;
-    if (dto.allowed_employee_statuses !== undefined) this.allowed_employee_statuses = dto.allowed_employee_statuses;
-    if (dto.excluded_weekdays !== undefined) this.excluded_weekdays = dto.excluded_weekdays;
+    if (dto.minimum_service_months !== undefined)
+      this.minimum_service_months = dto.minimum_service_months;
+    if (dto.allowed_employment_types !== undefined)
+      this.allowed_employment_types = dto.allowed_employment_types;
+    if (dto.allowed_employee_statuses !== undefined)
+      this.allowed_employee_statuses = dto.allowed_employee_statuses;
+    if (dto.excluded_weekdays !== undefined)
+      this.excluded_weekdays = dto.excluded_weekdays;
     this.updated_by = dto.updated_by ?? null;
     this.validate();
   }
@@ -219,14 +226,21 @@ export class LeavePolicy {
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    if (this.effective_date != null && (!(this.effective_date instanceof Date) || isNaN(this.effective_date.getTime()))) {
+    if (
+      this.effective_date != null &&
+      (!(this.effective_date instanceof Date) ||
+        isNaN(this.effective_date.getTime()))
+    ) {
       throw new LeavePolicyBusinessException(
         'Effective date must be a valid date.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     if (this.expiry_date != null) {
-      if (!(this.expiry_date instanceof Date) || isNaN(this.expiry_date.getTime())) {
+      if (
+        !(this.expiry_date instanceof Date) ||
+        isNaN(this.expiry_date.getTime())
+      ) {
         throw new LeavePolicyBusinessException(
           'Expiry date must be a valid date.',
           HTTP_STATUS.BAD_REQUEST,
@@ -253,7 +267,10 @@ export class LeavePolicy {
         );
       }
     }
-    if (this.minimum_service_months != null && this.minimum_service_months < 0) {
+    if (
+      this.minimum_service_months != null &&
+      this.minimum_service_months < 0
+    ) {
       throw new LeavePolicyBusinessException(
         'Minimum service months must be a non-negative number.',
         HTTP_STATUS.BAD_REQUEST,

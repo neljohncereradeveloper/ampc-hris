@@ -5,7 +5,11 @@ export interface ReferenceRepository<Context = unknown> {
   /** Create a reference. */
   create(reference: Reference, context: Context): Promise<Reference>;
   /** Update a reference. */
-  update(id: number, dto: Partial<Reference>, context: Context): Promise<boolean>;
+  update(
+    id: number,
+    dto: Partial<Reference>,
+    context: Context,
+  ): Promise<boolean>;
   /** Find a reference by ID. */
   findById(id: number, context: Context): Promise<Reference | null>;
   /** Find paginated list of references. */

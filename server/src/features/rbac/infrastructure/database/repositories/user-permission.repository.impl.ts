@@ -7,7 +7,7 @@ import { USER_MANAGEMENT_DATABASE_MODELS } from '@/features/user-management/doma
 
 @Injectable()
 export class UserPermissionRepositoryImpl implements UserPermissionRepository<EntityManager> {
-  constructor(private readonly dataSource: DataSource) { }
+  constructor(private readonly dataSource: DataSource) {}
 
   async create(
     user_permission: UserPermission,

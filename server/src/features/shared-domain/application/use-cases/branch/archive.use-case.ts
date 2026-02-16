@@ -22,7 +22,7 @@ export class ArchiveBranchUseCase {
     private readonly branchRepository: BranchRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -38,11 +38,7 @@ export class ArchiveBranchUseCase {
 
         branch.archive(requestInfo?.user_name || '');
 
-        const success = await this.branchRepository.update(
-          id,
-          branch,
-          manager,
-        );
+        const success = await this.branchRepository.update(id, branch, manager);
         if (!success) {
           throw new BranchBusinessException(
             'Branch archive failed',

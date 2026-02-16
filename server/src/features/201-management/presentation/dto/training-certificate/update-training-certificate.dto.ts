@@ -1,5 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RequiredStringValidation, OptionalStringValidation, RequiredDateValidation, OptionalDateValidation } from '@/core/infrastructure/decorators';
+import {
+  RequiredStringValidation,
+  OptionalStringValidation,
+  RequiredDateValidation,
+  OptionalDateValidation,
+} from '@/core/infrastructure/decorators';
 
 export class UpdateTrainingCertificateDto {
   @ApiProperty({

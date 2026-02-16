@@ -30,8 +30,10 @@ export class RestoreEducationCourseUseCase {
       EDUCATION_COURSE_ACTIONS.RESTORE,
       async (manager) => {
         // Validate existence
-        const education_course =
-          await this.educationCourseRepository.findById(id, manager);
+        const education_course = await this.educationCourseRepository.findById(
+          id,
+          manager,
+        );
         if (!education_course) {
           throw new EducationCourseBusinessException(
             `Education course with ID ${id} not found.`,

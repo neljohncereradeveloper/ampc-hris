@@ -193,7 +193,6 @@ import { TransactionAdapter } from '@/core/infrastructure/database/adapters/tran
 import { TOKENS_CORE } from '@/core/domain/constants';
 import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/repositories';
 
-
 @Module({
   imports: [PostgresqlDatabaseModule],
   controllers: [
@@ -586,4 +585,4 @@ import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/reposi
     MANAGEMENT_201_TOKENS.EDUCATION,
   ],
 })
-export class Management201Module { }
+export class Management201Module {}

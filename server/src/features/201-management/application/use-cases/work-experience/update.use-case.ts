@@ -38,7 +38,7 @@ export class UpdateWorkExperienceUseCase {
     private readonly workExperienceJobTitleRepository: WorkExperienceJobTitleRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,
@@ -61,10 +61,7 @@ export class UpdateWorkExperienceUseCase {
 
         // Validate company exists if company_id is provided
         let work_experience_company = null;
-        if (
-          command.company_id !== undefined &&
-          command.company_id !== null
-        ) {
+        if (command.company_id !== undefined && command.company_id !== null) {
           work_experience_company =
             await this.workExperienceCompanyRepository.findById(
               command.company_id,
@@ -136,10 +133,7 @@ export class UpdateWorkExperienceUseCase {
           id,
           manager,
         );
-        const after_state = extractEntityState(
-          updated_result,
-          tracking_config,
-        );
+        const after_state = extractEntityState(updated_result, tracking_config);
         const changed_fields = getChangedFields(before_state, after_state);
 
         const log = ActivityLog.create({
@@ -149,9 +143,7 @@ export class UpdateWorkExperienceUseCase {
             id: updated_result?.id,
             changed_fields: changed_fields,
             updated_by: requestInfo?.user_name || '',
-            updated_at: getPHDateTime(
-              updated_result?.updated_at || new Date(),
-            ),
+            updated_at: getPHDateTime(updated_result?.updated_at || new Date()),
           }),
           request_info: requestInfo || { user_name: '' },
         });

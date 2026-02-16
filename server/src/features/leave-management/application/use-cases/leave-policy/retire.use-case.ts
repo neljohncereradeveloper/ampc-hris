@@ -26,7 +26,7 @@ export class RetirePolicyUseCase {
     private readonly leavePolicyRepository: LeavePolicyRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,
@@ -44,8 +44,7 @@ export class RetirePolicyUseCase {
           );
         }
 
-        const can_retire =
-          this.activation_service.canRetirePolicy(policy);
+        const can_retire = this.activation_service.canRetirePolicy(policy);
         if (!can_retire.canRetire) {
           throw new LeavePolicyBusinessException(
             can_retire.reason ?? 'Policy cannot be retired',

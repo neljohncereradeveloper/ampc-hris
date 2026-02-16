@@ -41,7 +41,6 @@ export class EducationRepositoryImpl implements EducationRepository<EntityManage
       education.updated_at,
     ]);
 
-
     const savedEntity = result[0];
     const found = await this.findById(savedEntity.id, manager);
     return found ?? this.entityToModel(savedEntity);
@@ -135,8 +134,6 @@ export class EducationRepositoryImpl implements EducationRepository<EntityManage
 
     return this.entityToModel(result[0]);
   }
-
-
 
   async findPaginatedList(
     term: string,

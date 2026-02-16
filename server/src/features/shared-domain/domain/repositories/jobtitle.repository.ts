@@ -13,7 +13,10 @@ export interface JobtitleRepository<Context = unknown> {
   /** Find a jobtitle by ID. */
   findById(id: number, context: Context): Promise<Jobtitle | null>;
   /** Find a jobtitle by description. */
-  findByDescription(description: string, context: Context): Promise<Jobtitle | null>;
+  findByDescription(
+    description: string,
+    context: Context,
+  ): Promise<Jobtitle | null>;
   /** Find paginated list of jobtitles. */
   findPaginatedList(
     term: string,

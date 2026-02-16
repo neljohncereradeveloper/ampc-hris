@@ -78,7 +78,5 @@ export interface LeaveYearConfigurationRepository<Context = unknown> {
    * Load all configurations (e.g. for dropdown or admin list).
    * @param context - Transaction or connection
    */
-  findAll(
-    context: Context,
-  ): Promise<LeaveYearConfiguration[]>;
+  findAll(context: Context): Promise<LeaveYearConfiguration[]>;
 }

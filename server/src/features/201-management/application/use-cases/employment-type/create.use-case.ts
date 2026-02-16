@@ -25,7 +25,7 @@ export class CreateEmploymentTypeUseCase {
     private readonly employmentTypeRepository: EmploymentTypeRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateEmploymentTypeCommand,

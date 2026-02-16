@@ -30,7 +30,7 @@ export class UpdateEducationSchoolUseCase {
     private readonly educationSchoolRepository: EducationSchoolRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,

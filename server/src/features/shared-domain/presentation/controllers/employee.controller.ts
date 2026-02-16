@@ -62,7 +62,10 @@ import {
 import { Employee } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Employee')
 @Controller('employees')
@@ -85,7 +88,7 @@ export class EmployeeController {
     private readonly findByBioNumberEmployeeUseCase: FindByBioNumberEmployeeUseCase,
     private readonly retrieveActiveEmployeesUseCase: RetrieveActiveEmployeesUseCase,
     private readonly findEmployeesEligibleForLeaveUseCase: FindEmployeesEligibleForLeaveUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
@@ -141,7 +144,8 @@ export class EmployeeController {
       email: presentationDto.email,
       emergency_contact_name: presentationDto.emergency_contact_name,
       emergency_contact_number: presentationDto.emergency_contact_number,
-      emergency_contact_relationship: presentationDto.emergency_contact_relationship,
+      emergency_contact_relationship:
+        presentationDto.emergency_contact_relationship,
       emergency_contact_address: presentationDto.emergency_contact_address,
       husband_or_wife_name: presentationDto.husband_or_wife_name,
       husband_or_wife_birth_date: presentationDto.husband_or_wife_birth_date,
@@ -219,7 +223,8 @@ export class EmployeeController {
       email: presentationDto.email,
       emergency_contact_name: presentationDto.emergency_contact_name,
       emergency_contact_number: presentationDto.emergency_contact_number,
-      emergency_contact_relationship: presentationDto.emergency_contact_relationship,
+      emergency_contact_relationship:
+        presentationDto.emergency_contact_relationship,
       emergency_contact_address: presentationDto.emergency_contact_address,
       husband_or_wife_name: presentationDto.husband_or_wife_name,
       husband_or_wife_birth_date: presentationDto.husband_or_wife_birth_date,
@@ -312,7 +317,10 @@ export class EmployeeController {
   @ApiOperation({ summary: 'Update employee image path' })
   @ApiParam({ name: 'id', description: 'Employee ID', example: 1 })
   @ApiBody({ type: UpdateImagePathDto })
-  @ApiResponse({ status: 200, description: 'Employee image path updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Employee image path updated successfully',
+  })
   @ApiResponse({ status: 404, description: 'Employee not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
@@ -337,7 +345,10 @@ export class EmployeeController {
   @ApiOperation({ summary: 'Update employee government details' })
   @ApiParam({ name: 'id', description: 'Employee ID', example: 1 })
   @ApiBody({ type: UpdateGovernmentDetailsDto })
-  @ApiResponse({ status: 200, description: 'Employee government details updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Employee government details updated successfully',
+  })
   @ApiResponse({ status: 404, description: 'Employee not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
@@ -369,7 +380,10 @@ export class EmployeeController {
   @ApiOperation({ summary: 'Update employee salary details' })
   @ApiParam({ name: 'id', description: 'Employee ID', example: 1 })
   @ApiBody({ type: UpdateSalaryDetailsDto })
-  @ApiResponse({ status: 200, description: 'Employee salary details updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Employee salary details updated successfully',
+  })
   @ApiResponse({ status: 404, description: 'Employee not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
@@ -401,7 +415,10 @@ export class EmployeeController {
   @ApiOperation({ summary: 'Update employee bank details' })
   @ApiParam({ name: 'id', description: 'Employee ID', example: 1 })
   @ApiBody({ type: UpdateBankDetailsDto })
-  @ApiResponse({ status: 200, description: 'Employee bank details updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Employee bank details updated successfully',
+  })
   @ApiResponse({ status: 404, description: 'Employee not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
@@ -430,12 +447,18 @@ export class EmployeeController {
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
   @RequirePermissions(PERMISSIONS.EMPLOYEES.READ)
   @ApiOperation({ summary: 'Find employee by ID number' })
-  @ApiParam({ name: 'id_number', description: 'Employee ID number', example: 'EMP001' })
+  @ApiParam({
+    name: 'id_number',
+    description: 'Employee ID number',
+    example: 'EMP001',
+  })
   @ApiResponse({ status: 200, description: 'Employee found successfully' })
   @ApiResponse({ status: 404, description: 'Employee not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
-  async findByIdNumber(@Param('id_number') id_number: string): Promise<Employee> {
+  async findByIdNumber(
+    @Param('id_number') id_number: string,
+  ): Promise<Employee> {
     return this.findByIdNumberEmployeeUseCase.execute(id_number);
   }
 
@@ -444,12 +467,18 @@ export class EmployeeController {
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
   @RequirePermissions(PERMISSIONS.EMPLOYEES.READ)
   @ApiOperation({ summary: 'Find employee by bio number' })
-  @ApiParam({ name: 'bio_number', description: 'Employee bio number', example: 'BIO001' })
+  @ApiParam({
+    name: 'bio_number',
+    description: 'Employee bio number',
+    example: 'BIO001',
+  })
   @ApiResponse({ status: 200, description: 'Employee found successfully' })
   @ApiResponse({ status: 404, description: 'Employee not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
-  async findByBioNumber(@Param('bio_number') bio_number: string): Promise<Employee> {
+  async findByBioNumber(
+    @Param('bio_number') bio_number: string,
+  ): Promise<Employee> {
     return this.findByBioNumberEmployeeUseCase.execute(bio_number);
   }
 
@@ -458,7 +487,10 @@ export class EmployeeController {
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
   @RequirePermissions(PERMISSIONS.EMPLOYEES.READ)
   @ApiOperation({ summary: 'Retrieve active employees' })
-  @ApiResponse({ status: 200, description: 'Active employees retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Active employees retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
   async getActiveEmployees(): Promise<Employee[]> {
@@ -470,7 +502,10 @@ export class EmployeeController {
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
   @RequirePermissions(PERMISSIONS.EMPLOYEES.READ)
   @ApiOperation({ summary: 'Find employees eligible for leave' })
-  @ApiResponse({ status: 200, description: 'Employees eligible for leave retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Employees eligible for leave retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
   async getEmployeesEligibleForLeave(

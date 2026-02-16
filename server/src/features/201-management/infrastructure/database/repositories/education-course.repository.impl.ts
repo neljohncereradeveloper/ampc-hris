@@ -10,9 +10,7 @@ import {
 import { getPHDateTime } from '@/core/utils/date.util';
 
 @Injectable()
-export class EducationCourseRepositoryImpl
-  implements EducationCourseRepository<EntityManager>
-{
+export class EducationCourseRepositoryImpl implements EducationCourseRepository<EntityManager> {
   async create(
     education_course: EducationCourse,
     manager: EntityManager,
@@ -173,8 +171,8 @@ export class EducationCourseRepositoryImpl
     queryParams.push(limit, offset);
     const dataResult = await manager.query(dataQuery, queryParams);
 
-    const education_courses = dataResult.map(
-      (row: Record<string, unknown>) => this.entityToModel(row),
+    const education_courses = dataResult.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
     );
 
     return {

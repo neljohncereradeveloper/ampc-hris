@@ -13,7 +13,6 @@ export const LEAVE_REQUEST_ACTIONS = {
   CANCEL: 'CANCEL_LEAVE_REQUEST',
 } as const;
 
-
 export const DAY_NAMES = [
   'Sunday',
   'Monday',

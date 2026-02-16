@@ -23,7 +23,7 @@ export class RestoreTrainingCertificateUseCase {
     private readonly trainingCertificateRepository: TrainingCertificateRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -61,8 +61,9 @@ export class RestoreTrainingCertificateUseCase {
             id,
             certificate_name: certificate.certificate_name,
             issuing_organization: certificate.issuing_organization,
-            explanation: `Training certificate with ID : ${id} restored by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Training certificate with ID : ${id} restored by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             restored_by: requestInfo?.user_name || '',
             restored_at: getPHDateTime(new Date()),
           }),

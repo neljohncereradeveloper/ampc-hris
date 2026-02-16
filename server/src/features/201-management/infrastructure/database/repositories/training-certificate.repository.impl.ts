@@ -11,7 +11,10 @@ import { getPHDateTime } from '@/core/utils/date.util';
 
 @Injectable()
 export class TrainingCertificateRepositoryImpl implements TrainingCertificateRepository<EntityManager> {
-  async create(certificate: TrainingCertificate, manager: EntityManager): Promise<TrainingCertificate> {
+  async create(
+    certificate: TrainingCertificate,
+    manager: EntityManager,
+  ): Promise<TrainingCertificate> {
     const query = `
       INSERT INTO ${MANAGEMENT_201_DATABASE_MODELS.TRAINING_CERTIFICATES} (
         certificate_name, issuing_organization, issue_date,
@@ -109,7 +112,10 @@ export class TrainingCertificateRepositoryImpl implements TrainingCertificateRep
     return result.length > 0;
   }
 
-  async findById(id: number, manager: EntityManager): Promise<TrainingCertificate | null> {
+  async findById(
+    id: number,
+    manager: EntityManager,
+  ): Promise<TrainingCertificate | null> {
     const query = `
       SELECT *
       FROM ${MANAGEMENT_201_DATABASE_MODELS.TRAINING_CERTIFICATES}

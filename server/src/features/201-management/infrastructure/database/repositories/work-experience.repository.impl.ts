@@ -10,8 +10,7 @@ import {
 import { getPHDateTime } from '@/core/utils/date.util';
 
 @Injectable()
-export class WorkExperienceRepositoryImpl
-  implements WorkExperienceRepository<EntityManager> {
+export class WorkExperienceRepositoryImpl implements WorkExperienceRepository<EntityManager> {
   async create(
     work_experience: WorkExperience,
     manager: EntityManager,

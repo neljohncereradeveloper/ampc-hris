@@ -14,7 +14,7 @@ export class ComboboxDepartmentUseCase {
     private readonly departmentRepository: DepartmentRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(
@@ -25,7 +25,7 @@ export class ComboboxDepartmentUseCase {
           value: department.desc1 || '',
           label: department.desc1
             ? department.desc1.charAt(0).toUpperCase() +
-            department.desc1.slice(1).toLowerCase()
+              department.desc1.slice(1).toLowerCase()
             : '',
         }));
       },

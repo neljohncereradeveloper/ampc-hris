@@ -5,11 +5,18 @@ export interface BarangayRepository<Context = unknown> {
   /** Create a barangay. */
   create(barangay: Barangay, context: Context): Promise<Barangay>;
   /** Update a barangay. */
-  update(id: number, dto: Partial<Barangay>, context: Context): Promise<boolean>;
+  update(
+    id: number,
+    dto: Partial<Barangay>,
+    context: Context,
+  ): Promise<boolean>;
   /** Find a barangay by ID. */
   findById(id: number, context: Context): Promise<Barangay | null>;
   /** Find a barangay by description. */
-  findByDescription(description: string, context: Context): Promise<Barangay | null>;
+  findByDescription(
+    description: string,
+    context: Context,
+  ): Promise<Barangay | null>;
   /** Find paginated list of barangays. */
   findPaginatedList(
     term: string,

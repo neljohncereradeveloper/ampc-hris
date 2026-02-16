@@ -1,5 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RequiredStringValidation, OptionalStringValidation, OptionalNumberValidation } from '@/core/infrastructure/decorators';
+import {
+  RequiredStringValidation,
+  OptionalStringValidation,
+  OptionalNumberValidation,
+} from '@/core/infrastructure/decorators';
 
 export class CreateReferenceDto {
   @ApiProperty({

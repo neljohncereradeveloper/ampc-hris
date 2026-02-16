@@ -23,7 +23,7 @@ export class RestoreEmploymentStatusUseCase {
     private readonly employmentStatusRepository: EmploymentStatusRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -58,8 +58,9 @@ export class RestoreEmploymentStatusUseCase {
           details: JSON.stringify({
             id,
             desc1: employment_status.desc1,
-            explanation: `Employment status with ID : ${id} restored by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Employment status with ID : ${id} restored by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             restored_by: requestInfo?.user_name || '',
             restored_at: getPHDateTime(new Date()),
           }),

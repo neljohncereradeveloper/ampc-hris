@@ -3,7 +3,10 @@ import { TrainingCertificate } from '../models/training-certificate.model';
 
 export interface TrainingCertificateRepository<Context = unknown> {
   /** Create a training certificate. */
-  create(certificate: TrainingCertificate, context: Context): Promise<TrainingCertificate>;
+  create(
+    certificate: TrainingCertificate,
+    context: Context,
+  ): Promise<TrainingCertificate>;
   /** Update a training certificate. */
   update(
     id: number,

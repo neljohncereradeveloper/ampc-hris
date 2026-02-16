@@ -48,7 +48,10 @@ import {
 import { LeaveType } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Leave Type')
 @Controller('leave-types')
@@ -64,7 +67,7 @@ export class LeaveTypeController {
     private readonly restoreLeaveTypeUseCase: RestoreLeaveTypeUseCase,
     private readonly getPaginatedLeaveTypeUseCase: GetPaginatedLeaveTypeUseCase,
     private readonly comboboxLeaveTypeUseCase: ComboboxLeaveTypeUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

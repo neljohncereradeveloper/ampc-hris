@@ -9,13 +9,8 @@ import {
 } from '@/core/utils/pagination.util';
 
 @Injectable()
-export class JobtitleRepositoryImpl
-  implements JobtitleRepository<EntityManager>
-{
-  async create(
-    jobtitle: Jobtitle,
-    manager: EntityManager,
-  ): Promise<Jobtitle> {
+export class JobtitleRepositoryImpl implements JobtitleRepository<EntityManager> {
+  async create(jobtitle: Jobtitle, manager: EntityManager): Promise<Jobtitle> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.JOBTITLES} (
         desc1, deleted_by, deleted_at,
@@ -82,10 +77,7 @@ export class JobtitleRepositoryImpl
     return result.length > 0;
   }
 
-  async findById(
-    id: number,
-    manager: EntityManager,
-  ): Promise<Jobtitle | null> {
+  async findById(id: number, manager: EntityManager): Promise<Jobtitle | null> {
     const query = `
       SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.JOBTITLES}

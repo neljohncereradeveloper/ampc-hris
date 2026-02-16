@@ -3,12 +3,20 @@ import { IsNumber, IsOptional } from 'class-validator';
 import { PaymentTypeEnum } from '@/features/shared-domain/domain/enum';
 
 export class UpdateSalaryDetailsDto {
-  @ApiProperty({ description: 'Annual salary', example: 600000, required: false })
+  @ApiProperty({
+    description: 'Annual salary',
+    example: 600000,
+    required: false,
+  })
   @IsNumber()
   @IsOptional()
   annual_salary?: number;
 
-  @ApiProperty({ description: 'Monthly salary', example: 50000, required: false })
+  @ApiProperty({
+    description: 'Monthly salary',
+    example: 50000,
+    required: false,
+  })
   @IsNumber()
   @IsOptional()
   monthly_salary?: number;

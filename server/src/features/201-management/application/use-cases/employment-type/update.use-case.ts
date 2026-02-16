@@ -30,7 +30,7 @@ export class UpdateEmploymentTypeUseCase {
     private readonly employmentTypeRepository: EmploymentTypeRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,
@@ -60,7 +60,10 @@ export class UpdateEmploymentTypeUseCase {
           { field: 'updated_by' },
         ];
 
-        const before_state = extractEntityState(employment_type, tracking_config);
+        const before_state = extractEntityState(
+          employment_type,
+          tracking_config,
+        );
 
         employment_type.update({
           desc1: command.desc1,

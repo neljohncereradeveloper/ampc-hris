@@ -27,7 +27,7 @@ export class RbacService {
     @Inject(RBAC_TOKENS.ROLE)
     private readonly roleRepository: RoleRepository,
     private readonly dataSource: DataSource,
-  ) { }
+  ) {}
 
   /**
    * Check if user has any of the specified roles
@@ -82,7 +82,6 @@ export class RbacService {
     userId: number,
     permissionNames: string[],
   ): Promise<boolean> {
-
     const queryRunner = this.dataSource.createQueryRunner();
     try {
       await queryRunner.connect();
@@ -105,14 +104,11 @@ export class RbacService {
         return false;
       }
 
-
-
       // Get user's role IDs
       const userRoleIds = await this.userRoleRepository.findRoleIdsByUserId(
         userId,
         manager,
       );
-
 
       // Get permissions from roles
       const rolePermissionIds = new Set<number>();
@@ -125,21 +121,15 @@ export class RbacService {
         rolePermissionIdsForRole.forEach((id) => rolePermissionIds.add(id));
       }
 
-
-
       // Get user-specific permission overrides
       const userPermissions = await this.userPermissionRepository.findByUserId(
         userId,
         manager,
       );
 
-
-
       // Check user permission overrides (grants and denials)
       const grantedPermissionIds = new Set<number>();
       const deniedPermissionIds = new Set<number>();
-
-
 
       userPermissions.forEach((up) => {
         if (up.is_allowed) {
@@ -155,7 +145,6 @@ export class RbacService {
       rolePermissionIds.forEach((id) => effectivePermissions.add(id));
       grantedPermissionIds.forEach((id) => effectivePermissions.add(id));
       deniedPermissionIds.forEach((id) => effectivePermissions.delete(id));
-
 
       // Check if user has any of the required permissions
       return permissionIds.some((permissionId) =>
@@ -238,8 +227,6 @@ export class RbacService {
       rolePermissionIds.forEach((id) => effectivePermissions.add(id));
       grantedPermissionIds.forEach((id) => effectivePermissions.add(id));
       deniedPermissionIds.forEach((id) => effectivePermissions.delete(id));
-
-
 
       // Check if user has all of the required permissions
       return permissionIds.every((permissionId) =>

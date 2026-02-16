@@ -49,7 +49,10 @@ import {
 import { TrainingCertificate } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Training Certificate')
 @Controller('training-certificates')
@@ -65,7 +68,7 @@ export class TrainingCertificateController {
     private readonly restoreTrainingCertificateUseCase: RestoreTrainingCertificateUseCase,
     private readonly getPaginatedTrainingCertificateUseCase: GetPaginatedTrainingCertificateUseCase,
     private readonly comboboxTrainingCertificateUseCase: ComboboxTrainingCertificateUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
@@ -74,7 +77,10 @@ export class TrainingCertificateController {
   @RequirePermissions(PERMISSIONS.TRAINING_CERTIFICATES.CREATE)
   @ApiOperation({ summary: 'Create a new training certificate' })
   @ApiBody({ type: CreateTrainingCertificatePresentationDto })
-  @ApiResponse({ status: 201, description: 'Training certificate created successfully' })
+  @ApiResponse({
+    status: 201,
+    description: 'Training certificate created successfully',
+  })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
@@ -101,7 +107,10 @@ export class TrainingCertificateController {
   @ApiOperation({ summary: 'Update training certificate information' })
   @ApiParam({ name: 'id', description: 'Training certificate ID', example: 1 })
   @ApiBody({ type: UpdateTrainingCertificatePresentationDto })
-  @ApiResponse({ status: 200, description: 'Training certificate updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Training certificate updated successfully',
+  })
   @ApiResponse({ status: 404, description: 'Training certificate not found' })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -120,7 +129,11 @@ export class TrainingCertificateController {
       certificate_number: presentationDto.certificate_number,
       file_path: presentationDto.file_path,
     };
-    return this.updateTrainingCertificateUseCase.execute(id, command, requestInfo);
+    return this.updateTrainingCertificateUseCase.execute(
+      id,
+      command,
+      requestInfo,
+    );
   }
 
   @Version('1')
@@ -130,7 +143,10 @@ export class TrainingCertificateController {
   @RequirePermissions(PERMISSIONS.TRAINING_CERTIFICATES.ARCHIVE)
   @ApiOperation({ summary: 'Archive a training certificate' })
   @ApiParam({ name: 'id', description: 'Training certificate ID', example: 1 })
-  @ApiResponse({ status: 200, description: 'Training certificate archived successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Training certificate archived successfully',
+  })
   @ApiResponse({ status: 404, description: 'Training certificate not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')

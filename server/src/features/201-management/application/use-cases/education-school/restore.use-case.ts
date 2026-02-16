@@ -30,8 +30,10 @@ export class RestoreEducationSchoolUseCase {
       EDUCATION_SCHOOL_ACTIONS.RESTORE,
       async (manager) => {
         // Validate existence
-        const education_school =
-          await this.educationSchoolRepository.findById(id, manager);
+        const education_school = await this.educationSchoolRepository.findById(
+          id,
+          manager,
+        );
         if (!education_school) {
           throw new EducationSchoolBusinessException(
             `Education school with ID ${id} not found.`,

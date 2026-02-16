@@ -32,7 +32,7 @@ export class CreateLeavePolicyUseCase {
     private readonly leaveTypeRepository: LeaveTypeRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateLeavePolicyCommand,
@@ -78,7 +78,10 @@ export class CreateLeavePolicyUseCase {
           );
         }
 
-        const created = await this.leavePolicyRepository.create(policy, manager);
+        const created = await this.leavePolicyRepository.create(
+          policy,
+          manager,
+        );
         if (!created) {
           throw new LeavePolicyBusinessException(
             'Leave policy creation failed',

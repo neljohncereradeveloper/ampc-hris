@@ -6,7 +6,7 @@ import { RBAC_DATABASE_MODELS } from '@/features/rbac/domain/constants';
 
 @Injectable()
 export class PermissionRepositoryImpl implements PermissionRepository<EntityManager> {
-  constructor(private readonly dataSource: DataSource) { }
+  constructor(private readonly dataSource: DataSource) {}
 
   // Note: create() and update() methods removed - permissions are statically defined and managed via seeders only
 

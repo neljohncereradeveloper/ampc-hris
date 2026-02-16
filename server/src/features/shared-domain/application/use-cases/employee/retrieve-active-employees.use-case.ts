@@ -15,15 +15,14 @@ export class RetrieveActiveEmployeesUseCase {
     private readonly employeeRepository: EmployeeRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<Employee[]> {
     return this.transactionHelper.executeTransaction(
       EMPLOYEE_ACTIONS.ACTIVE_EMPLOYEES,
       async (manager) => {
-        const employees = await this.employeeRepository.retrieveActiveEmployees(
-          manager,
-        );
+        const employees =
+          await this.employeeRepository.retrieveActiveEmployees(manager);
         return employees;
       },
     );

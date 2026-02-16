@@ -16,7 +16,7 @@ export class GetPaginatedCitizenshipUseCase {
     private readonly citizenshipRepository: CitizenshipRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,
@@ -27,14 +27,13 @@ export class GetPaginatedCitizenshipUseCase {
     return this.transactionHelper.executeTransaction(
       CITIZENSHIP_ACTIONS.PAGINATED_LIST,
       async (manager) => {
-        const citizenships =
-          await this.citizenshipRepository.findPaginatedList(
-            term,
-            page,
-            limit,
-            is_archived,
-            manager,
-          );
+        const citizenships = await this.citizenshipRepository.findPaginatedList(
+          term,
+          page,
+          limit,
+          is_archived,
+          manager,
+        );
         return citizenships;
       },
     );

@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Version,
-  ParseIntPipe,
-} from '@nestjs/common';
+import { Controller, Get, Param, Version, ParseIntPipe } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -12,9 +6,7 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import {
-  GetRolePermissionsUseCase,
-} from '@/features/rbac/application/use-cases/role-permission';
+import { GetRolePermissionsUseCase } from '@/features/rbac/application/use-cases/role-permission';
 import {
   RequirePermissions,
   RequireRoles,
@@ -35,7 +27,7 @@ import { RolePermission } from '@/features/rbac/domain/models';
 export class RolePermissionController {
   constructor(
     private readonly getRolePermissionsUseCase: GetRolePermissionsUseCase,
-  ) { }
+  ) {}
 
   // Note: POST endpoint for assigning permissions removed - role-permission assignments
   // are managed via seeders only. Only GET endpoint remains for viewing role permissions.
@@ -45,7 +37,10 @@ export class RolePermissionController {
   @RequirePermissions(PERMISSIONS.ROLES.READ)
   @ApiOperation({ summary: 'Get permissions assigned to a role' })
   @ApiParam({ name: 'roleId', description: 'Role ID', example: 1 })
-  @ApiResponse({ status: 200, description: 'Role permissions retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Role permissions retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
   async getRolePermissions(

@@ -15,8 +15,7 @@ import { toNumber } from '@/core/utils/coercion.util';
 import { EnumLeaveRequestStatus } from '@/features/leave-management/domain/enum';
 
 @Injectable()
-export class LeaveRequestRepositoryImpl
-  implements LeaveRequestRepository<EntityManager> {
+export class LeaveRequestRepositoryImpl implements LeaveRequestRepository<EntityManager> {
   async create(
     leave_request: LeaveRequest,
     manager: EntityManager,
@@ -132,9 +131,10 @@ export class LeaveRequestRepositoryImpl
       ORDER BY lr.start_date DESC
     `;
     const result = await manager.query(query, [employee_id]);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
   }
-
 
   async findPaginatedPending(
     term: string,
@@ -324,7 +324,9 @@ export class LeaveRequestRepositoryImpl
     }
     query += ` ORDER BY lr.start_date`;
     const result = await manager.query(query, params);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
   }
 
   private entityToModel(entity: Record<string, unknown>): LeaveRequest {
@@ -341,7 +343,9 @@ export class LeaveRequestRepositoryImpl
       approval_date: (entity.approval_date as Date) ?? undefined,
       approval_by: (entity.approval_by as number) ?? undefined,
       remarks: (entity.remarks as string) ?? undefined,
-      status: (entity.status as EnumLeaveRequestStatus) ?? EnumLeaveRequestStatus.PENDING,
+      status:
+        (entity.status as EnumLeaveRequestStatus) ??
+        EnumLeaveRequestStatus.PENDING,
       deleted_by: (entity.deleted_by as string) ?? null,
       deleted_at: (entity.deleted_at as Date) ?? null,
       created_by: (entity.created_by as string) ?? null,

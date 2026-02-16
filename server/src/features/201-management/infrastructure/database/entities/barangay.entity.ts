@@ -71,6 +71,9 @@ export class BarangayEntity {
   /**
    * One barangay belongs to many employees as present_address_barangay
    */
-  @OneToMany(() => EmployeeEntity, (employee) => employee.present_address_barangay)
+  @OneToMany(
+    () => EmployeeEntity,
+    (employee) => employee.present_address_barangay,
+  )
   employees_present_address: EmployeeEntity[];
 }

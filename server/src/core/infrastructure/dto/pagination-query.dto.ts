@@ -68,5 +68,4 @@ export class PaginationQueryDto {
     return 'false';
   })
   is_archived?: string;
-
 }

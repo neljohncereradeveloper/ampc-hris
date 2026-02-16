@@ -12,7 +12,7 @@ export class DatabaseHealthService {
   constructor(
     @InjectDataSource()
     private readonly dataSource: DataSource,
-  ) { }
+  ) {}
 
   async checkHealth(): Promise<DatabaseHealthResult> {
     const start_time = Date.now();

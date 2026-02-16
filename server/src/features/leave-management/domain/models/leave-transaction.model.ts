@@ -71,7 +71,11 @@ export class LeaveTransaction {
     return leave_transaction;
   }
 
-  update(dto: { days?: number; remarks?: string; updated_by?: string | null }): void {
+  update(dto: {
+    days?: number;
+    remarks?: string;
+    updated_by?: string | null;
+  }): void {
     if (this.deleted_at) {
       throw new LeaveTransactionBusinessException(
         'Leave transaction is archived and cannot be updated',

@@ -17,10 +17,7 @@ export class GetLeaveBalanceByEmployeeYearUseCase {
     private readonly transactionHelper: TransactionPort,
   ) {}
 
-  async execute(
-    employee_id: number,
-    year: string,
-  ): Promise<LeaveBalance[]> {
+  async execute(employee_id: number, year: string): Promise<LeaveBalance[]> {
     return this.transactionHelper.executeTransaction(
       LEAVE_BALANCE_ACTIONS.GET_BY_EMPLOYEE_YEAR,
       async (manager) =>

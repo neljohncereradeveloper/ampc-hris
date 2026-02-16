@@ -48,7 +48,10 @@ import {
 import { Training } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 import { PaginationTrainingQueryDto } from '../dto/training/pagination-training-query.dto';
 
 @ApiTags('Training')
@@ -64,7 +67,7 @@ export class TrainingController {
     private readonly archiveTrainingUseCase: ArchiveTrainingUseCase,
     private readonly restoreTrainingUseCase: RestoreTrainingUseCase,
     private readonly getPaginatedTrainingUseCase: GetPaginatedTrainingUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
@@ -169,7 +172,12 @@ export class TrainingController {
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
   @RequirePermissions(PERMISSIONS.TRAININGS.READ)
   @ApiOperation({ summary: 'Get paginated list of trainings' })
-  @ApiQuery({ name: 'employee_id', required: true, type: Number, description: 'Filter by employee ID' })
+  @ApiQuery({
+    name: 'employee_id',
+    required: true,
+    type: Number,
+    description: 'Filter by employee ID',
+  })
   @ApiResponse({
     status: 200,
     description: 'Trainings retrieved successfully',

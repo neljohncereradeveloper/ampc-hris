@@ -22,7 +22,7 @@ export class RestoreBranchUseCase {
     private readonly branchRepository: BranchRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -38,11 +38,7 @@ export class RestoreBranchUseCase {
 
         branch.restore();
 
-        const success = await this.branchRepository.update(
-          id,
-          branch,
-          manager,
-        );
+        const success = await this.branchRepository.update(id, branch, manager);
         if (!success) {
           throw new BranchBusinessException(
             'Branch restore failed',

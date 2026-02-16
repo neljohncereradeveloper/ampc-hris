@@ -3,11 +3,17 @@ import { EntityManager } from 'typeorm';
 import { LeaveYearConfigurationRepository } from '@/features/leave-management/domain/repositories/leave-year-configuration.repository';
 import { LeaveYearConfiguration } from '@/features/leave-management/domain/models/leave-year-configuration.model';
 import { LEAVE_MANAGEMENT_DATABASE_MODELS } from '@/features/leave-management/domain/constants';
-import { PaginatedResult, calculatePagination } from '@/core/utils/pagination.util';
+import {
+  PaginatedResult,
+  calculatePagination,
+} from '@/core/utils/pagination.util';
 
 @Injectable()
 export class LeaveYearConfigurationRepositoryImpl implements LeaveYearConfigurationRepository<EntityManager> {
-  async create(leave_year_configuration: LeaveYearConfiguration, manager: EntityManager): Promise<LeaveYearConfiguration> {
+  async create(
+    leave_year_configuration: LeaveYearConfiguration,
+    manager: EntityManager,
+  ): Promise<LeaveYearConfiguration> {
     const query = `
       INSERT INTO ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_YEAR_CONFIGURATIONS} (
         cutoff_start_date, cutoff_end_date, year, remarks,
@@ -31,7 +37,11 @@ export class LeaveYearConfigurationRepositoryImpl implements LeaveYearConfigurat
     return this.entityToModel(result[0]);
   }
 
-  async update(id: number, dto: Partial<LeaveYearConfiguration>, manager: EntityManager): Promise<boolean> {
+  async update(
+    id: number,
+    dto: Partial<LeaveYearConfiguration>,
+    manager: EntityManager,
+  ): Promise<boolean> {
     const updateFields: string[] = [];
     const values: unknown[] = [];
     let paramIndex = 1;
@@ -68,7 +78,10 @@ export class LeaveYearConfigurationRepositoryImpl implements LeaveYearConfigurat
     return result.length > 0;
   }
 
-  async findById(id: number, manager: EntityManager): Promise<LeaveYearConfiguration | null> {
+  async findById(
+    id: number,
+    manager: EntityManager,
+  ): Promise<LeaveYearConfiguration | null> {
     const query = `SELECT * FROM ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_YEAR_CONFIGURATIONS} WHERE id = $1`;
     const result = await manager.query(query, [id]);
     if (result.length === 0) return null;
@@ -85,7 +98,9 @@ export class LeaveYearConfigurationRepositoryImpl implements LeaveYearConfigurat
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
 
-    let whereClause = is_archived ? 'WHERE deleted_at IS NOT NULL' : 'WHERE deleted_at IS NULL';
+    let whereClause = is_archived
+      ? 'WHERE deleted_at IS NOT NULL'
+      : 'WHERE deleted_at IS NULL';
     const queryParams: unknown[] = [];
     let paramIndex = 1;
     if (term) {
@@ -110,11 +125,16 @@ export class LeaveYearConfigurationRepositoryImpl implements LeaveYearConfigurat
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
     const dataResult = await manager.query(dataQuery, queryParams);
-    const data = dataResult.map((row: Record<string, unknown>) => this.entityToModel(row));
+    const data = dataResult.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
     return { data, meta: calculatePagination(totalRecords, page, limit) };
   }
 
-  async findByYear(year: string, manager: EntityManager): Promise<LeaveYearConfiguration | null> {
+  async findByYear(
+    year: string,
+    manager: EntityManager,
+  ): Promise<LeaveYearConfiguration | null> {
     const query = `
       SELECT * FROM ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_YEAR_CONFIGURATIONS}
       WHERE year = $1 AND deleted_at IS NULL
@@ -124,7 +144,10 @@ export class LeaveYearConfigurationRepositoryImpl implements LeaveYearConfigurat
     return this.entityToModel(result[0]);
   }
 
-  async findActiveForDate(date: Date, manager: EntityManager): Promise<LeaveYearConfiguration | null> {
+  async findActiveForDate(
+    date: Date,
+    manager: EntityManager,
+  ): Promise<LeaveYearConfiguration | null> {
     const query = `
       SELECT * FROM ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_YEAR_CONFIGURATIONS}
       WHERE $1::date >= cutoff_start_date AND $1::date <= cutoff_end_date AND deleted_at IS NULL
@@ -140,10 +163,14 @@ export class LeaveYearConfigurationRepositoryImpl implements LeaveYearConfigurat
       WHERE deleted_at IS NULL ORDER BY year DESC
     `;
     const result = await manager.query(query);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
   }
 
-  private entityToModel(entity: Record<string, unknown>): LeaveYearConfiguration {
+  private entityToModel(
+    entity: Record<string, unknown>,
+  ): LeaveYearConfiguration {
     return new LeaveYearConfiguration({
       id: entity.id as number,
       cutoff_start_date: entity.cutoff_start_date as Date,

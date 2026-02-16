@@ -13,7 +13,10 @@ export interface CitizenshipRepository<Context = unknown> {
   /** Find a citizenship by ID. */
   findById(id: number, context: Context): Promise<Citizenship | null>;
   /** Find a citizenship by description. */
-  findByDescription(description: string, context: Context): Promise<Citizenship | null>;
+  findByDescription(
+    description: string,
+    context: Context,
+  ): Promise<Citizenship | null>;
   /** Find paginated list of citizenships. */
   findPaginatedList(
     term: string,

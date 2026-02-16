@@ -14,7 +14,7 @@ export class ComboboxEmploymentStatusUseCase {
     private readonly employmentStatusRepository: EmploymentStatusRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(
@@ -27,7 +27,7 @@ export class ComboboxEmploymentStatusUseCase {
             value: employment_status.desc1 || '',
             label: employment_status.desc1
               ? employment_status.desc1.charAt(0).toUpperCase() +
-              employment_status.desc1.slice(1).toLowerCase()
+                employment_status.desc1.slice(1).toLowerCase()
               : '',
           }),
         );

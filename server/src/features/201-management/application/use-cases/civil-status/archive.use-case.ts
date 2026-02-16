@@ -23,7 +23,7 @@ export class ArchiveCivilStatusUseCase {
     private readonly civilStatusRepository: CivilStatusRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -60,8 +60,9 @@ export class ArchiveCivilStatusUseCase {
           details: JSON.stringify({
             id,
             desc1: civil_status.desc1,
-            explanation: `Civil status with ID : ${id} archived by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Civil status with ID : ${id} archived by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             archived_by: requestInfo?.user_name || '',
             archived_at: getPHDateTime(civil_status.deleted_at || new Date()),
           }),

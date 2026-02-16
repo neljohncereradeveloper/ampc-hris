@@ -103,7 +103,12 @@ export class EmployeeEntity {
   @Column({ type: 'varchar', length: 100, comment: 'First name' })
   first_name: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true, comment: 'Middle name' })
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+    comment: 'Middle name',
+  })
   middle_name: string | null;
 
   @Column({ type: 'varchar', length: 100, comment: 'Last name' })
@@ -135,10 +140,22 @@ export class EmployeeEntity {
   @Column({ type: 'int', comment: 'Citizenship ID' })
   citizen_ship_id: number;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true, comment: 'Height' })
+  @Column({
+    type: 'decimal',
+    precision: 5,
+    scale: 2,
+    nullable: true,
+    comment: 'Height',
+  })
   height: number | null;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true, comment: 'Weight' })
+  @Column({
+    type: 'decimal',
+    precision: 5,
+    scale: 2,
+    nullable: true,
+    comment: 'Weight',
+  })
   weight: number | null;
 
   /** Address information */
@@ -157,99 +174,230 @@ export class EmployeeEntity {
   @Column({ type: 'varchar', length: 10, comment: 'Home address zip code' })
   home_address_zip_code: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Present address street' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Present address street',
+  })
   present_address_street: string | null;
 
-  @Column({ type: 'int', nullable: true, comment: 'Present address barangay ID' })
+  @Column({
+    type: 'int',
+    nullable: true,
+    comment: 'Present address barangay ID',
+  })
   present_address_barangay_id: number | null;
 
   @Column({ type: 'int', nullable: true, comment: 'Present address city ID' })
   present_address_city_id: number | null;
 
-  @Column({ type: 'int', nullable: true, comment: 'Present address province ID' })
+  @Column({
+    type: 'int',
+    nullable: true,
+    comment: 'Present address province ID',
+  })
   present_address_province_id: number | null;
 
-  @Column({ type: 'varchar', length: 10, nullable: true, comment: 'Present address zip code' })
+  @Column({
+    type: 'varchar',
+    length: 10,
+    nullable: true,
+    comment: 'Present address zip code',
+  })
   present_address_zip_code: string | null;
 
   /** Contact information */
-  @Column({ type: 'varchar', length: 20, nullable: true, comment: 'Cellphone number' })
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    comment: 'Cellphone number',
+  })
   cellphone_number: string | null;
 
-  @Column({ type: 'varchar', length: 20, nullable: true, comment: 'Telephone number' })
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    comment: 'Telephone number',
+  })
   telephone_number: string | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Email address' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Email address',
+  })
   email: string | null;
 
   /** Emergency contact information */
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Emergency contact name' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Emergency contact name',
+  })
   emergency_contact_name: string | null;
 
-  @Column({ type: 'varchar', length: 20, nullable: true, comment: 'Emergency contact number' })
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    comment: 'Emergency contact number',
+  })
   emergency_contact_number: string | null;
 
-  @Column({ type: 'varchar', length: 100, nullable: true, comment: 'Emergency contact relationship' })
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+    comment: 'Emergency contact relationship',
+  })
   emergency_contact_relationship: string | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Emergency contact address' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Emergency contact address',
+  })
   emergency_contact_address: string | null;
 
   /** Family information */
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Husband or wife name' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Husband or wife name',
+  })
   husband_or_wife_name: string | null;
 
-  @Column({ type: 'date', nullable: true, comment: 'Husband or wife birth date' })
+  @Column({
+    type: 'date',
+    nullable: true,
+    comment: 'Husband or wife birth date',
+  })
   husband_or_wife_birth_date: Date | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Husband or wife occupation' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Husband or wife occupation',
+  })
   husband_or_wife_occupation: string | null;
 
   @Column({ type: 'int', nullable: true, comment: 'Number of children' })
   number_of_children: number | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Fathers name' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Fathers name',
+  })
   fathers_name: string | null;
 
   @Column({ type: 'date', nullable: true, comment: 'Fathers birth date' })
   fathers_birth_date: Date | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Fathers occupation' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Fathers occupation',
+  })
   fathers_occupation: string | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Mothers name' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Mothers name',
+  })
   mothers_name: string | null;
 
   @Column({ type: 'date', nullable: true, comment: 'Mothers birth date' })
   mothers_birth_date: Date | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Mothers occupation' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Mothers occupation',
+  })
   mothers_occupation: string | null;
 
   /** Bank account information */
-  @Column({ type: 'varchar', length: 50, nullable: true, comment: 'Bank account number' })
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+    comment: 'Bank account number',
+  })
   bank_account_number: string | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Bank account name' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Bank account name',
+  })
   bank_account_name: string | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Bank name' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Bank name',
+  })
   bank_name: string | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'Bank branch' })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'Bank branch',
+  })
   bank_branch: string | null;
 
   /** Salary information */
-  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: true, comment: 'Annual salary' })
+  @Column({
+    type: 'decimal',
+    precision: 12,
+    scale: 2,
+    nullable: true,
+    comment: 'Annual salary',
+  })
   annual_salary: number | null;
 
-  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: true, comment: 'Monthly salary' })
+  @Column({
+    type: 'decimal',
+    precision: 12,
+    scale: 2,
+    nullable: true,
+    comment: 'Monthly salary',
+  })
   monthly_salary: number | null;
 
-  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: true, comment: 'Daily rate' })
+  @Column({
+    type: 'decimal',
+    precision: 12,
+    scale: 2,
+    nullable: true,
+    comment: 'Daily rate',
+  })
   daily_rate: number | null;
 
-  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: true, comment: 'Hourly rate' })
+  @Column({
+    type: 'decimal',
+    precision: 12,
+    scale: 2,
+    nullable: true,
+    comment: 'Hourly rate',
+  })
   hourly_rate: number | null;
 
   @Column({
@@ -261,19 +409,44 @@ export class EmployeeEntity {
   pay_type: PaymentTypeEnum | null;
 
   /** Government information */
-  @Column({ type: 'varchar', length: 50, nullable: true, comment: 'PHIC number' })
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+    comment: 'PHIC number',
+  })
   phic: string | null;
 
-  @Column({ type: 'varchar', length: 50, nullable: true, comment: 'HDMF number' })
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+    comment: 'HDMF number',
+  })
   hdmf: string | null;
 
-  @Column({ type: 'varchar', length: 50, nullable: true, comment: 'SSS number' })
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+    comment: 'SSS number',
+  })
   sss_no: string | null;
 
-  @Column({ type: 'varchar', length: 50, nullable: true, comment: 'TIN number' })
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+    comment: 'TIN number',
+  })
   tin_no: string | null;
 
-  @Column({ type: 'varchar', length: 50, nullable: true, comment: 'Tax exempt code' })
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+    comment: 'Tax exempt code',
+  })
   tax_exempt_code: string | null;
 
   /** Active status */

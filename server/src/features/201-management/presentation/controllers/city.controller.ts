@@ -48,7 +48,10 @@ import {
 import { City } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('City')
 @Controller('cities')
@@ -64,7 +67,7 @@ export class CityController {
     private readonly restoreCityUseCase: RestoreCityUseCase,
     private readonly getPaginatedCityUseCase: GetPaginatedCityUseCase,
     private readonly comboboxCityUseCase: ComboboxCityUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

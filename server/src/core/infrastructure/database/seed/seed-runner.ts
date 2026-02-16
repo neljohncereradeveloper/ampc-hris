@@ -47,7 +47,7 @@ const data_source = new DataSource({
 class SeedRunner {
   private readonly logger = new Logger('SeedRunner');
 
-  constructor(private readonly data_source: DataSource) { }
+  constructor(private readonly data_source: DataSource) {}
 
   async run() {
     // Initialize database connection

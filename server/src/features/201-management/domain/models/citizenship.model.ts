@@ -46,10 +46,7 @@ export class Citizenship {
   }
 
   /** Update details; validate new state before applying. */
-  update(dto: {
-    desc1: string;
-    updated_by?: string | null;
-  }): void {
+  update(dto: { desc1: string; updated_by?: string | null }): void {
     if (this.deleted_at) {
       throw new CitizenshipBusinessException(
         'Citizenship is archived and cannot be updated',

@@ -10,7 +10,7 @@ import {
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository<EntityManager> {
-  constructor(private readonly dataSource: DataSource) { }
+  constructor(private readonly dataSource: DataSource) {}
 
   async create(user: User, manager: EntityManager): Promise<User> {
     const query = `

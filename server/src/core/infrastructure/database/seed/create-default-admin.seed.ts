@@ -42,7 +42,7 @@ import { ROLES } from '@/core/domain/constants';
 export class SeedAdminAccount {
   private readonly logger = new Logger(SeedAdminAccount.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   /**
    * Executes the seed operation to create default admin account.

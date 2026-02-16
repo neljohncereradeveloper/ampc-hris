@@ -75,4 +75,4 @@ import { LoginUseCase } from './application/use-cases/login';
   ],
   exports: [LoginUseCase, JwtTokenService, RbacService, AUTH_TOKENS.RBAC],
 })
-export class AuthModule { }
+export class AuthModule {}

@@ -16,7 +16,7 @@ export class GetPaginatedProvinceUseCase {
     private readonly provinceRepository: ProvinceRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,

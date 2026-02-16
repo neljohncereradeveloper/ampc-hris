@@ -33,10 +33,7 @@ export class Branch {
   }
 
   /** Static factory: create and validate. */
-  static create(params: {
-    desc1: string;
-    created_by?: string | null;
-  }): Branch {
+  static create(params: { desc1: string; created_by?: string | null }): Branch {
     const branch = new Branch({
       desc1: params.desc1,
       created_by: params.created_by ?? null,
@@ -46,10 +43,7 @@ export class Branch {
   }
 
   /** Update details; validate new state before applying. */
-  update(dto: {
-    desc1: string;
-    updated_by?: string | null;
-  }): void {
+  update(dto: { desc1: string; updated_by?: string | null }): void {
     if (this.deleted_at) {
       throw new BranchBusinessException(
         'Branch is archived and cannot be updated',

@@ -11,8 +11,7 @@ import { toNumber } from '@/core/utils/coercion.util';
 import { EnumLeaveBalanceStatus } from '@/features/leave-management/domain/enum';
 
 @Injectable()
-export class LeaveBalanceRepositoryImpl
-  implements LeaveBalanceRepository<EntityManager> {
+export class LeaveBalanceRepositoryImpl implements LeaveBalanceRepository<EntityManager> {
   async create(
     leave_balance: LeaveBalance,
     manager: EntityManager,
@@ -138,7 +137,9 @@ export class LeaveBalanceRepositoryImpl
       ORDER BY lb.leave_type_id
     `;
     const result = await manager.query(query, [employee_id, year]);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
   }
 
   async findByLeaveType(
@@ -210,7 +211,8 @@ export class LeaveBalanceRepositoryImpl
       carried_over: toNumber(entity.carried_over),
       encashed: toNumber(entity.encashed),
       remaining: toNumber(entity.remaining),
-      last_transaction_date: (entity.last_transaction_date as Date) ?? undefined,
+      last_transaction_date:
+        (entity.last_transaction_date as Date) ?? undefined,
       status: entity.status as EnumLeaveBalanceStatus,
       remarks: (entity.remarks as string) ?? undefined,
       deleted_by: (entity.deleted_by as string) ?? null,

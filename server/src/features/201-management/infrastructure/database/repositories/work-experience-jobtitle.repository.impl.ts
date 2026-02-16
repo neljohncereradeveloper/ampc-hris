@@ -10,8 +10,7 @@ import {
 import { getPHDateTime } from '@/core/utils/date.util';
 
 @Injectable()
-export class WorkExperienceJobTitleRepositoryImpl
-  implements WorkExperienceJobTitleRepository<EntityManager> {
+export class WorkExperienceJobTitleRepositoryImpl implements WorkExperienceJobTitleRepository<EntityManager> {
   async create(
     work_experience_job_title: WorkExperienceJobTitle,
     manager: EntityManager,
@@ -182,9 +181,7 @@ export class WorkExperienceJobTitleRepositoryImpl
     };
   }
 
-  async combobox(
-    manager: EntityManager,
-  ): Promise<WorkExperienceJobTitle[]> {
+  async combobox(manager: EntityManager): Promise<WorkExperienceJobTitle[]> {
     const query = `
       SELECT id, desc1
       FROM ${MANAGEMENT_201_DATABASE_MODELS.WORK_EXPERIENCE_JOBTITLES}

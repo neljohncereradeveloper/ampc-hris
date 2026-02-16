@@ -7,7 +7,7 @@ import { WORK_EXPERIENCE_JOB_TITLES } from './data';
 export class SeedWorkExperienceJobTitles {
   private readonly logger = new Logger(SeedWorkExperienceJobTitles.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';
@@ -20,14 +20,11 @@ export class SeedWorkExperienceJobTitles {
         },
       );
       if (!existing) {
-        const entity = this.entityManager.create(
-          WorkExperienceJobTitleEntity,
-          {
-            desc1,
-            created_by: seedBy,
-            created_at: getPHDateTime(),
-          },
-        );
+        const entity = this.entityManager.create(WorkExperienceJobTitleEntity, {
+          desc1,
+          created_by: seedBy,
+          created_at: getPHDateTime(),
+        });
         await this.entityManager.save(entity);
         this.logger.log(`Created work experience job title: ${desc1}`);
       }

@@ -1109,7 +1109,8 @@ export class Employee {
   updateLastEntryDate(): void {
     const current_date = getPHDateTime();
     this.last_entry_date = current_date;
-    this.retention_expiry_date = this.calculateRetentionExpiryDate(current_date);
+    this.retention_expiry_date =
+      this.calculateRetentionExpiryDate(current_date);
   }
 
   /**

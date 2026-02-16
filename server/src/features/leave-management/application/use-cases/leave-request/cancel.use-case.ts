@@ -35,7 +35,7 @@ export class CancelLeaveRequestUseCase {
     private readonly leaveTransactionRepository: LeaveTransactionRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,
@@ -114,7 +114,8 @@ export class CancelLeaveRequestUseCase {
               balance_id,
               EnumLeaveTransactionType.ADJUSTMENT,
               total_days,
-              command.remarks ?? `Cancelled leave request ${request_id} (reversal)`,
+              command.remarks ??
+                `Cancelled leave request ${request_id} (reversal)`,
               userId,
               manager,
             );

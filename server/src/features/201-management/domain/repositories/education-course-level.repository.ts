@@ -14,10 +14,7 @@ export interface EducationCourseLevelRepository<Context = unknown> {
     context: Context,
   ): Promise<boolean>;
   /** Find an education course level by ID. */
-  findById(
-    id: number,
-    context: Context,
-  ): Promise<EducationCourseLevel | null>;
+  findById(id: number, context: Context): Promise<EducationCourseLevel | null>;
   /** Find an education course level by description. */
   findByDescription(
     description: string,

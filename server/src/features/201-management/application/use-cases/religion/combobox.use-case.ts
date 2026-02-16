@@ -14,7 +14,7 @@ export class ComboboxReligionUseCase {
     private readonly religionRepository: ReligionRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(
@@ -25,7 +25,7 @@ export class ComboboxReligionUseCase {
           value: religion.desc1 || '',
           label: religion.desc1
             ? religion.desc1.charAt(0).toUpperCase() +
-            religion.desc1.slice(1).toLowerCase()
+              religion.desc1.slice(1).toLowerCase()
             : '',
         }));
       },

@@ -23,7 +23,7 @@ export class ArchiveWorkExperienceUseCase {
     private readonly workExperienceRepository: WorkExperienceRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -64,8 +64,9 @@ export class ArchiveWorkExperienceUseCase {
             work_experience_job_title_id:
               work_experience.work_experience_job_title_id,
             years: work_experience.years,
-            explanation: `Work experience with ID : ${id} archived by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Work experience with ID : ${id} archived by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             archived_by: requestInfo?.user_name || '',
             archived_at: getPHDateTime(
               work_experience.deleted_at || new Date(),

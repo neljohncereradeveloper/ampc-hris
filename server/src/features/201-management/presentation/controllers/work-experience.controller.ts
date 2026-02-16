@@ -67,7 +67,7 @@ export class WorkExperienceController {
     private readonly archiveWorkExperienceUseCase: ArchiveWorkExperienceUseCase,
     private readonly restoreWorkExperienceUseCase: RestoreWorkExperienceUseCase,
     private readonly getPaginatedWorkExperienceUseCase: GetPaginatedWorkExperienceUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
@@ -91,7 +91,8 @@ export class WorkExperienceController {
     const command: CreateWorkExperienceCommand = {
       employee_id: presentationDto.employee_id,
       company_id: presentationDto.company_id,
-      work_experience_job_title_id: presentationDto.work_experience_job_title_id,
+      work_experience_job_title_id:
+        presentationDto.work_experience_job_title_id,
       years: presentationDto.years,
     };
     return this.createWorkExperienceUseCase.execute(command, requestInfo);
@@ -127,7 +128,8 @@ export class WorkExperienceController {
     const requestInfo = createRequestInfo(request);
     const command: UpdateWorkExperienceCommand = {
       company_id: presentationDto.company_id,
-      work_experience_job_title_id: presentationDto.work_experience_job_title_id,
+      work_experience_job_title_id:
+        presentationDto.work_experience_job_title_id,
       years: presentationDto.years,
     };
     return this.updateWorkExperienceUseCase.execute(id, command, requestInfo);

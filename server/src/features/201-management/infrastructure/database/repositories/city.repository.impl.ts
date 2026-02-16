@@ -179,7 +179,9 @@ export class CityRepositoryImpl implements CityRepository<EntityManager> {
     `;
 
     const result = await manager.query(query);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
   }
 
   /**

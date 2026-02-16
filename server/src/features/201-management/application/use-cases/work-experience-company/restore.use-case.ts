@@ -23,7 +23,7 @@ export class RestoreWorkExperienceCompanyUseCase {
     private readonly workExperienceCompanyRepository: WorkExperienceCompanyRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -62,8 +62,9 @@ export class RestoreWorkExperienceCompanyUseCase {
           details: JSON.stringify({
             id,
             desc1: work_experience_company.desc1,
-            explanation: `Work experience company with ID : ${id} restored by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Work experience company with ID : ${id} restored by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             restored_by: requestInfo?.user_name || '',
             restored_at: getPHDateTime(new Date()),
           }),

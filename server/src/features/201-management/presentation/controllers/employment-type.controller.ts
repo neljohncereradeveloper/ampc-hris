@@ -48,7 +48,10 @@ import {
 import { EmploymentType } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Employment Type')
 @Controller('employment-types')
@@ -64,7 +67,7 @@ export class EmploymentTypeController {
     private readonly restoreEmploymentTypeUseCase: RestoreEmploymentTypeUseCase,
     private readonly getPaginatedEmploymentTypeUseCase: GetPaginatedEmploymentTypeUseCase,
     private readonly comboboxEmploymentTypeUseCase: ComboboxEmploymentTypeUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
@@ -73,7 +76,10 @@ export class EmploymentTypeController {
   @RequirePermissions(PERMISSIONS.EMPLOYMENT_TYPES.CREATE)
   @ApiOperation({ summary: 'Create a new employment type' })
   @ApiBody({ type: CreateEmploymentTypePresentationDto })
-  @ApiResponse({ status: 201, description: 'Employment type created successfully' })
+  @ApiResponse({
+    status: 201,
+    description: 'Employment type created successfully',
+  })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
@@ -95,7 +101,10 @@ export class EmploymentTypeController {
   @ApiOperation({ summary: 'Update employment type information' })
   @ApiParam({ name: 'id', description: 'Employment type ID', example: 1 })
   @ApiBody({ type: UpdateEmploymentTypePresentationDto })
-  @ApiResponse({ status: 200, description: 'Employment type updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Employment type updated successfully',
+  })
   @ApiResponse({ status: 404, description: 'Employment type not found' })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -119,7 +128,10 @@ export class EmploymentTypeController {
   @RequirePermissions(PERMISSIONS.EMPLOYMENT_TYPES.ARCHIVE)
   @ApiOperation({ summary: 'Archive an employment type' })
   @ApiParam({ name: 'id', description: 'Employment type ID', example: 1 })
-  @ApiResponse({ status: 200, description: 'Employment type archived successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Employment type archived successfully',
+  })
   @ApiResponse({ status: 404, description: 'Employment type not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')

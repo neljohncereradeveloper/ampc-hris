@@ -71,6 +71,9 @@ export class ProvinceEntity {
   /**
    * One province belongs to many employees as present_address_province
    */
-  @OneToMany(() => EmployeeEntity, (employee) => employee.present_address_province)
+  @OneToMany(
+    () => EmployeeEntity,
+    (employee) => employee.present_address_province,
+  )
   employees_present_address: EmployeeEntity[];
 }

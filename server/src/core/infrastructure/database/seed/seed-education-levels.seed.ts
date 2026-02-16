@@ -7,7 +7,7 @@ import { EDUCATION_LEVELS } from './data';
 export class SeedEducationLevels {
   private readonly logger = new Logger(SeedEducationLevels.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';

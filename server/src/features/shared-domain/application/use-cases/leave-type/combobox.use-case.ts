@@ -14,7 +14,7 @@ export class ComboboxLeaveTypeUseCase {
     private readonly leaveTypeRepository: LeaveTypeRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(

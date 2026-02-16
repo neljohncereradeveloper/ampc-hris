@@ -187,7 +187,10 @@ export class LeaveRequest {
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    if (!(this.start_date instanceof Date) || isNaN(this.start_date.getTime())) {
+    if (
+      !(this.start_date instanceof Date) ||
+      isNaN(this.start_date.getTime())
+    ) {
       throw new LeaveRequestBusinessException(
         'Start date must be a valid date.',
         HTTP_STATUS.BAD_REQUEST,
@@ -217,7 +220,10 @@ export class LeaveRequest {
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    const max_calendar_days = this.getCalendarDaysBetween(this.start_date, this.end_date);
+    const max_calendar_days = this.getCalendarDaysBetween(
+      this.start_date,
+      this.end_date,
+    );
     if (this.total_days > max_calendar_days) {
       throw new LeaveRequestBusinessException(
         `Total days (${this.total_days}) cannot exceed calendar days in range (${max_calendar_days}).`,
@@ -242,7 +248,11 @@ export class LeaveRequest {
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    if (this.remarks !== undefined && this.remarks !== null && this.remarks !== '') {
+    if (
+      this.remarks !== undefined &&
+      this.remarks !== null &&
+      this.remarks !== ''
+    ) {
       if (this.remarks.trim().length === 0) {
         throw new LeaveRequestBusinessException(
           'Remarks cannot be empty if provided.',
@@ -263,7 +273,11 @@ export class LeaveRequest {
    */
   private getCalendarDaysBetween(start: Date, end: Date): number {
     const ms_per_day = 24 * 60 * 60 * 1000;
-    const start_utc = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+    const start_utc = Date.UTC(
+      start.getFullYear(),
+      start.getMonth(),
+      start.getDate(),
+    );
     const end_utc = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
     return Math.floor((end_utc - start_utc) / ms_per_day) + 1;
   }
@@ -275,13 +289,20 @@ export class LeaveRequest {
    * Checks: balance identity (id), balance is usable (OPEN/REOPENED), and remaining >= total_days.
    */
   assertBalanceSufficient(balance: LeaveBalance): void {
-    if (balance.id !== undefined && this.balance_id !== undefined && balance.id !== this.balance_id) {
+    if (
+      balance.id !== undefined &&
+      this.balance_id !== undefined &&
+      balance.id !== this.balance_id
+    ) {
       throw new LeaveRequestBusinessException(
         'Balance does not match this request.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    const usableStatuses = [EnumLeaveBalanceStatus.OPEN, EnumLeaveBalanceStatus.REOPENED];
+    const usableStatuses = [
+      EnumLeaveBalanceStatus.OPEN,
+      EnumLeaveBalanceStatus.REOPENED,
+    ];
     if (!usableStatuses.includes(balance.status)) {
       throw new LeaveRequestBusinessException(
         'Leave balance is not available for use (closed or finalized).',

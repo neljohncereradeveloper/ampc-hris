@@ -16,7 +16,7 @@ export class GetPaginatedEmployeeUseCase {
     private readonly employeeRepository: EmployeeRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,

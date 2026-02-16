@@ -23,7 +23,7 @@ export class RestoreCityUseCase {
     private readonly cityRepository: CityRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -53,8 +53,9 @@ export class RestoreCityUseCase {
           details: JSON.stringify({
             id,
             desc1: city.desc1,
-            explanation: `City with ID : ${id} restored by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `City with ID : ${id} restored by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             restored_by: requestInfo?.user_name || '',
             restored_at: getPHDateTime(new Date()),
           }),

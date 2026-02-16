@@ -66,7 +66,9 @@ export class IpThrottlerGuard extends ThrottlerGuard {
    * Get the tracker (identifier) for rate limiting from execution context
    * Uses IP address from request
    */
-  protected async getTrackerFromContext(context: ExecutionContext): Promise<string> {
+  protected async getTrackerFromContext(
+    context: ExecutionContext,
+  ): Promise<string> {
     const request = context.switchToHttp().getRequest<Request>();
     return this.extractIpAddress(request);
   }

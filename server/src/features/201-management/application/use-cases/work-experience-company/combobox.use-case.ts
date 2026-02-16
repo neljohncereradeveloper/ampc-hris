@@ -14,7 +14,7 @@ export class ComboboxWorkExperienceCompanyUseCase {
     private readonly workExperienceCompanyRepository: WorkExperienceCompanyRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(
@@ -27,7 +27,7 @@ export class ComboboxWorkExperienceCompanyUseCase {
             value: work_experience_company.desc1 || '',
             label: work_experience_company.desc1
               ? work_experience_company.desc1.charAt(0).toUpperCase() +
-              work_experience_company.desc1.slice(1).toLowerCase()
+                work_experience_company.desc1.slice(1).toLowerCase()
               : '',
           }),
         );

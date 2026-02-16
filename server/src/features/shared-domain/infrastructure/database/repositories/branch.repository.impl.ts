@@ -92,7 +92,10 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
     return this.entityToModel(result[0]);
   }
 
-  async findByDescription(description: string, manager: EntityManager): Promise<Branch | null> {
+  async findByDescription(
+    description: string,
+    manager: EntityManager,
+  ): Promise<Branch | null> {
     const query = `
       SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.BRANCHES}

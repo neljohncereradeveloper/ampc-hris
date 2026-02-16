@@ -67,7 +67,7 @@ export class UpdateLeaveRequestUseCase {
     private readonly activityLogRepository: ActivityLogRepository,
     @Inject(SHARED_DOMAIN_TOKENS.EMPLOYEE)
     private readonly employeeRepository: EmployeeRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,
@@ -126,7 +126,8 @@ export class UpdateLeaveRequestUseCase {
         let start_date = existing_request.start_date;
         let end_date = existing_request.end_date;
         let total_days = existing_request.total_days;
-        const dates_updated = command.start_date != null || command.end_date != null;
+        const dates_updated =
+          command.start_date != null || command.end_date != null;
 
         if (dates_updated) {
           start_date = this.normalizeDate(
@@ -207,7 +208,10 @@ export class UpdateLeaveRequestUseCase {
 
           /** Validate that the total days is greater than 0. */
           if (total_days <= 0) {
-            const calendar_days = getCalendarDaysInclusive(start_date, end_date);
+            const calendar_days = getCalendarDaysInclusive(
+              start_date,
+              end_date,
+            );
             if (holidays.length >= calendar_days) {
               throw new LeaveRequestBusinessException(
                 'All dates in the leave request period are holidays. Cannot update leave request for holiday dates only.',
@@ -254,13 +258,14 @@ export class UpdateLeaveRequestUseCase {
            * two half-days on the same day when slots differ. With the current "same date range = one request" rule,
            * the logic is correct as-is.
            */
-          const overlapping = await this.leaveRequestRepository.findOverlappingRequests(
-            Number(existing_request.employee_id),
-            start_date,
-            end_date,
-            manager,
-            request_id,
-          );
+          const overlapping =
+            await this.leaveRequestRepository.findOverlappingRequests(
+              Number(existing_request.employee_id),
+              start_date,
+              end_date,
+              manager,
+              request_id,
+            );
           const blocking = overlapping.filter(
             (r) =>
               r.status === EnumLeaveRequestStatus.PENDING ||
@@ -324,9 +329,7 @@ export class UpdateLeaveRequestUseCase {
             id: updated_result?.id,
             changed_fields,
             updated_by: requestInfo?.user_name ?? '',
-            updated_at: getPHDateTime(
-              updated_result?.updated_at ?? new Date(),
-            ),
+            updated_at: getPHDateTime(updated_result?.updated_at ?? new Date()),
           }),
           request_info: requestInfo ?? { user_name: '' },
         });
@@ -437,7 +440,9 @@ export class UpdateLeaveRequestUseCase {
       if (excluded_weekdays.includes(day)) {
         const is_holiday = holidays.some((h) => {
           const holidayDate = toDate(h.date);
-          return holidayDate !== null && isSameCalendarDay(holidayDate, current);
+          return (
+            holidayDate !== null && isSameCalendarDay(holidayDate, current)
+          );
         });
         if (!is_holiday) count++;
       }

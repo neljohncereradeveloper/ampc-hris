@@ -179,7 +179,9 @@ export class BarangayRepositoryImpl implements BarangayRepository<EntityManager>
     `;
 
     const result = await manager.query(query);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
   }
 
   /**

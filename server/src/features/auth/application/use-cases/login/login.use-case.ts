@@ -22,7 +22,7 @@ export class LoginUseCase {
     private readonly jwtTokenService: JwtTokenPort,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(command: LoginCommand): Promise<{
     access_token: string;
@@ -52,7 +52,10 @@ export class LoginUseCase {
 
         // If not found by username, try email
         if (!user) {
-          user = await this.userRepository.findByEmail(normalizedInput, manager);
+          user = await this.userRepository.findByEmail(
+            normalizedInput,
+            manager,
+          );
         }
 
         // Check if user exists

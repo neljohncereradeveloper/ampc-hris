@@ -14,7 +14,7 @@ export class ComboboxCitizenshipUseCase {
     private readonly citizenshipRepository: CitizenshipRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<{ value: string; label: string }[]> {
     return this.transactionHelper.executeTransaction(
@@ -25,7 +25,7 @@ export class ComboboxCitizenshipUseCase {
           value: citizenship.desc1 || '',
           label: citizenship.desc1
             ? citizenship.desc1.charAt(0).toUpperCase() +
-            citizenship.desc1.slice(1).toLowerCase()
+              citizenship.desc1.slice(1).toLowerCase()
             : '',
         }));
       },

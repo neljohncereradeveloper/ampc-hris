@@ -42,8 +42,6 @@ export interface LeaveRequestRepository<Context = unknown> {
     context: Context,
   ): Promise<LeaveRequest[]>;
 
-
-
   /**
    * List leave requests with status PENDING only, with search and pagination.
    * @param term - Search term

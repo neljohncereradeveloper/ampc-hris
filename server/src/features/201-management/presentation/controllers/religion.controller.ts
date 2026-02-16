@@ -48,7 +48,10 @@ import {
 import { Religion } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { RATE_LIMIT_MODERATE, RateLimit } from '@/core/infrastructure/decorators';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
 
 @ApiTags('Religion')
 @Controller('religions')
@@ -64,7 +67,7 @@ export class ReligionController {
     private readonly restoreReligionUseCase: RestoreReligionUseCase,
     private readonly getPaginatedReligionUseCase: GetPaginatedReligionUseCase,
     private readonly comboboxReligionUseCase: ComboboxReligionUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

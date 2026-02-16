@@ -16,7 +16,7 @@ export class GetPaginatedCivilStatusUseCase {
     private readonly civilStatusRepository: CivilStatusRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,

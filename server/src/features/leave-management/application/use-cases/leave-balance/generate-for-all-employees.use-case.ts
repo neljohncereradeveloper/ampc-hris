@@ -53,7 +53,7 @@ export class GenerateBalancesForAllEmployeesUseCase {
     @Inject(LEAVE_MANAGEMENT_TOKENS.LEAVE_POLICY)
     private readonly policyRepo: LeavePolicyRepository,
     private readonly bulkCreateService: LeaveBalanceBulkCreateService,
-  ) { }
+  ) {}
 
   async execute(
     year: string,
@@ -152,7 +152,9 @@ export class GenerateBalancesForAllEmployeesUseCase {
   private getEmployeeName(employee: EmployeeEligibilityInfo): string {
     const first = (employee.first_name ?? '').trim();
     const last = (employee.last_name ?? '').trim();
-    return [first, last].filter(Boolean).join(' ') || `Employee #${employee.id}`;
+    return (
+      [first, last].filter(Boolean).join(' ') || `Employee #${employee.id}`
+    );
   }
 
   private parseYearStartOrThrow(year: string): Date {
@@ -176,7 +178,9 @@ export class GenerateBalancesForAllEmployeesUseCase {
       const typeMatch = allowedEmploymentTypes.some(
         (t) =>
           String(t).trim().toLowerCase() ===
-          String(employee.employment_type ?? '').trim().toLowerCase(),
+          String(employee.employment_type ?? '')
+            .trim()
+            .toLowerCase(),
       );
       if (!typeMatch) {
         return {
@@ -191,7 +195,9 @@ export class GenerateBalancesForAllEmployeesUseCase {
       const statusMatch = allowedEmployeeStatuses.some(
         (s) =>
           String(s).trim().toLowerCase() ===
-          String(employee.employment_status ?? '').trim().toLowerCase(),
+          String(employee.employment_status ?? '')
+            .trim()
+            .toLowerCase(),
       );
       if (!statusMatch) {
         return {
@@ -221,5 +227,4 @@ export class GenerateBalancesForAllEmployeesUseCase {
 
     return { eligible: true };
   }
-
 }

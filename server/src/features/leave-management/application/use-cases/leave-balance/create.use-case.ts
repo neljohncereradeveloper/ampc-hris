@@ -7,7 +7,10 @@ import { ActivityLog } from '@/core/domain/models';
 import { TransactionPort } from '@/core/domain/ports';
 import { LeaveBalanceBusinessException } from '@/features/leave-management/domain/exceptions';
 import { LeaveBalance } from '@/features/leave-management/domain/models';
-import { LeaveBalanceRepository, LeavePolicyRepository } from '@/features/leave-management/domain/repositories';
+import {
+  LeaveBalanceRepository,
+  LeavePolicyRepository,
+} from '@/features/leave-management/domain/repositories';
 import {
   LEAVE_MANAGEMENT_DATABASE_MODELS,
   LEAVE_MANAGEMENT_TOKENS,
@@ -15,7 +18,10 @@ import {
 } from '@/features/leave-management/domain/constants';
 import { CreateLeaveBalanceCommand } from '../../commands/leave-balance/create.command';
 import { EnumLeaveBalanceStatus } from '@/features/leave-management/domain/enum';
-import { EmployeeRepository, LeaveTypeRepository } from '@/features/shared-domain/domain/repositories';
+import {
+  EmployeeRepository,
+  LeaveTypeRepository,
+} from '@/features/shared-domain/domain/repositories';
 import { SHARED_DOMAIN_TOKENS } from '@/features/shared-domain/domain/constants';
 import { toNumber } from '@/core/utils/coercion.util';
 
@@ -34,7 +40,7 @@ export class CreateLeaveBalanceUseCase {
     private readonly leaveTypeRepository: LeaveTypeRepository,
     @Inject(SHARED_DOMAIN_TOKENS.EMPLOYEE)
     private readonly employeeRepository: EmployeeRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateLeaveBalanceCommand,
@@ -43,29 +49,36 @@ export class CreateLeaveBalanceUseCase {
     return this.transactionHelper.executeTransaction(
       LEAVE_BALANCE_ACTIONS.CREATE,
       async (manager) => {
-
-        const policy = await this.policyRepository.findById(command.policy_id, manager);
+        const policy = await this.policyRepository.findById(
+          command.policy_id,
+          manager,
+        );
         if (!policy) {
           throw new LeaveBalanceBusinessException(
             'Policy not found',
             HTTP_STATUS.NOT_FOUND,
           );
         }
-        const leave_type = await this.leaveTypeRepository.findById(policy.leave_type_id, manager);
+        const leave_type = await this.leaveTypeRepository.findById(
+          policy.leave_type_id,
+          manager,
+        );
         if (!leave_type || leave_type.deleted_at) {
           throw new LeaveBalanceBusinessException(
             'Leave type not found or archived',
             HTTP_STATUS.NOT_FOUND,
           );
         }
-        const employee = await this.employeeRepository.findById(command.employee_id, manager);
+        const employee = await this.employeeRepository.findById(
+          command.employee_id,
+          manager,
+        );
         if (!employee || employee.deleted_at) {
           throw new LeaveBalanceBusinessException(
             'Employee not found or archived',
             HTTP_STATUS.NOT_FOUND,
           );
         }
-
 
         const annual_entitlement = toNumber(policy.annual_entitlement);
 

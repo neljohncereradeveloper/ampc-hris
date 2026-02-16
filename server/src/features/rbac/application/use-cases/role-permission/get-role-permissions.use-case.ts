@@ -17,7 +17,7 @@ export class GetRolePermissionsUseCase {
     private readonly rolePermissionRepository: RolePermissionRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(role_id: number): Promise<RolePermission[]> {
     if (!role_id || role_id <= 0) {

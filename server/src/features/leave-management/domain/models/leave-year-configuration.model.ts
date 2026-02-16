@@ -83,8 +83,10 @@ export class LeaveYearConfiguration {
         HTTP_STATUS.CONFLICT,
       );
     }
-    if (dto.cutoff_start_date !== undefined) this.cutoff_start_date = dto.cutoff_start_date;
-    if (dto.cutoff_end_date !== undefined) this.cutoff_end_date = dto.cutoff_end_date;
+    if (dto.cutoff_start_date !== undefined)
+      this.cutoff_start_date = dto.cutoff_start_date;
+    if (dto.cutoff_end_date !== undefined)
+      this.cutoff_end_date = dto.cutoff_end_date;
     if (dto.year !== undefined) this.year = dto.year;
     if (dto.remarks !== undefined) this.remarks = dto.remarks;
     this.updated_by = dto.updated_by ?? null;

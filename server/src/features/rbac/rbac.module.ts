@@ -148,4 +148,4 @@ import { USER_MANAGEMENT_TOKENS } from '../user-management/domain';
     RemovePermissionsFromUserUseCase,
   ],
 })
-export class RbacModule { }
+export class RbacModule {}

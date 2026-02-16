@@ -23,7 +23,7 @@ export class RestoreCitizenshipUseCase {
     private readonly citizenshipRepository: CitizenshipRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -60,8 +60,9 @@ export class RestoreCitizenshipUseCase {
           details: JSON.stringify({
             id,
             desc1: citizenship.desc1,
-            explanation: `Citizenship with ID : ${id} restored by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Citizenship with ID : ${id} restored by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             restored_by: requestInfo?.user_name || '',
             restored_at: getPHDateTime(new Date()),
           }),

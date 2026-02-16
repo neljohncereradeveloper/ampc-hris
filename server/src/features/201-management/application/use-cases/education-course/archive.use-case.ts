@@ -30,8 +30,10 @@ export class ArchiveEducationCourseUseCase {
       EDUCATION_COURSE_ACTIONS.ARCHIVE,
       async (manager) => {
         // Validate existence
-        const education_course =
-          await this.educationCourseRepository.findById(id, manager);
+        const education_course = await this.educationCourseRepository.findById(
+          id,
+          manager,
+        );
         if (!education_course) {
           throw new EducationCourseBusinessException(
             `Education course with ID ${id} not found.`,
@@ -64,7 +66,9 @@ export class ArchiveEducationCourseUseCase {
             desc1: education_course.desc1,
             explanation: `Education course with ID : ${id} archived by USER : ${requestInfo?.user_name || ''}`,
             archived_by: requestInfo?.user_name || '',
-            archived_at: getPHDateTime(education_course.deleted_at || new Date()),
+            archived_at: getPHDateTime(
+              education_course.deleted_at || new Date(),
+            ),
           }),
           request_info: requestInfo || { user_name: '' },
         });

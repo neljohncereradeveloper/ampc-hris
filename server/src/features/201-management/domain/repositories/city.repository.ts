@@ -9,7 +9,10 @@ export interface CityRepository<Context = unknown> {
   /** Find a city by ID. */
   findById(id: number, context: Context): Promise<City | null>;
   /** Find a city by description. */
-  findByDescription(description: string, context: Context): Promise<City | null>;
+  findByDescription(
+    description: string,
+    context: Context,
+  ): Promise<City | null>;
   /** Find paginated list of cities. */
   findPaginatedList(
     term: string,

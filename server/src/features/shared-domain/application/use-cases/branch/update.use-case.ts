@@ -29,7 +29,7 @@ export class UpdateBranchUseCase {
     private readonly branchRepository: BranchRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,
@@ -63,11 +63,7 @@ export class UpdateBranchUseCase {
           updated_by: requestInfo?.user_name || null,
         });
 
-        const success = await this.branchRepository.update(
-          id,
-          branch,
-          manager,
-        );
+        const success = await this.branchRepository.update(id, branch, manager);
         if (!success) {
           throw new BranchBusinessException(
             'Branch update failed',

@@ -15,7 +15,7 @@ export class GetAllPermissionsUseCase {
     private readonly permissionRepository: PermissionRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<Permission[]> {
     return this.transactionHelper.executeTransaction(

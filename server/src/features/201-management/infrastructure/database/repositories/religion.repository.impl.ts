@@ -10,10 +10,7 @@ import {
 
 @Injectable()
 export class ReligionRepositoryImpl implements ReligionRepository<EntityManager> {
-  async create(
-    religion: Religion,
-    manager: EntityManager,
-  ): Promise<Religion> {
+  async create(religion: Religion, manager: EntityManager): Promise<Religion> {
     const query = `
       INSERT INTO ${MANAGEMENT_201_DATABASE_MODELS.RELIGIONS} (
         desc1, deleted_by, deleted_at,
@@ -80,10 +77,7 @@ export class ReligionRepositoryImpl implements ReligionRepository<EntityManager>
     return result.length > 0;
   }
 
-  async findById(
-    id: number,
-    manager: EntityManager,
-  ): Promise<Religion | null> {
+  async findById(id: number, manager: EntityManager): Promise<Religion | null> {
     const query = `
       SELECT *
       FROM ${MANAGEMENT_201_DATABASE_MODELS.RELIGIONS}

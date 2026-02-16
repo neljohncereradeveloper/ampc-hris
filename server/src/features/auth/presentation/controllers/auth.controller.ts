@@ -6,12 +6,7 @@ import {
   HttpStatus,
   Version,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBody,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { RateLimit, RATE_LIMIT_STRICT } from '@/core/infrastructure/decorators';
 import { Public } from '../../infrastructure/decorators/public.decorator';
 import { LoginDto } from '../dto/login/login.dto';
@@ -25,7 +20,7 @@ import { LoginCommand } from '../../application/commands/login/login.command';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly loginUseCase: LoginUseCase) { }
+  constructor(private readonly loginUseCase: LoginUseCase) {}
 
   @Version('1')
   @Post('login')

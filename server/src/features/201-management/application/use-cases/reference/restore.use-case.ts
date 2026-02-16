@@ -23,16 +23,13 @@ export class RestoreReferenceUseCase {
     private readonly referenceRepository: ReferenceRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
       REFERENCE_ACTIONS.RESTORE,
       async (manager) => {
-        const reference = await this.referenceRepository.findById(
-          id,
-          manager,
-        );
+        const reference = await this.referenceRepository.findById(id, manager);
         if (!reference) {
           throw new ReferenceBusinessException(
             `Reference with ID ${id} not found.`,
@@ -65,8 +62,9 @@ export class RestoreReferenceUseCase {
             lname: reference.lname,
             suffix: reference.suffix,
             cellphone_number: reference.cellphone_number,
-            explanation: `Reference with ID : ${id} restored by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Reference with ID : ${id} restored by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             restored_by: requestInfo?.user_name || '',
             restored_at: getPHDateTime(new Date()),
           }),

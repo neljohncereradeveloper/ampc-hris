@@ -7,7 +7,7 @@ import { USER_MANAGEMENT_DATABASE_MODELS } from '@/features/user-management/doma
 
 @Injectable()
 export class UserRoleRepositoryImpl implements UserRoleRepository<EntityManager> {
-  constructor(private readonly dataSource: DataSource) { }
+  constructor(private readonly dataSource: DataSource) {}
 
   async create(user_role: UserRole, manager: EntityManager): Promise<UserRole> {
     const query = `

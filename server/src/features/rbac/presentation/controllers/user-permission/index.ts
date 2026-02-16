@@ -60,7 +60,7 @@ export class UserPermissionController {
     private readonly getUserPermissionsUseCase: GetUserPermissionsUseCase,
     private readonly grantPermissionsToUserUseCase: GrantPermissionsToUserUseCase,
     private readonly removePermissionsFromUserUseCase: RemovePermissionsFromUserUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Get()
@@ -68,7 +68,10 @@ export class UserPermissionController {
   @RequirePermissions(PERMISSIONS.USER_PERMISSIONS.READ)
   @ApiOperation({ summary: 'Get permission overrides for a user' })
   @ApiParam({ name: 'userId', description: 'User ID', example: 1 })
-  @ApiResponse({ status: 200, description: 'User permissions retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'User permissions retrieved successfully',
+  })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth('JWT-auth')
@@ -144,7 +147,10 @@ export class UserPermissionController {
   @ApiOperation({ summary: 'Remove permission overrides from a user' })
   @ApiParam({ name: 'userId', description: 'User ID', example: 1 })
   @ApiBody({ type: RemovePermissionsFromUserDto })
-  @ApiResponse({ status: 200, description: 'Permission overrides removed successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Permission overrides removed successfully',
+  })
   @ApiResponse({ status: 404, description: 'User not found' })
   @ApiResponse({ status: 400, description: 'Bad request - validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })

@@ -12,7 +12,7 @@ export class GetAllRolesUseCase {
     private readonly roleRepository: RoleRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(): Promise<Role[]> {
     return this.transactionHelper.executeTransaction(

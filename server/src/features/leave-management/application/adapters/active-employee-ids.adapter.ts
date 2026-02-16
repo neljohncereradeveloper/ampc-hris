@@ -33,7 +33,7 @@ export class ActiveEmployeeIdsAdapter implements ActiveEmployeeIdsPort {
       .filter((e): e is typeof e & { id: number } => e.id != null)
       .map(
         (e): EmployeeEligibilityInfo => ({
-          id: e.id as number,
+          id: e.id,
           first_name: e.first_name ?? '',
           last_name: e.last_name ?? '',
           employment_type: e.employment_type ?? '',
@@ -41,7 +41,7 @@ export class ActiveEmployeeIdsAdapter implements ActiveEmployeeIdsPort {
           hire_date:
             e.hire_date instanceof Date
               ? e.hire_date
-              : new Date((e.hire_date as unknown) as string),
+              : new Date(e.hire_date as unknown as string),
         }),
       );
   }

@@ -24,7 +24,7 @@ export class RejectLeaveRequestUseCase {
     private readonly leaveRequestRepository: LeaveRequestRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,

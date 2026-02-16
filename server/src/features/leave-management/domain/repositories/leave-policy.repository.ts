@@ -77,5 +77,9 @@ export interface LeavePolicyRepository<Context = unknown> {
    * @param context - Transaction or connection
    * @param expiry_date - Optional end date for the policy
    */
-  retirePolicy(id: number, context: Context, expiry_date?: Date): Promise<boolean>;
+  retirePolicy(
+    id: number,
+    context: Context,
+    expiry_date?: Date,
+  ): Promise<boolean>;
 }

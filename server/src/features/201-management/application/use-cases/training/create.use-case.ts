@@ -8,7 +8,10 @@ import { TransactionPort } from '@/core/domain/ports';
 import { HTTP_STATUS } from '@/core/domain/constants';
 import { TrainingBusinessException } from '@/features/201-management/domain/exceptions';
 import { Training } from '@/features/201-management/domain/models';
-import { TrainingRepository, TrainingCertificateRepository } from '@/features/201-management/domain/repositories';
+import {
+  TrainingRepository,
+  TrainingCertificateRepository,
+} from '@/features/201-management/domain/repositories';
 import {
   TRAINING_ACTIONS,
   MANAGEMENT_201_TOKENS,
@@ -27,7 +30,7 @@ export class CreateTrainingUseCase {
     private readonly trainingCertificateRepository: TrainingCertificateRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateTrainingCommand,
@@ -37,10 +40,11 @@ export class CreateTrainingUseCase {
       TRAINING_ACTIONS.CREATE,
       async (manager) => {
         // Validate training certificate exists
-        const trainingCertificate = await this.trainingCertificateRepository.findById(
-          command.trainings_cert_id,
-          manager,
-        );
+        const trainingCertificate =
+          await this.trainingCertificateRepository.findById(
+            command.trainings_cert_id,
+            manager,
+          );
         if (!trainingCertificate) {
           throw new TrainingBusinessException(
             `Training certificate with ID ${command.trainings_cert_id} not found.`,

@@ -65,7 +65,7 @@ export class CreateLeaveRequestUseCase {
     private readonly activityLogRepository: ActivityLogRepository,
     @Inject(SHARED_DOMAIN_TOKENS.EMPLOYEE)
     private readonly employeeRepository: EmployeeRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateLeaveRequestCommand,
@@ -99,7 +99,10 @@ export class CreateLeaveRequestUseCase {
     return this.transactionHelper.executeTransaction(
       LEAVE_REQUEST_ACTIONS.CREATE,
       async (manager) => {
-        const employee = await this.employeeRepository.findById(employee_id, manager);
+        const employee = await this.employeeRepository.findById(
+          employee_id,
+          manager,
+        );
         if (!employee || employee.deleted_at) {
           throw new LeaveRequestBusinessException(
             'Employee not found or archived',
@@ -197,10 +200,11 @@ export class CreateLeaveRequestUseCase {
         /**
          * Resolve leave year for start date, then find balance by employee, leave type, and year.
          */
-        const yearConfig = await this.leaveYearConfigurationRepository.findActiveForDate(
-          start_date,
-          manager,
-        );
+        const yearConfig =
+          await this.leaveYearConfigurationRepository.findActiveForDate(
+            start_date,
+            manager,
+          );
         if (!yearConfig) {
           throw new LeaveRequestBusinessException(
             'No leave year configuration found for the selected start date',
@@ -244,13 +248,14 @@ export class CreateLeaveRequestUseCase {
          * two half-days on the same day when slots differ. With the current "same date range = one request" rule,
          * the logic is correct as-is.
          */
-        const overlapping = await this.leaveRequestRepository.findOverlappingRequests(
-          employee_id,
-          start_date,
-          end_date,
-          manager,
-          undefined,
-        );
+        const overlapping =
+          await this.leaveRequestRepository.findOverlappingRequests(
+            employee_id,
+            start_date,
+            end_date,
+            manager,
+            undefined,
+          );
         const blocking = overlapping.filter(
           (r) =>
             r.status === EnumLeaveRequestStatus.PENDING ||
@@ -259,8 +264,7 @@ export class CreateLeaveRequestUseCase {
         if (blocking.length > 0) {
           const dateRanges = blocking
             .map(
-              (r) =>
-                `${formatDate(r.start_date)} – ${formatDate(r.end_date)}`,
+              (r) => `${formatDate(r.start_date)} – ${formatDate(r.end_date)}`,
             )
             .join('; ');
           throw new LeaveRequestBusinessException(
@@ -419,7 +423,9 @@ export class CreateLeaveRequestUseCase {
       if (excluded_weekdays.includes(day)) {
         const is_holiday = holidays.some((h) => {
           const holidayDate = toDate(h.date);
-          return holidayDate !== null && isSameCalendarDay(holidayDate, current);
+          return (
+            holidayDate !== null && isSameCalendarDay(holidayDate, current)
+          );
         });
         if (!is_holiday) count++;
       }
@@ -427,8 +433,6 @@ export class CreateLeaveRequestUseCase {
     }
     return count;
   }
-
-
 
   /**
    * Returns detailed info about excluded weekdays in the date range, or null if none.

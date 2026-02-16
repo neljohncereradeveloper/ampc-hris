@@ -64,7 +64,7 @@ export class CreateEmployeeUseCase {
     private readonly provinceRepository: ProvinceRepository,
     @Inject(SHARED_DOMAIN_TOKENS.LEAVE_TYPE)
     private readonly leaveTypeRepository: LeaveTypeRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateEmployeeCommand,
@@ -97,25 +97,46 @@ export class CreateEmployeeUseCase {
           this.validateBranchByDescription(command.branch, manager),
           this.validateCitizenshipByDescription(command.citizenship, manager),
           this.validateJobTitleByDescription(command.job_title, manager),
-          this.validateEmploymentTypeByDescription(command.employment_type, manager),
-          this.validateEmploymentStatusByDescription(command.employment_status, manager),
+          this.validateEmploymentTypeByDescription(
+            command.employment_type,
+            manager,
+          ),
+          this.validateEmploymentStatusByDescription(
+            command.employment_status,
+            manager,
+          ),
           this.validateReligionByDescription(command.religion, manager),
           this.validateCivilStatusByDescription(command.civil_status, manager),
-          this.validateBarangayByDescription(command.home_address_barangay, manager),
+          this.validateBarangayByDescription(
+            command.home_address_barangay,
+            manager,
+          ),
           this.validateCityByDescription(command.home_address_city, manager),
-          this.validateProvinceByDescription(command.home_address_province, manager),
+          this.validateProvinceByDescription(
+            command.home_address_province,
+            manager,
+          ),
           this.validateDepartmentByDescription(command.department, manager),
           command.leave_type
             ? this.validateLeaveTypeByDescription(command.leave_type, manager)
             : Promise.resolve(null),
           command.present_address_barangay
-            ? this.validateBarangayByDescription(command.present_address_barangay, manager)
+            ? this.validateBarangayByDescription(
+                command.present_address_barangay,
+                manager,
+              )
             : Promise.resolve(null),
           command.present_address_city
-            ? this.validateCityByDescription(command.present_address_city, manager)
+            ? this.validateCityByDescription(
+                command.present_address_city,
+                manager,
+              )
             : Promise.resolve(null),
           command.present_address_province
-            ? this.validateProvinceByDescription(command.present_address_province, manager)
+            ? this.validateProvinceByDescription(
+                command.present_address_province,
+                manager,
+              )
             : Promise.resolve(null),
         ]);
 
@@ -169,7 +190,8 @@ export class CreateEmployeeUseCase {
           email: command.email,
           emergency_contact_name: command.emergency_contact_name,
           emergency_contact_number: command.emergency_contact_number,
-          emergency_contact_relationship: command.emergency_contact_relationship,
+          emergency_contact_relationship:
+            command.emergency_contact_relationship,
           emergency_contact_address: command.emergency_contact_address,
           husband_or_wife_name: command.husband_or_wife_name,
           husband_or_wife_birth_date: command.husband_or_wife_birth_date,
@@ -252,7 +274,10 @@ export class CreateEmployeeUseCase {
     }
   }
 
-  private async validateBranchByDescription(desc: string, manager: EntityManager) {
+  private async validateBranchByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
     const branch = await this.branchRepository.findByDescription(desc, manager);
     if (!branch) {
       throw new EmployeeBusinessException(
@@ -263,8 +288,14 @@ export class CreateEmployeeUseCase {
     return branch;
   }
 
-  private async validateCitizenshipByDescription(desc: string, manager: EntityManager) {
-    const citizenship = await this.citizenshipRepository.findByDescription(desc, manager);
+  private async validateCitizenshipByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const citizenship = await this.citizenshipRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!citizenship) {
       throw new EmployeeBusinessException(
         `Citizenship "${desc}" not found`,
@@ -274,8 +305,14 @@ export class CreateEmployeeUseCase {
     return citizenship;
   }
 
-  private async validateJobTitleByDescription(desc: string, manager: EntityManager) {
-    const jobTitle = await this.jobTitleRepository.findByDescription(desc, manager);
+  private async validateJobTitleByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const jobTitle = await this.jobTitleRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!jobTitle) {
       throw new EmployeeBusinessException(
         `Job title "${desc}" not found`,
@@ -285,8 +322,12 @@ export class CreateEmployeeUseCase {
     return jobTitle;
   }
 
-  private async validateEmploymentTypeByDescription(desc: string, manager: EntityManager) {
-    const employmentType = await this.employmentTypeRepository.findByDescription(desc, manager);
+  private async validateEmploymentTypeByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const employmentType =
+      await this.employmentTypeRepository.findByDescription(desc, manager);
     if (!employmentType) {
       throw new EmployeeBusinessException(
         `Employment type "${desc}" not found`,
@@ -296,11 +337,12 @@ export class CreateEmployeeUseCase {
     return employmentType;
   }
 
-  private async validateEmploymentStatusByDescription(desc: string, manager: EntityManager) {
-    const employmentStatus = await this.employmentStatusRepository.findByDescription(
-      desc,
-      manager,
-    );
+  private async validateEmploymentStatusByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const employmentStatus =
+      await this.employmentStatusRepository.findByDescription(desc, manager);
     if (!employmentStatus) {
       throw new EmployeeBusinessException(
         `Employment status "${desc}" not found`,
@@ -310,8 +352,14 @@ export class CreateEmployeeUseCase {
     return employmentStatus;
   }
 
-  private async validateReligionByDescription(desc: string, manager: EntityManager) {
-    const religion = await this.religionRepository.findByDescription(desc, manager);
+  private async validateReligionByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const religion = await this.religionRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!religion) {
       throw new EmployeeBusinessException(
         `Religion "${desc}" not found`,
@@ -321,8 +369,14 @@ export class CreateEmployeeUseCase {
     return religion;
   }
 
-  private async validateCivilStatusByDescription(desc: string, manager: EntityManager) {
-    const civilStatus = await this.civilStatusRepository.findByDescription(desc, manager);
+  private async validateCivilStatusByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const civilStatus = await this.civilStatusRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!civilStatus) {
       throw new EmployeeBusinessException(
         `Civil status "${desc}" not found`,
@@ -332,7 +386,10 @@ export class CreateEmployeeUseCase {
     return civilStatus;
   }
 
-  private async validateCityByDescription(desc: string, manager: EntityManager) {
+  private async validateCityByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
     const city = await this.cityRepository.findByDescription(desc, manager);
     if (!city) {
       throw new EmployeeBusinessException(
@@ -343,8 +400,14 @@ export class CreateEmployeeUseCase {
     return city;
   }
 
-  private async validateProvinceByDescription(desc: string, manager: EntityManager) {
-    const province = await this.provinceRepository.findByDescription(desc, manager);
+  private async validateProvinceByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const province = await this.provinceRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!province) {
       throw new EmployeeBusinessException(
         `Province "${desc}" not found`,
@@ -354,8 +417,14 @@ export class CreateEmployeeUseCase {
     return province;
   }
 
-  private async validateDepartmentByDescription(desc: string, manager: EntityManager) {
-    const department = await this.departmentRepository.findByDescription(desc, manager);
+  private async validateDepartmentByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const department = await this.departmentRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!department) {
       throw new EmployeeBusinessException(
         `Department "${desc}" not found`,
@@ -365,8 +434,14 @@ export class CreateEmployeeUseCase {
     return department;
   }
 
-  private async validateBarangayByDescription(desc: string, manager: EntityManager) {
-    const barangay = await this.barangayRepository.findByDescription(desc, manager);
+  private async validateBarangayByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const barangay = await this.barangayRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!barangay) {
       throw new EmployeeBusinessException(
         `Barangay "${desc}" not found`,
@@ -376,8 +451,14 @@ export class CreateEmployeeUseCase {
     return barangay;
   }
 
-  private async validateLeaveTypeByDescription(desc: string, manager: EntityManager) {
-    const leaveType = await this.leaveTypeRepository.findByDescription(desc, manager);
+  private async validateLeaveTypeByDescription(
+    desc: string,
+    manager: EntityManager,
+  ) {
+    const leaveType = await this.leaveTypeRepository.findByDescription(
+      desc,
+      manager,
+    );
     if (!leaveType) {
       throw new EmployeeBusinessException(
         `Leave type "${desc}" not found`,

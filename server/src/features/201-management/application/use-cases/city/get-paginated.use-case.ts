@@ -16,7 +16,7 @@ export class GetPaginatedCityUseCase {
     private readonly cityRepository: CityRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,

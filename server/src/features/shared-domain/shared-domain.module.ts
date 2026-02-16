@@ -226,4 +226,4 @@ import { TOKENS_CORE } from '@/core/domain/constants';
     SHARED_DOMAIN_TOKENS.LEAVE_TYPE,
   ],
 })
-export class SharedDomainModule { }
+export class SharedDomainModule {}

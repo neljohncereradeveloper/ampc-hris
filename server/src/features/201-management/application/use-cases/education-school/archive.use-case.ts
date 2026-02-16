@@ -30,8 +30,10 @@ export class ArchiveEducationSchoolUseCase {
       EDUCATION_SCHOOL_ACTIONS.ARCHIVE,
       async (manager) => {
         // Validate existence
-        const education_school =
-          await this.educationSchoolRepository.findById(id, manager);
+        const education_school = await this.educationSchoolRepository.findById(
+          id,
+          manager,
+        );
         if (!education_school) {
           throw new EducationSchoolBusinessException(
             `Education school with ID ${id} not found.`,
@@ -64,7 +66,9 @@ export class ArchiveEducationSchoolUseCase {
             desc1: education_school.desc1,
             explanation: `Education school with ID : ${id} archived by USER : ${requestInfo?.user_name || ''}`,
             archived_by: requestInfo?.user_name || '',
-            archived_at: getPHDateTime(education_school.deleted_at || new Date()),
+            archived_at: getPHDateTime(
+              education_school.deleted_at || new Date(),
+            ),
           }),
           request_info: requestInfo || { user_name: '' },
         });

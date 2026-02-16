@@ -23,7 +23,7 @@ export class ArchiveWorkExperienceJobTitleUseCase {
     private readonly workExperienceJobTitleRepository: WorkExperienceJobTitleRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
     return this.transactionHelper.executeTransaction(
@@ -62,8 +62,9 @@ export class ArchiveWorkExperienceJobTitleUseCase {
           details: JSON.stringify({
             id,
             desc1: work_experience_job_title.desc1,
-            explanation: `Work experience job title with ID : ${id} archived by USER : ${requestInfo?.user_name || ''
-              }`,
+            explanation: `Work experience job title with ID : ${id} archived by USER : ${
+              requestInfo?.user_name || ''
+            }`,
             archived_by: requestInfo?.user_name || '',
             archived_at: getPHDateTime(
               work_experience_job_title.deleted_at || new Date(),

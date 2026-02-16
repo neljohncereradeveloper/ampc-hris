@@ -16,7 +16,7 @@ export class GetPaginatedTrainingUseCase {
     private readonly trainingRepository: TrainingRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   async execute(
     term: string,

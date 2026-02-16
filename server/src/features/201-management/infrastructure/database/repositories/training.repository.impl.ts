@@ -207,7 +207,8 @@ export class TrainingRepositoryImpl implements TrainingRepository<EntityManager>
       employee_id: entity.employee_id as number | undefined,
       training_date: entity.training_date as Date,
       trainings_cert_id: entity.trainings_cert_id as number,
-      trainings_certificate: (entity.trainings_certificate as string) ?? undefined,
+      trainings_certificate:
+        (entity.trainings_certificate as string) ?? undefined,
       training_title: (entity.training_title as string) ?? undefined,
       desc1: (entity.desc1 as string) ?? undefined,
       image_path: (entity.image_path as string) ?? undefined,

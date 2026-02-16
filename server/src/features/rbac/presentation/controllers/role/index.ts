@@ -1,8 +1,4 @@
-import {
-  Controller,
-  Get,
-  Version,
-} from '@nestjs/common';
+import { Controller, Get, Version } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -37,7 +33,7 @@ export class RoleController {
     // Note: CreateRoleUseCase, UpdateRoleUseCase, ArchiveRoleUseCase, RestoreRoleUseCase, GetRoleByIdUseCase, ComboboxRoleUseCase removed
     // Roles are statically defined (Admin, Editor, Viewer) and managed via seeders only
     private readonly getAllRolesUseCase: GetAllRolesUseCase,
-  ) { }
+  ) {}
 
   // Note: Create, Update, Archive, Restore, and GetById endpoints removed - roles are statically defined
   // (Admin, Editor, Viewer) and managed via seeders only. Modifying or archiving them would break
@@ -49,7 +45,8 @@ export class RoleController {
   @RequirePermissions(PERMISSIONS.ROLES.PAGINATED_LIST)
   @ApiOperation({
     summary: 'Get all roles',
-    description: 'Retrieves all roles. This endpoint does NOT support pagination, filtering, or search. Returns all roles in a single response. Roles are system-defined (Admin, Editor, Viewer) and cannot be modified. Note: The permission name contains "paginated_list" for backward compatibility, but pagination is not implemented.',
+    description:
+      'Retrieves all roles. This endpoint does NOT support pagination, filtering, or search. Returns all roles in a single response. Roles are system-defined (Admin, Editor, Viewer) and cannot be modified. Note: The permission name contains "paginated_list" for backward compatibility, but pagination is not implemented.',
   })
   @ApiOkResponse({
     description: 'Roles retrieved successfully',

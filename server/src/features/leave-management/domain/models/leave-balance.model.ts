@@ -149,7 +149,8 @@ export class LeaveBalance {
     if (dto.carried_over !== undefined) this.carried_over = dto.carried_over;
     if (dto.encashed !== undefined) this.encashed = dto.encashed;
     if (dto.remaining !== undefined) this.remaining = dto.remaining;
-    if (dto.last_transaction_date !== undefined) this.last_transaction_date = dto.last_transaction_date;
+    if (dto.last_transaction_date !== undefined)
+      this.last_transaction_date = dto.last_transaction_date;
     if (dto.status !== undefined) this.status = dto.status;
     if (dto.remarks !== undefined) this.remarks = dto.remarks;
     this.updated_by = dto.updated_by ?? null;
@@ -246,7 +247,11 @@ export class LeaveBalance {
       );
     }
     const expected_remaining =
-      this.beginning_balance + this.earned + this.carried_over - this.used - this.encashed;
+      this.beginning_balance +
+      this.earned +
+      this.carried_over -
+      this.used -
+      this.encashed;
     if (this.remaining !== expected_remaining) {
       throw new LeaveBalanceBusinessException(
         `Remaining (${this.remaining}) must equal (beginning_balance + earned + carried_over) - (used + encashed) = ${expected_remaining}.`,
@@ -255,7 +260,8 @@ export class LeaveBalance {
     }
     if (
       this.last_transaction_date != null &&
-      (!(this.last_transaction_date instanceof Date) || isNaN(this.last_transaction_date.getTime()))
+      (!(this.last_transaction_date instanceof Date) ||
+        isNaN(this.last_transaction_date.getTime()))
     ) {
       throw new LeaveBalanceBusinessException(
         'Last transaction date must be a valid date.',

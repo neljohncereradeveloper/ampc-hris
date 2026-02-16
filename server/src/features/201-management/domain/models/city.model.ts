@@ -33,10 +33,7 @@ export class City {
   }
 
   /** Static factory: create and validate. */
-  static create(params: {
-    desc1: string;
-    created_by?: string | null;
-  }): City {
+  static create(params: { desc1: string; created_by?: string | null }): City {
     const city = new City({
       desc1: params.desc1,
       created_by: params.created_by ?? null,
@@ -46,10 +43,7 @@ export class City {
   }
 
   /** Update details; validate new state before applying. */
-  update(dto: {
-    desc1: string;
-    updated_by?: string | null;
-  }): void {
+  update(dto: { desc1: string; updated_by?: string | null }): void {
     if (this.deleted_at) {
       throw new CityBusinessException(
         'City is archived and cannot be updated',
