@@ -6,8 +6,13 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Index,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { LEAVE_MANAGEMENT_DATABASE_MODELS } from '@/features/leave-management/domain/constants';
+import { LeaveTypeEntity } from '@/features/shared-domain/infrastructure/database/entities/leave-type.entity';
+import { LeaveBalanceEntity } from './leave-balance.entity';
 
 @Entity(LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES)
 export class LeavePolicyEntity {
@@ -137,4 +142,11 @@ export class LeavePolicyEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToOne(() => LeaveTypeEntity)
+  @JoinColumn({ name: 'leave_type_id' })
+  leave_type: LeaveTypeEntity;
+
+  @OneToMany(() => LeaveBalanceEntity, (balance) => balance.policy)
+  leave_balances: LeaveBalanceEntity[];
 }

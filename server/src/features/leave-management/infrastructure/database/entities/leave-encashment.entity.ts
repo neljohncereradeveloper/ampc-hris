@@ -6,8 +6,12 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Index,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { LEAVE_MANAGEMENT_DATABASE_MODELS } from '@/features/leave-management/domain/constants';
+import { EmployeeEntity } from '@/features/shared-domain/infrastructure/database/entities/employee.entity';
+import { LeaveBalanceEntity } from './leave-balance.entity';
 
 @Entity(LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_ENCASHMENTS)
 export class LeaveEncashmentEntity {
@@ -87,4 +91,12 @@ export class LeaveEncashmentEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToOne(() => EmployeeEntity)
+  @JoinColumn({ name: 'employee_id' })
+  employee: EmployeeEntity;
+
+  @ManyToOne(() => LeaveBalanceEntity, (balance) => balance.leave_encashments)
+  @JoinColumn({ name: 'balance_id' })
+  balance: LeaveBalanceEntity;
 }

@@ -6,8 +6,17 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Index,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { LEAVE_MANAGEMENT_DATABASE_MODELS } from '@/features/leave-management/domain/constants';
+import { EmployeeEntity } from '@/features/shared-domain/infrastructure/database/entities/employee.entity';
+import { LeaveTypeEntity } from '@/features/shared-domain/infrastructure/database/entities/leave-type.entity';
+import { LeavePolicyEntity } from './leave-policy.entity';
+import { LeaveRequestEntity } from './leave-request.entity';
+import { LeaveEncashmentEntity } from './leave-encashment.entity';
+import { LeaveTransactionEntity } from './leave-transaction.entity';
 
 @Entity(LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_BALANCES)
 export class LeaveBalanceEntity {
@@ -23,6 +32,7 @@ export class LeaveBalanceEntity {
   leave_type_id: number;
 
   @Column({ type: 'int', comment: 'Policy defining entitlement' })
+  @Index()
   policy_id: number;
 
   @Column({ type: 'varchar', length: 50, comment: 'Leave year (e.g. 2025)' })
@@ -134,4 +144,25 @@ export class LeaveBalanceEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToOne(() => EmployeeEntity)
+  @JoinColumn({ name: 'employee_id' })
+  employee: EmployeeEntity;
+
+  @ManyToOne(() => LeaveTypeEntity)
+  @JoinColumn({ name: 'leave_type_id' })
+  leave_type: LeaveTypeEntity;
+
+  @ManyToOne(() => LeavePolicyEntity, (policy) => policy.leave_balances)
+  @JoinColumn({ name: 'policy_id' })
+  policy: LeavePolicyEntity;
+
+  @OneToMany(() => LeaveRequestEntity, (request) => request.balance)
+  leave_requests: LeaveRequestEntity[];
+
+  @OneToMany(() => LeaveEncashmentEntity, (enc) => enc.balance)
+  leave_encashments: LeaveEncashmentEntity[];
+
+  @OneToMany(() => LeaveTransactionEntity, (tx) => tx.balance)
+  leave_transactions: LeaveTransactionEntity[];
 }
