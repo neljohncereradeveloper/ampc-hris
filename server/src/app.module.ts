@@ -24,6 +24,7 @@ import { UserManagementModule } from './features/user-management/user-management
 import { RbacModule } from './features/rbac/rbac.module';
 import { HealthCheckModule } from './features/health-check/health-check.module';
 import { SharedDomainModule } from './features/shared-domain/shared-domain.module';
+import { LeaveManagementModule } from './features/leave-management/leave-management.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { SharedDomainModule } from './features/shared-domain/shared-domain.modul
     UserManagementModule,
     RbacModule,
     SharedDomainModule,
+    LeaveManagementModule,
   ],
   providers: [
     // Set JWT Auth Guard as global (applies to all routes by default)

@@ -9,6 +9,7 @@ import { coreEntities } from './core.entities';
 import { userManagementEntities } from '@/features/user-management/infrastructure/database/entities/user-management.entities';
 import { rbacEntities } from '@/features/rbac/infrastructure/database/entities/rbac.entities';
 import { management201Entities } from '@/features/201-management/infrastructure/database/entities/management-201.entities';
+import { leaveManagementEntities } from '@/features/leave-management/infrastructure/database/entities/leave-management.entities';
 import { sharedDomainEntities } from '@/features/shared-domain/infrastructure/database/entities/shared-domain.entities';
 
 // Re-export individual entities for convenience
@@ -40,4 +41,5 @@ export const allEntities = [
   ...userManagementEntities,
   ...rbacEntities,
   ...management201Entities,
+  ...leaveManagementEntities,
 ];

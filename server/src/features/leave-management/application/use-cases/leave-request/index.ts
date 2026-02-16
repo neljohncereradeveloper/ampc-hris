@@ -6,4 +6,4 @@ export * from './get-paginated-pending.use-case';
 export * from './approve.use-case';
 export * from './reject.use-case';
 export * from './cancel.use-case';
-export * from './update.use-case';
+export { UpdateLeaveRequestUseCase } from './update.use-case';
