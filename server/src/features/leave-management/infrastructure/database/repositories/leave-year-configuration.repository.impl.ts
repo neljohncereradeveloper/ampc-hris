@@ -56,8 +56,7 @@ export class LeaveYearConfigurationRepositoryImpl implements LeaveYearConfigurat
       values.push(dto.updated_by);
     }
     if (updateFields.length === 0) return false;
-    updateFields.push(`updated_at = $${paramIndex++}`);
-    values.push(new Date());
+
     values.push(id);
     const query = `
       UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_YEAR_CONFIGURATIONS}
@@ -85,19 +84,30 @@ export class LeaveYearConfigurationRepositoryImpl implements LeaveYearConfigurat
   ): Promise<PaginatedResult<LeaveYearConfiguration>> {
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
-    const whereArchived = is_archived ? 'deleted_at IS NOT NULL' : 'deleted_at IS NULL';
-    const queryParams: unknown[] = term ? [searchTerm, limit, offset] : [limit, offset];
+
+    let whereClause = is_archived ? 'WHERE deleted_at IS NOT NULL' : 'WHERE deleted_at IS NULL';
+    const queryParams: unknown[] = [];
+    let paramIndex = 1;
+    if (term) {
+      whereClause += ` AND (year ILIKE $${paramIndex} OR remarks ILIKE $${paramIndex})`;
+      queryParams.push(searchTerm);
+      paramIndex++;
+    }
+
     const countQuery = `
-      SELECT COUNT(*) as total FROM ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_YEAR_CONFIGURATIONS}
-      WHERE ${whereArchived}${term ? ' AND (year ILIKE $1 OR remarks ILIKE $1)' : ''}
+      SELECT COUNT(*) as total
+      FROM ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_YEAR_CONFIGURATIONS}
+      ${whereClause}
     `;
-    const countResult = await manager.query(countQuery, term ? [searchTerm] : []);
+    const countResult = await manager.query(countQuery, queryParams);
     const totalRecords = parseInt(countResult[0].total, 10);
-    const paramIndex = term ? 2 : 1;
+
+    queryParams.push(limit, offset);
     const dataQuery = `
       SELECT * FROM ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_YEAR_CONFIGURATIONS}
-      WHERE ${whereArchived}${term ? ' AND (year ILIKE $1 OR remarks ILIKE $1)' : ''}
-      ORDER BY year DESC, created_at DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      ${whereClause}
+      ORDER BY year DESC, created_at DESC
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
     const dataResult = await manager.query(dataQuery, queryParams);
     const data = dataResult.map((row: Record<string, unknown>) => this.entityToModel(row));

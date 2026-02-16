@@ -42,11 +42,7 @@ export interface LeaveRequestRepository<Context = unknown> {
     context: Context,
   ): Promise<LeaveRequest[]>;
 
-  /**
-   * Load all leave requests with status PENDING.
-   * @param context - Transaction or connection
-   */
-  findPending(context: Context): Promise<LeaveRequest[]>;
+
 
   /**
    * List leave requests with status PENDING only, with search and pagination.

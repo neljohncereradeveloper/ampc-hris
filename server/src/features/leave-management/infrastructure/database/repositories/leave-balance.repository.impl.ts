@@ -7,19 +7,12 @@ import { SHARED_DOMAIN_DATABASE_MODELS } from '@/features/shared-domain/domain/c
 
 const LB = LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_BALANCES;
 const LT = SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES;
+import { toNumber } from '@/core/utils/coercion.util';
 import { EnumLeaveBalanceStatus } from '@/features/leave-management/domain/enum';
-
-function parseDecimal(value: unknown): number {
-  if (value === null || value === undefined) return 0;
-  if (typeof value === 'number' && !Number.isNaN(value)) return value;
-  const n = Number(value);
-  return Number.isNaN(n) ? 0 : n;
-}
 
 @Injectable()
 export class LeaveBalanceRepositoryImpl
-  implements LeaveBalanceRepository<EntityManager>
-{
+  implements LeaveBalanceRepository<EntityManager> {
   async create(
     leave_balance: LeaveBalance,
     manager: EntityManager,
@@ -104,8 +97,7 @@ export class LeaveBalanceRepositoryImpl
       values.push(dto.updated_by);
     }
     if (updateFields.length === 0) return false;
-    updateFields.push(`updated_at = $${paramIndex++}`);
-    values.push(new Date());
+
     values.push(id);
 
     const query = `
@@ -125,7 +117,7 @@ export class LeaveBalanceRepositoryImpl
     const query = `
       SELECT lb.*, lt.name AS leave_type_name
       FROM ${LB} lb
-      LEFT JOIN ${LT} lt ON lb.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lb.leave_type_id = lt.id
       WHERE lb.id = $1
     `;
     const result = await manager.query(query, [id]);
@@ -141,7 +133,7 @@ export class LeaveBalanceRepositoryImpl
     const query = `
       SELECT lb.*, lt.name AS leave_type_name
       FROM ${LB} lb
-      LEFT JOIN ${LT} lt ON lb.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lb.leave_type_id = lt.id
       WHERE lb.employee_id = $1 AND lb.year = $2 AND lb.deleted_at IS NULL
       ORDER BY lb.leave_type_id
     `;
@@ -158,7 +150,7 @@ export class LeaveBalanceRepositoryImpl
     const query = `
       SELECT lb.*, lt.name AS leave_type_name
       FROM ${LB} lb
-      LEFT JOIN ${LT} lt ON lb.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lb.leave_type_id = lt.id
       WHERE lb.employee_id = $1 AND lb.leave_type_id = $2 AND lb.year = $3 AND lb.deleted_at IS NULL
     `;
     const result = await manager.query(query, [
@@ -173,13 +165,12 @@ export class LeaveBalanceRepositoryImpl
   async closeBalance(id: number, manager: EntityManager): Promise<boolean> {
     const query = `
       UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_BALANCES}
-      SET status = $1, updated_at = $2
-      WHERE id = $3 AND deleted_at IS NULL AND status IN ($4, $5)
+      SET status = $1
+      WHERE id = $2 AND deleted_at IS NULL AND status IN ($3, $4)
       RETURNING id
     `;
     const result = await manager.query(query, [
       EnumLeaveBalanceStatus.CLOSED,
-      new Date(),
       id,
       EnumLeaveBalanceStatus.OPEN,
       EnumLeaveBalanceStatus.REOPENED,
@@ -193,12 +184,11 @@ export class LeaveBalanceRepositoryImpl
   ): Promise<boolean> {
     const query = `
       UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_BALANCES}
-      SET status = $1, updated_at = $2
-      WHERE year = $3 AND deleted_at IS NULL AND status IN ($4, $5)
+      SET status = $1
+      WHERE year = $2 AND deleted_at IS NULL AND status IN ($3, $4)
     `;
     await manager.query(query, [
       EnumLeaveBalanceStatus.CLOSED,
-      new Date(),
       year,
       EnumLeaveBalanceStatus.OPEN,
       EnumLeaveBalanceStatus.REOPENED,
@@ -214,12 +204,12 @@ export class LeaveBalanceRepositoryImpl
       leave_type: (entity.leave_type_name as string) ?? undefined,
       policy_id: entity.policy_id as number,
       year: entity.year as string,
-      beginning_balance: parseDecimal(entity.beginning_balance),
-      earned: parseDecimal(entity.earned),
-      used: parseDecimal(entity.used),
-      carried_over: parseDecimal(entity.carried_over),
-      encashed: parseDecimal(entity.encashed),
-      remaining: parseDecimal(entity.remaining),
+      beginning_balance: toNumber(entity.beginning_balance),
+      earned: toNumber(entity.earned),
+      used: toNumber(entity.used),
+      carried_over: toNumber(entity.carried_over),
+      encashed: toNumber(entity.encashed),
+      remaining: toNumber(entity.remaining),
       last_transaction_date: (entity.last_transaction_date as Date) ?? undefined,
       status: entity.status as EnumLeaveBalanceStatus,
       remarks: (entity.remarks as string) ?? undefined,

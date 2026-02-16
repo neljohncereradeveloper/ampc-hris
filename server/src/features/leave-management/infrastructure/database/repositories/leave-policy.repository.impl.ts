@@ -8,14 +8,8 @@ import { SHARED_DOMAIN_DATABASE_MODELS } from '@/features/shared-domain/domain/c
 const LP = LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES;
 const LT = SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES;
 import { PaginatedResult, calculatePagination } from '@/core/utils/pagination.util';
+import { toNumber } from '@/core/utils/coercion.util';
 import { EnumLeavePolicyStatus } from '@/features/leave-management/domain/enum';
-
-function parseDecimal(value: unknown): number {
-  if (value === null || value === undefined) return 0;
-  if (typeof value === 'number' && !Number.isNaN(value)) return value;
-  const n = Number(value);
-  return Number.isNaN(n) ? 0 : n;
-}
 
 function parseJsonArray(value: unknown): string[] | undefined {
   if (value == null) return undefined;
@@ -139,8 +133,6 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
       values.push(dto.updated_by);
     }
     if (updateFields.length === 0) return false;
-    updateFields.push(`updated_at = $${paramIndex++}`);
-    values.push(new Date());
     values.push(id);
     const query = `
       UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
@@ -156,7 +148,7 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     const query = `
       SELECT lp.*, lt.name AS leave_type_name
       FROM ${LP} lp
-      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
       WHERE lp.id = $1
     `;
     const result = await manager.query(query, [id]);
@@ -173,24 +165,34 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
   ): Promise<PaginatedResult<LeavePolicy>> {
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
-    const whereArchived = is_archived ? 'deleted_at IS NOT NULL' : 'deleted_at IS NULL';
-    const queryParams: unknown[] = term ? [searchTerm, limit, offset] : [limit, offset];
+
     const joinClause = `
       FROM ${LP} lp
-      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
     `;
+    let whereClause = `WHERE lp.deleted_at ${is_archived ? 'IS NOT NULL' : 'IS NULL'}`;
+    const queryParams: unknown[] = [];
+    let paramIndex = 1;
+    if (term) {
+      whereClause += ` AND (lp.remarks ILIKE $${paramIndex} OR lt.name ILIKE $${paramIndex})`;
+      queryParams.push(searchTerm);
+      paramIndex++;
+    }
+
     const countQuery = `
       SELECT COUNT(*) as total ${joinClause}
-      WHERE lp.deleted_at ${is_archived ? 'IS NOT NULL' : 'IS NULL'}${term ? ' AND (lp.remarks ILIKE $1 OR lt.name ILIKE $1)' : ''}
+      ${whereClause}
     `;
-    const countResult = await manager.query(countQuery, term ? [searchTerm] : []);
+    const countResult = await manager.query(countQuery, queryParams);
     const totalRecords = parseInt(countResult[0].total, 10);
-    const paramIndex = term ? 2 : 1;
+
+    queryParams.push(limit, offset);
     const dataQuery = `
       SELECT lp.*, lt.name AS leave_type_name
       ${joinClause}
-      WHERE lp.deleted_at ${is_archived ? 'IS NOT NULL' : 'IS NULL'}${term ? ' AND (lp.remarks ILIKE $1 OR lt.name ILIKE $1)' : ''}
-      ORDER BY lp.created_at DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      ${whereClause}
+      ORDER BY lp.created_at DESC
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
     const dataResult = await manager.query(dataQuery, queryParams);
     const data = dataResult.map((row: Record<string, unknown>) => this.entityToModel(row));
@@ -201,7 +203,7 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     const query = `
       SELECT lp.*, lt.name AS leave_type_name
       FROM ${LP} lp
-      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
       WHERE lp.status = $1 AND lp.deleted_at IS NULL
       ORDER BY lp.leave_type_id
     `;
@@ -213,7 +215,7 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     const query = `
       SELECT lp.*, lt.name AS leave_type_name
       FROM ${LP} lp
-      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
       WHERE lp.leave_type_id = $1 AND lp.status = $2 AND lp.deleted_at IS NULL
     `;
     const result = await manager.query(query, [leave_type_id, EnumLeavePolicyStatus.ACTIVE]);
@@ -224,9 +226,9 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
   async activatePolicy(id: number, manager: EntityManager): Promise<boolean> {
     const query = `
       UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
-      SET status = $1, updated_at = $2 WHERE id = $3 AND deleted_at IS NULL RETURNING id
+      SET status = $1 WHERE id = $2 AND deleted_at IS NULL RETURNING id
     `;
-    const result = await manager.query(query, [EnumLeavePolicyStatus.ACTIVE, new Date(), id]);
+    const result = await manager.query(query, [EnumLeavePolicyStatus.ACTIVE, id]);
     return result.length > 0;
   }
 
@@ -234,16 +236,16 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     if (expiry_date) {
       const query = `
         UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
-        SET status = $1, expiry_date = $2, updated_at = $3 WHERE id = $4 AND deleted_at IS NULL RETURNING id
+        SET status = $1, expiry_date = $2 WHERE id = $3 AND deleted_at IS NULL RETURNING id
       `;
-      const result = await manager.query(query, [EnumLeavePolicyStatus.RETIRED, expiry_date, new Date(), id]);
+      const result = await manager.query(query, [EnumLeavePolicyStatus.RETIRED, expiry_date, id]);
       return result.length > 0;
     }
     const query = `
       UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
-      SET status = $1, updated_at = $2 WHERE id = $3 AND deleted_at IS NULL RETURNING id
+      SET status = $1 WHERE id = $2 AND deleted_at IS NULL RETURNING id
     `;
-    const result = await manager.query(query, [EnumLeavePolicyStatus.RETIRED, new Date(), id]);
+    const result = await manager.query(query, [EnumLeavePolicyStatus.RETIRED, id]);
     return result.length > 0;
   }
 
@@ -252,9 +254,9 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
       id: entity.id as number,
       leave_type_id: entity.leave_type_id as number,
       leave_type: (entity.leave_type_name as string) ?? undefined,
-      annual_entitlement: parseDecimal(entity.annual_entitlement),
-      carry_limit: parseDecimal(entity.carry_limit),
-      encash_limit: parseDecimal(entity.encash_limit),
+      annual_entitlement: toNumber(entity.annual_entitlement),
+      carry_limit: toNumber(entity.carry_limit),
+      encash_limit: toNumber(entity.encash_limit),
       carried_over_years: (entity.carried_over_years as number) ?? 0,
       effective_date: (entity.effective_date as Date) ?? undefined,
       expiry_date: (entity.expiry_date as Date) ?? undefined,

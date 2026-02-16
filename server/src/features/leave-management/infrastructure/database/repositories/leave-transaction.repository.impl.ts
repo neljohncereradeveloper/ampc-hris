@@ -3,14 +3,8 @@ import { EntityManager } from 'typeorm';
 import { LeaveTransactionRepository } from '@/features/leave-management/domain/repositories/leave-transaction.repository';
 import { LeaveTransaction } from '@/features/leave-management/domain/models/leave-transaction.model';
 import { LEAVE_MANAGEMENT_DATABASE_MODELS } from '@/features/leave-management/domain/constants';
+import { toNumber } from '@/core/utils/coercion.util';
 import { EnumLeaveTransactionType } from '@/features/leave-management/domain/enum';
-
-function parseDecimal(value: unknown): number {
-  if (value === null || value === undefined) return 0;
-  if (typeof value === 'number' && !Number.isNaN(value)) return value;
-  const n = Number(value);
-  return Number.isNaN(n) ? 0 : n;
-}
 
 @Injectable()
 export class LeaveTransactionRepositoryImpl
@@ -80,7 +74,7 @@ export class LeaveTransactionRepositoryImpl
       id: entity.id as number,
       balance_id: entity.balance_id as number,
       transaction_type: entity.transaction_type as EnumLeaveTransactionType,
-      days: parseDecimal(entity.days),
+      days: toNumber(entity.days),
       remarks: entity.remarks as string,
       deleted_by: (entity.deleted_by as string) ?? null,
       deleted_at: (entity.deleted_at as Date) ?? null,

@@ -11,19 +11,12 @@ import {
   PaginatedResult,
   calculatePagination,
 } from '@/core/utils/pagination.util';
+import { toNumber } from '@/core/utils/coercion.util';
 import { EnumLeaveRequestStatus } from '@/features/leave-management/domain/enum';
-
-function parseDecimal(value: unknown): number {
-  if (value === null || value === undefined) return 0;
-  if (typeof value === 'number' && !Number.isNaN(value)) return value;
-  const n = Number(value);
-  return Number.isNaN(n) ? 0 : n;
-}
 
 @Injectable()
 export class LeaveRequestRepositoryImpl
-  implements LeaveRequestRepository<EntityManager>
-{
+  implements LeaveRequestRepository<EntityManager> {
   async create(
     leave_request: LeaveRequest,
     manager: EntityManager,
@@ -119,7 +112,7 @@ export class LeaveRequestRepositoryImpl
     const query = `
       SELECT lr.*, lt.name AS leave_type_name
       FROM ${LR} lr
-      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id
       WHERE lr.id = $1
     `;
     const result = await manager.query(query, [id]);
@@ -134,7 +127,7 @@ export class LeaveRequestRepositoryImpl
     const query = `
       SELECT lr.*, lt.name AS leave_type_name
       FROM ${LR} lr
-      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id
       WHERE lr.employee_id = $1 AND lr.deleted_at IS NULL
       ORDER BY lr.start_date DESC
     `;
@@ -142,17 +135,6 @@ export class LeaveRequestRepositoryImpl
     return result.map((row: Record<string, unknown>) => this.entityToModel(row));
   }
 
-  async findPending(manager: EntityManager): Promise<LeaveRequest[]> {
-    const query = `
-      SELECT lr.*, lt.name AS leave_type_name
-      FROM ${LR} lr
-      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id AND lt.deleted_at IS NULL
-      WHERE lr.status = $1 AND lr.deleted_at IS NULL
-      ORDER BY lr.created_at DESC
-    `;
-    const result = await manager.query(query, [EnumLeaveRequestStatus.PENDING]);
-    return result.map((row: Record<string, unknown>) => this.entityToModel(row));
-  }
 
   async findPaginatedPending(
     term: string,
@@ -162,51 +144,37 @@ export class LeaveRequestRepositoryImpl
   ): Promise<PaginatedResult<LeaveRequest>> {
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
-    const whereClause = `WHERE status = $1 AND deleted_at IS NULL`;
-    const countParams: unknown[] = [EnumLeaveRequestStatus.PENDING];
-    const dataParams: unknown[] = [EnumLeaveRequestStatus.PENDING];
 
     const joinClause = `
       FROM ${LR} lr
-      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id
     `;
-    let countQuery = `
+    let whereClause = `WHERE lr.status = $1 AND lr.deleted_at IS NULL`;
+    const queryParams: unknown[] = [EnumLeaveRequestStatus.PENDING];
+    let paramIndex = 2;
+    if (term) {
+      whereClause += ` AND (lr.reason ILIKE $${paramIndex} OR lt.name ILIKE $${paramIndex})`;
+      queryParams.push(searchTerm);
+      paramIndex++;
+    }
+
+    const countQuery = `
       SELECT COUNT(*) as total
       ${joinClause}
-      WHERE lr.status = $1 AND lr.deleted_at IS NULL
+      ${whereClause}
     `;
-    if (term) {
-      countQuery = `
-        SELECT COUNT(*) as total
-        ${joinClause}
-        WHERE lr.status = $1 AND lr.deleted_at IS NULL AND (lr.reason ILIKE $2 OR lt.name ILIKE $2)
-      `;
-      countParams.push(searchTerm);
-    }
-    const countResult = await manager.query(countQuery, countParams);
+    const countResult = await manager.query(countQuery, queryParams);
     const totalRecords = parseInt(countResult[0].total, 10);
 
-    let dataQuery: string;
-    if (term) {
-      dataParams.push(searchTerm, limit, offset);
-      dataQuery = `
-        SELECT lr.*, lt.name AS leave_type_name
-        ${joinClause}
-        WHERE lr.status = $1 AND lr.deleted_at IS NULL AND (lr.reason ILIKE $2 OR lt.name ILIKE $2)
-        ORDER BY lr.created_at DESC
-        LIMIT $3 OFFSET $4
-      `;
-    } else {
-      dataParams.push(limit, offset);
-      dataQuery = `
-        SELECT lr.*, lt.name AS leave_type_name
-        ${joinClause}
-        WHERE lr.status = $1 AND lr.deleted_at IS NULL
-        ORDER BY lr.created_at DESC
-        LIMIT $2 OFFSET $3
-      `;
-    }
-    const dataResult = await manager.query(dataQuery, dataParams);
+    queryParams.push(limit, offset);
+    const dataQuery = `
+      SELECT lr.*, lt.name AS leave_type_name
+      ${joinClause}
+      ${whereClause}
+      ORDER BY lr.created_at DESC
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+    `;
+    const dataResult = await manager.query(dataQuery, queryParams);
     const data = dataResult.map((row: Record<string, unknown>) =>
       this.entityToModel(row),
     );
@@ -222,36 +190,33 @@ export class LeaveRequestRepositoryImpl
   ): Promise<PaginatedResult<LeaveRequest>> {
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
-    const whereArchived = is_archived
-      ? 'deleted_at IS NOT NULL'
-      : 'deleted_at IS NULL';
-    const queryParams: unknown[] = [];
-    let paramIndex = 1;
-    if (term) {
-      queryParams.push(searchTerm);
-      paramIndex++;
-    }
-    queryParams.push(limit, offset);
 
     const joinClause = `
       FROM ${LR} lr
-      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id
     `;
+    let whereClause = `WHERE lr.deleted_at ${is_archived ? 'IS NOT NULL' : 'IS NULL'}`;
+    const queryParams: unknown[] = [];
+    let paramIndex = 1;
+    if (term) {
+      whereClause += ` AND (lr.reason ILIKE $${paramIndex} OR lt.name ILIKE $${paramIndex})`;
+      queryParams.push(searchTerm);
+      paramIndex++;
+    }
+
     const countQuery = `
       SELECT COUNT(*) as total
       ${joinClause}
-      WHERE lr.deleted_at ${is_archived ? 'IS NOT NULL' : 'IS NULL'}${term ? ` AND (lr.reason ILIKE $1 OR lt.name ILIKE $1)` : ''}
+      ${whereClause}
     `;
-    const countResult = await manager.query(
-      countQuery,
-      term ? [searchTerm] : [],
-    );
+    const countResult = await manager.query(countQuery, queryParams);
     const totalRecords = parseInt(countResult[0].total, 10);
 
+    queryParams.push(limit, offset);
     const dataQuery = `
       SELECT lr.*, lt.name AS leave_type_name
       ${joinClause}
-      WHERE lr.deleted_at ${is_archived ? 'IS NOT NULL' : 'IS NULL'}${term ? ` AND (lr.reason ILIKE $1 OR lt.name ILIKE $1)` : ''}
+      ${whereClause}
       ORDER BY lr.created_at DESC
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
@@ -272,39 +237,37 @@ export class LeaveRequestRepositoryImpl
   ): Promise<PaginatedResult<LeaveRequest>> {
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
-    const whereArchived = is_archived
-      ? 'deleted_at IS NOT NULL'
-      : 'deleted_at IS NULL';
-    const baseWhere = `employee_id = $1 AND ${whereArchived}`;
-    const countParams: unknown[] = [employee_id];
-    const dataParams: unknown[] = [employee_id];
-    if (term) {
-      countParams.push(searchTerm);
-      dataParams.push(searchTerm);
-    }
+
     const joinClause = `
       FROM ${LR} lr
-      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id
     `;
+    let whereClause = `WHERE lr.employee_id = $1 AND lr.deleted_at ${is_archived ? 'IS NOT NULL' : 'IS NULL'}`;
+    const queryParams: unknown[] = [employee_id];
+    let paramIndex = 2;
+    if (term) {
+      whereClause += ` AND (lr.reason ILIKE $${paramIndex} OR lt.name ILIKE $${paramIndex})`;
+      queryParams.push(searchTerm);
+      paramIndex++;
+    }
+
     const countQuery = `
       SELECT COUNT(*) as total
       ${joinClause}
-      WHERE lr.employee_id = $1 AND lr.deleted_at ${is_archived ? 'IS NOT NULL' : 'IS NULL'}${term ? ` AND (lr.reason ILIKE $2 OR lt.name ILIKE $2)` : ''}
+      ${whereClause}
     `;
-    const countResult = await manager.query(countQuery, countParams);
+    const countResult = await manager.query(countQuery, queryParams);
     const totalRecords = parseInt(countResult[0].total, 10);
 
-    const limitParam = term ? 3 : 2;
-    const offsetParam = term ? 4 : 3;
-    dataParams.push(limit, offset);
+    queryParams.push(limit, offset);
     const dataQuery = `
       SELECT lr.*, lt.name AS leave_type_name
       ${joinClause}
-      WHERE lr.employee_id = $1 AND lr.deleted_at ${is_archived ? 'IS NOT NULL' : 'IS NULL'}${term ? ` AND (lr.reason ILIKE $2 OR lt.name ILIKE $2)` : ''}
+      ${whereClause}
       ORDER BY lr.created_at DESC
-      LIMIT $${limitParam} OFFSET $${offsetParam}
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
-    const dataResult = await manager.query(dataQuery, dataParams);
+    const dataResult = await manager.query(dataQuery, queryParams);
     const data = dataResult.map((row: Record<string, unknown>) =>
       this.entityToModel(row),
     );
@@ -320,8 +283,8 @@ export class LeaveRequestRepositoryImpl
   ): Promise<boolean> {
     const query = `
       UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_REQUESTS}
-      SET status = $1, approval_by = $2, approval_date = $3, remarks = $4, updated_at = $5
-      WHERE id = $6 AND deleted_at IS NULL
+      SET status = $1, approval_by = $2, approval_date = $3, remarks = $4
+      WHERE id = $5 AND deleted_at IS NULL
       RETURNING id
     `;
     const result = await manager.query(query, [
@@ -329,7 +292,6 @@ export class LeaveRequestRepositoryImpl
       user_id,
       new Date(),
       remarks ?? '',
-      new Date(),
       id,
     ]);
     return result.length > 0;
@@ -345,7 +307,7 @@ export class LeaveRequestRepositoryImpl
     let query = `
       SELECT lr.*, lt.name AS leave_type_name
       FROM ${LR} lr
-      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id AND lt.deleted_at IS NULL
+      LEFT JOIN ${LT} lt ON lr.leave_type_id = lt.id
       WHERE lr.employee_id = $1 AND lr.deleted_at IS NULL
         AND lr.status = $2
         AND (lr.start_date, lr.end_date) OVERLAPS ($3::date, $4::date)
@@ -373,7 +335,7 @@ export class LeaveRequestRepositoryImpl
       leave_type: (entity.leave_type_name as string) ?? undefined,
       start_date: entity.start_date as Date,
       end_date: entity.end_date as Date,
-      total_days: parseDecimal(entity.total_days),
+      total_days: toNumber(entity.total_days),
       reason: entity.reason as string,
       balance_id: entity.balance_id as number,
       approval_date: (entity.approval_date as Date) ?? undefined,

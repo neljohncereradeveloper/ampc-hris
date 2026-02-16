@@ -7,19 +7,12 @@ import {
   PaginatedResult,
   calculatePagination,
 } from '@/core/utils/pagination.util';
+import { toNumber } from '@/core/utils/coercion.util';
 import { EnumLeaveEncashmentStatus } from '@/features/leave-management/domain/enum';
-
-function parseDecimal(value: unknown): number {
-  if (value === null || value === undefined) return 0;
-  if (typeof value === 'number' && !Number.isNaN(value)) return value;
-  const n = Number(value);
-  return Number.isNaN(n) ? 0 : n;
-}
 
 @Injectable()
 export class LeaveEncashmentRepositoryImpl
-  implements LeaveEncashmentRepository<EntityManager>
-{
+  implements LeaveEncashmentRepository<EntityManager> {
   async create(
     leave_encashment: LeaveEncashment,
     manager: EntityManager,
@@ -73,8 +66,6 @@ export class LeaveEncashmentRepositoryImpl
       values.push(dto.updated_by);
     }
     if (updateFields.length === 0) return false;
-    updateFields.push(`updated_at = $${paramIndex++}`);
-    values.push(new Date());
     values.push(id);
 
     const query = `
@@ -109,28 +100,30 @@ export class LeaveEncashmentRepositoryImpl
   ): Promise<PaginatedResult<LeaveEncashment>> {
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
-    const whereArchived = is_archived
-      ? 'deleted_at IS NOT NULL'
-      : 'deleted_at IS NULL';
+
+    let whereClause = is_archived
+      ? 'WHERE deleted_at IS NOT NULL'
+      : 'WHERE deleted_at IS NULL';
     const queryParams: unknown[] = [];
-    if (term) queryParams.push(searchTerm);
-    queryParams.push(limit, offset);
+    let paramIndex = 1;
+    if (term) {
+      whereClause += ` AND (CAST(employee_id AS TEXT) ILIKE $${paramIndex} OR CAST(balance_id AS TEXT) ILIKE $${paramIndex})`;
+      queryParams.push(searchTerm);
+      paramIndex++;
+    }
 
     const countQuery = `
       SELECT COUNT(*) as total
       FROM ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_ENCASHMENTS}
-      WHERE ${whereArchived}${term ? ' AND (CAST(employee_id AS TEXT) ILIKE $1 OR CAST(balance_id AS TEXT) ILIKE $1)' : ''}
+      ${whereClause}
     `;
-    const countResult = await manager.query(
-      countQuery,
-      term ? [searchTerm] : [],
-    );
+    const countResult = await manager.query(countQuery, queryParams);
     const totalRecords = parseInt(countResult[0].total, 10);
 
-    const paramIndex = term ? 2 : 1;
+    queryParams.push(limit, offset);
     const dataQuery = `
       SELECT * FROM ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_ENCASHMENTS}
-      WHERE ${whereArchived}${term ? ' AND (CAST(employee_id AS TEXT) ILIKE $1 OR CAST(balance_id AS TEXT) ILIKE $1)' : ''}
+      ${whereClause}
       ORDER BY created_at DESC
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
@@ -190,8 +183,8 @@ export class LeaveEncashmentRepositoryImpl
       id: entity.id as number,
       employee_id: entity.employee_id as number,
       balance_id: entity.balance_id as number,
-      total_days: parseDecimal(entity.total_days),
-      amount: parseDecimal(entity.amount),
+      total_days: toNumber(entity.total_days),
+      amount: toNumber(entity.amount),
       status: entity.status as EnumLeaveEncashmentStatus,
       deleted_by: (entity.deleted_by as string) ?? null,
       deleted_at: (entity.deleted_at as Date) ?? null,
