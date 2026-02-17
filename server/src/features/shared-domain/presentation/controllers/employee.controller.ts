@@ -88,7 +88,7 @@ export class EmployeeController {
     private readonly findByBioNumberEmployeeUseCase: FindByBioNumberEmployeeUseCase,
     private readonly retrieveActiveEmployeesUseCase: RetrieveActiveEmployeesUseCase,
     private readonly findEmployeesEligibleForLeaveUseCase: FindEmployeesEligibleForLeaveUseCase,
-  ) {}
+  ) { }
 
   @Version('1')
   @Post()
@@ -313,7 +313,7 @@ export class EmployeeController {
   @Version('1')
   @Patch(':id/image-path')
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR)
-  @RequirePermissions(PERMISSIONS.EMPLOYEES.UPDATE)
+  @RequirePermissions(PERMISSIONS.EMPLOYEES.UPDATE_IMAGE_PATH)
   @ApiOperation({ summary: 'Update employee image path' })
   @ApiParam({ name: 'id', description: 'Employee ID', example: 1 })
   @ApiBody({ type: UpdateImagePathDto })
@@ -341,7 +341,7 @@ export class EmployeeController {
   @Version('1')
   @Patch(':id/government-details')
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR)
-  @RequirePermissions(PERMISSIONS.EMPLOYEES.UPDATE)
+  @RequirePermissions(PERMISSIONS.EMPLOYEES.UPDATE_GOVERNMENT_DETAILS)
   @ApiOperation({ summary: 'Update employee government details' })
   @ApiParam({ name: 'id', description: 'Employee ID', example: 1 })
   @ApiBody({ type: UpdateGovernmentDetailsDto })
@@ -376,7 +376,7 @@ export class EmployeeController {
   @Version('1')
   @Patch(':id/salary-details')
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR)
-  @RequirePermissions(PERMISSIONS.EMPLOYEES.UPDATE)
+  @RequirePermissions(PERMISSIONS.EMPLOYEES.UPDATE_SALARY_DETAILS)
   @ApiOperation({ summary: 'Update employee salary details' })
   @ApiParam({ name: 'id', description: 'Employee ID', example: 1 })
   @ApiBody({ type: UpdateSalaryDetailsDto })
@@ -411,7 +411,7 @@ export class EmployeeController {
   @Version('1')
   @Patch(':id/bank-details')
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR)
-  @RequirePermissions(PERMISSIONS.EMPLOYEES.UPDATE)
+  @RequirePermissions(PERMISSIONS.EMPLOYEES.UPDATE_BANK_DETAILS)
   @ApiOperation({ summary: 'Update employee bank details' })
   @ApiParam({ name: 'id', description: 'Employee ID', example: 1 })
   @ApiBody({ type: UpdateBankDetailsDto })

@@ -47,7 +47,6 @@ import {
 } from '../../application/commands/work-experience';
 import { WorkExperience } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
-import { PaginationQueryDto } from '@/core/infrastructure/dto';
 import {
   RATE_LIMIT_MODERATE,
   RateLimit,
@@ -67,7 +66,7 @@ export class WorkExperienceController {
     private readonly archiveWorkExperienceUseCase: ArchiveWorkExperienceUseCase,
     private readonly restoreWorkExperienceUseCase: RestoreWorkExperienceUseCase,
     private readonly getPaginatedWorkExperienceUseCase: GetPaginatedWorkExperienceUseCase,
-  ) {}
+  ) { }
 
   @Version('1')
   @Post()

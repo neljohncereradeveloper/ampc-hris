@@ -18,11 +18,25 @@ export const PERMISSION_ACTIONS = {
   UPDATE: 'update',
   ARCHIVE: 'archive',
   RESTORE: 'restore',
-  COMBOBOX: 'combobox',
-  PAGINATED_LIST: 'paginated_list',
   ASSIGN_PERMISSIONS: 'assign_permissions',
   CHANGE_PASSWORD: 'change_password',
   VERIFY_EMAIL: 'verify_email',
+  // EMPLOYEE ACTIONS
+  UPDATE_IMAGE_PATH: 'update_image_path',
+  UPDATE_GOVERNMENT_DETAILS: 'update_government_details',
+  UPDATE_SALARY_DETAILS: 'update_salary_details',
+  UPDATE_BANK_DETAILS: 'update_bank_details',
+  // Leave management (aligned with use cases)
+  APPROVE: 'approve',
+  REJECT: 'reject',
+  CANCEL: 'cancel',
+  MARK_AS_PAID: 'mark_as_paid',
+  ACTIVATE: 'activate',
+  RETIRE: 'retire',
+  CLOSE: 'close',
+  CLOSE_BALANCES_FOR_EMPLOYEE: 'close_balances_for_employee',
+  RESET_FOR_YEAR: 'reset_for_year',
+  GENERATE_BALANCES_FOR_ALL_EMPLOYEES: 'generate_balances_for_all_employees',
 } as const;
 
 /**
@@ -60,6 +74,11 @@ export const PERMISSION_RESOURCES = {
   DEPARTMENTS: 'departments',
   JOBTITLES: 'jobtitles',
   LEAVE_TYPES: 'leave-types',
+  LEAVE_POLICIES: 'leave-policies',
+  LEAVE_REQUESTS: 'leave-requests',
+  LEAVE_BALANCES: 'leave-balances',
+  LEAVE_ENCASHMENTS: 'leave-encashments',
+  LEAVE_YEAR_CONFIGURATIONS: 'leave-year-configurations',
   EMPLOYEES: 'employees',
 } as const;
 
@@ -86,14 +105,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.ROLES,
       PERMISSION_ACTIONS.READ,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.ROLES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.ROLES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Permission permissions
   // Note: CREATE, UPDATE, ARCHIVE, RESTORE removed - permissions are statically defined
@@ -103,14 +114,7 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.PERMISSIONS,
       PERMISSION_ACTIONS.READ,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.PERMISSIONS,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.PERMISSIONS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
+
   },
   // User permissions
   USERS: {
@@ -142,14 +146,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.USERS,
       PERMISSION_ACTIONS.VERIFY_EMAIL,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.USERS,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.USERS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Holiday permissions
   HOLIDAYS: {
@@ -172,14 +168,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.HOLIDAYS,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.HOLIDAYS,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.HOLIDAYS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Barangay permissions (201-management)
@@ -204,14 +192,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.BARANGAYS,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.BARANGAYS,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.BARANGAYS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // City permissions (201-management)
   CITIES: {
@@ -234,14 +214,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.CITIES,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.CITIES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.CITIES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Citizenship permissions (201-management)
@@ -266,14 +238,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.CITIZENSHIPS,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.CITIZENSHIPS,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.CITIZENSHIPS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Civil Status permissions (201-management)
   CIVIL_STATUSES: {
@@ -296,14 +260,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.CIVIL_STATUSES,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.CIVIL_STATUSES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.CIVIL_STATUSES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Employment Type permissions (201-management)
@@ -328,14 +284,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Employment Status permissions (201-management)
   EMPLOYMENT_STATUSES: {
@@ -358,14 +306,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Province permissions (201-management)
@@ -390,14 +330,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.PROVINCES,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.PROVINCES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.PROVINCES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Religion permissions (201-management)
   RELIGIONS: {
@@ -420,14 +352,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.RELIGIONS,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.RELIGIONS,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.RELIGIONS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Reference permissions (201-management)
@@ -452,10 +376,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.REFERENCES,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.REFERENCES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Training Certificate permissions (201-management)
   TRAINING_CERTIFICATES: {
@@ -478,14 +398,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Training permissions (201-management)
@@ -510,10 +422,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.TRAININGS,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.TRAININGS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Work Experience Company permissions (201-management)
   WORK_EXPERIENCE_COMPANIES: {
@@ -536,14 +444,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.WORK_EXPERIENCE_COMPANIES,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.WORK_EXPERIENCE_COMPANIES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.WORK_EXPERIENCE_COMPANIES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Work Experience Job Title permissions (201-management)
@@ -568,14 +468,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.WORK_EXPERIENCE_JOBTITLES,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.WORK_EXPERIENCE_JOBTITLES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.WORK_EXPERIENCE_JOBTITLES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Work Experience permissions (201-management)
   WORK_EXPERIENCES: {
@@ -598,10 +490,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.WORK_EXPERIENCES,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.WORK_EXPERIENCES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Education Course Level permissions (201-management)
@@ -626,14 +514,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.EDUCATION_COURSE_LEVELS,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.EDUCATION_COURSE_LEVELS,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.EDUCATION_COURSE_LEVELS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Education Course permissions (201-management)
   EDUCATION_COURSES: {
@@ -656,14 +536,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.EDUCATION_COURSES,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.EDUCATION_COURSES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.EDUCATION_COURSES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Education Level permissions (201-management)
@@ -688,14 +560,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.EDUCATION_LEVELS,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.EDUCATION_LEVELS,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.EDUCATION_LEVELS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Education School permissions (201-management)
   EDUCATION_SCHOOLS: {
@@ -718,14 +582,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.EDUCATION_SCHOOLS,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.EDUCATION_SCHOOLS,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.EDUCATION_SCHOOLS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Education permissions (201-management - employee education records)
@@ -773,14 +629,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.BRANCHES,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.BRANCHES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.BRANCHES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Department permissions (shared-domain)
   DEPARTMENTS: {
@@ -803,14 +651,6 @@ export const PERMISSIONS = {
     RESTORE: buildPermissionName(
       PERMISSION_RESOURCES.DEPARTMENTS,
       PERMISSION_ACTIONS.RESTORE,
-    ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.DEPARTMENTS,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.DEPARTMENTS,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
     ),
   },
   // Jobtitle permissions (shared-domain)
@@ -835,14 +675,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.JOBTITLES,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.JOBTITLES,
-      PERMISSION_ACTIONS.COMBOBOX,
-    ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.JOBTITLES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
-    ),
   },
   // Leave type permissions (shared-domain)
   LEAVE_TYPES: {
@@ -866,13 +698,120 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.LEAVE_TYPES,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    COMBOBOX: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_TYPES,
-      PERMISSION_ACTIONS.COMBOBOX,
+  },
+  // Leave policy permissions (leave-management; strictly 1:1 with use cases)
+  LEAVE_POLICIES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_POLICIES,
+      PERMISSION_ACTIONS.CREATE,
     ),
-    PAGINATED_LIST: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_TYPES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_POLICIES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_POLICIES,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_POLICIES,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_POLICIES,
+      PERMISSION_ACTIONS.RESTORE,
+    ),
+    ACTIVATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_POLICIES,
+      PERMISSION_ACTIONS.ACTIVATE,
+    ),
+    RETIRE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_POLICIES,
+      PERMISSION_ACTIONS.RETIRE,
+    ),
+  },
+  // Leave request permissions (leave-management; aligned with use cases)
+  LEAVE_REQUESTS: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    APPROVE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.APPROVE,
+    ),
+    REJECT: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.REJECT,
+    ),
+    CANCEL: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.CANCEL,
+    ),
+  },
+  // Leave balance permissions (leave-management; aligned with use cases)
+  LEAVE_BALANCES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    CLOSE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.CLOSE,
+    ),
+    CLOSE_BALANCES_FOR_EMPLOYEE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.CLOSE_BALANCES_FOR_EMPLOYEE,
+    ),
+    GENERATE_BALANCES_FOR_ALL_EMPLOYEES: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.GENERATE_BALANCES_FOR_ALL_EMPLOYEES,
+    ),
+    RESET_FOR_YEAR: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.RESET_FOR_YEAR,
+    ),
+  },
+  // Leave encashment permissions (leave-management; strictly 1:1 with use cases)
+  LEAVE_ENCASHMENTS: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_ENCASHMENTS,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    MARK_AS_PAID: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_ENCASHMENTS,
+      PERMISSION_ACTIONS.MARK_AS_PAID,
+    ),
+  },
+  // Leave year configuration permissions (leave-management; strictly 1:1 with use cases)
+  LEAVE_YEAR_CONFIGURATIONS: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    ARCHIVE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
+      PERMISSION_ACTIONS.ARCHIVE,
+    ),
+    RESTORE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
+      PERMISSION_ACTIONS.RESTORE,
     ),
   },
   // Employee permissions (shared-domain)
@@ -897,9 +836,21 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.EMPLOYEES,
       PERMISSION_ACTIONS.RESTORE,
     ),
-    PAGINATED_LIST: buildPermissionName(
+    UPDATE_IMAGE_PATH: buildPermissionName(
       PERMISSION_RESOURCES.EMPLOYEES,
-      PERMISSION_ACTIONS.PAGINATED_LIST,
+      PERMISSION_ACTIONS.UPDATE_IMAGE_PATH,
+    ),
+    UPDATE_GOVERNMENT_DETAILS: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYEES,
+      PERMISSION_ACTIONS.UPDATE_GOVERNMENT_DETAILS,
+    ),
+    UPDATE_SALARY_DETAILS: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYEES,
+      PERMISSION_ACTIONS.UPDATE_SALARY_DETAILS,
+    ),
+    UPDATE_BANK_DETAILS: buildPermissionName(
+      PERMISSION_RESOURCES.EMPLOYEES,
+      PERMISSION_ACTIONS.UPDATE_BANK_DETAILS,
     ),
   },
   // User-Role permissions

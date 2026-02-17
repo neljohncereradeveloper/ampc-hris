@@ -47,7 +47,6 @@ import {
 } from '../../application/commands/reference';
 import { Reference } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
-import { PaginationQueryDto } from '@/core/infrastructure/dto';
 import {
   RATE_LIMIT_MODERATE,
   RateLimit,
@@ -67,7 +66,7 @@ export class ReferenceController {
     private readonly archiveReferenceUseCase: ArchiveReferenceUseCase,
     private readonly restoreReferenceUseCase: RestoreReferenceUseCase,
     private readonly getPaginatedReferenceUseCase: GetPaginatedReferenceUseCase,
-  ) {}
+  ) { }
 
   @Version('1')
   @Post()

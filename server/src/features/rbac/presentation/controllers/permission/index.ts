@@ -32,7 +32,7 @@ export class PermissionController {
     // Note: CreatePermissionUseCase, UpdatePermissionUseCase, ArchivePermissionUseCase, RestorePermissionUseCase, GetPermissionByIdUseCase, ComboboxPermissionUseCase removed
     // Permissions are statically defined and managed via seeders only
     private readonly getAllPermissionsUseCase: GetAllPermissionsUseCase,
-  ) {}
+  ) { }
 
   // Note: Create, Update, Archive, Restore, and GetById endpoints removed - permissions are statically defined
   // and managed via seeders only. Modifying or archiving them would break authorization checks.
@@ -40,7 +40,7 @@ export class PermissionController {
   @Version('1')
   @Get()
   @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
-  @RequirePermissions(PERMISSIONS.PERMISSIONS.PAGINATED_LIST)
+  @RequirePermissions(PERMISSIONS.PERMISSIONS.READ)
   @ApiOperation({
     summary: 'Get all permissions (no pagination, no filtering)',
   })

@@ -47,7 +47,6 @@ import {
 } from '../../application/commands/training';
 import { Training } from '../../domain/models';
 import { PaginatedResult } from '@/core/utils/pagination.util';
-import { PaginationQueryDto } from '@/core/infrastructure/dto';
 import {
   RATE_LIMIT_MODERATE,
   RateLimit,
@@ -67,7 +66,7 @@ export class TrainingController {
     private readonly archiveTrainingUseCase: ArchiveTrainingUseCase,
     private readonly restoreTrainingUseCase: RestoreTrainingUseCase,
     private readonly getPaginatedTrainingUseCase: GetPaginatedTrainingUseCase,
-  ) {}
+  ) { }
 
   @Version('1')
   @Post()

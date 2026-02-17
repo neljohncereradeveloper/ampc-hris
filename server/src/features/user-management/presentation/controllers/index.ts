@@ -76,7 +76,7 @@ export class UserController {
     private readonly getUserByIdUseCase: GetUserByIdUseCase,
     private readonly getPaginatedUserUseCase: GetPaginatedUserUseCase,
     private readonly comboboxUserUseCase: ComboboxUserUseCase,
-  ) {}
+  ) { }
 
   @Version('1')
   @Post()
@@ -252,7 +252,7 @@ export class UserController {
   @Version('1')
   @Get()
   @RequireRoles(ROLES.ADMIN)
-  @RequirePermissions(PERMISSIONS.USERS.PAGINATED_LIST)
+  @RequirePermissions(PERMISSIONS.USERS.READ)
   @ApiOperation({ summary: 'Get paginated list of users' })
   @ApiResponse({
     status: 200,
@@ -275,7 +275,7 @@ export class UserController {
   @Version('1')
   @Get('combobox/list')
   @RequireRoles(ROLES.ADMIN)
-  @RequirePermissions(PERMISSIONS.USERS.COMBOBOX)
+  @RequirePermissions(PERMISSIONS.USERS.READ)
   @ApiOperation({ summary: 'Get users combobox list' })
   @ApiResponse({
     status: 200,

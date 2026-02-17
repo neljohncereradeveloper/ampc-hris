@@ -31,7 +31,7 @@ import {
 export class SeedPermissions {
   private readonly logger = new Logger(SeedPermissions.name);
 
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(private readonly entityManager: EntityManager) { }
 
   /**
    * Executes the seed operation to create default permission entries.
@@ -59,18 +59,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.READ,
         description: 'View role details',
       },
-      {
-        name: PERMISSIONS.ROLES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.ROLES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get roles list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.ROLES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.ROLES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of roles',
-      },
       // Permission permissions
       // Note: CREATE, UPDATE, ARCHIVE, RESTORE removed - permissions are statically defined
       // and managed via seeders only
@@ -79,18 +67,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.PERMISSIONS,
         action: PERMISSION_ACTIONS.READ,
         description: 'View permission details',
-      },
-      {
-        name: PERMISSIONS.PERMISSIONS.COMBOBOX,
-        resource: PERMISSION_RESOURCES.PERMISSIONS,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get permissions list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.PERMISSIONS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.PERMISSIONS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of permissions',
       },
       // User permissions
       {
@@ -134,18 +110,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.USERS,
         action: PERMISSION_ACTIONS.VERIFY_EMAIL,
         description: 'Verify user email addresses',
-      },
-      {
-        name: PERMISSIONS.USERS.COMBOBOX,
-        resource: PERMISSION_RESOURCES.USERS,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get users list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.USERS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.USERS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of users',
       },
       // User-Role permissions
       {
@@ -222,18 +186,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived holidays',
       },
-      {
-        name: PERMISSIONS.HOLIDAYS.COMBOBOX,
-        resource: PERMISSION_RESOURCES.HOLIDAYS,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get holidays list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.HOLIDAYS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.HOLIDAYS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of holidays',
-      },
       // Barangay permissions (201-management)
       {
         name: PERMISSIONS.BARANGAYS.CREATE,
@@ -264,18 +216,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.BARANGAYS,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived barangays',
-      },
-      {
-        name: PERMISSIONS.BARANGAYS.COMBOBOX,
-        resource: PERMISSION_RESOURCES.BARANGAYS,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get barangays list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.BARANGAYS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.BARANGAYS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of barangays',
       },
       // City permissions (201-management)
       {
@@ -308,18 +248,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived cities',
       },
-      {
-        name: PERMISSIONS.CITIES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.CITIES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get cities list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.CITIES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.CITIES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of cities',
-      },
       // Citizenship permissions (201-management)
       {
         name: PERMISSIONS.CITIZENSHIPS.CREATE,
@@ -350,18 +278,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.CITIZENSHIPS,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived citizenships',
-      },
-      {
-        name: PERMISSIONS.CITIZENSHIPS.COMBOBOX,
-        resource: PERMISSION_RESOURCES.CITIZENSHIPS,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get citizenships list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.CITIZENSHIPS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.CITIZENSHIPS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of citizenships',
       },
       // Civil Status permissions (201-management)
       {
@@ -394,18 +310,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived civil statuses',
       },
-      {
-        name: PERMISSIONS.CIVIL_STATUSES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.CIVIL_STATUSES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get civil statuses list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.CIVIL_STATUSES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.CIVIL_STATUSES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of civil statuses',
-      },
       // Employment Type permissions (201-management)
       {
         name: PERMISSIONS.EMPLOYMENT_TYPES.CREATE,
@@ -436,18 +340,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived employment types',
-      },
-      {
-        name: PERMISSIONS.EMPLOYMENT_TYPES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get employment types list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.EMPLOYMENT_TYPES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.EMPLOYMENT_TYPES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of employment types',
       },
       // Employment Status permissions (201-management)
       {
@@ -480,18 +372,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived employment statuses',
       },
-      {
-        name: PERMISSIONS.EMPLOYMENT_STATUSES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get employment statuses list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.EMPLOYMENT_STATUSES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.EMPLOYMENT_STATUSES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of employment statuses',
-      },
       // Province permissions (201-management)
       {
         name: PERMISSIONS.PROVINCES.CREATE,
@@ -522,18 +402,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.PROVINCES,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived provinces',
-      },
-      {
-        name: PERMISSIONS.PROVINCES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.PROVINCES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get provinces list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.PROVINCES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.PROVINCES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of provinces',
       },
       // Religion permissions (201-management)
       {
@@ -566,18 +434,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived religions',
       },
-      {
-        name: PERMISSIONS.RELIGIONS.COMBOBOX,
-        resource: PERMISSION_RESOURCES.RELIGIONS,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get religions list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.RELIGIONS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.RELIGIONS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of religions',
-      },
       // Reference permissions (201-management)
       {
         name: PERMISSIONS.REFERENCES.CREATE,
@@ -608,12 +464,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.REFERENCES,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived references',
-      },
-      {
-        name: PERMISSIONS.REFERENCES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.REFERENCES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of references',
       },
       // Training Certificate permissions (201-management)
       {
@@ -646,18 +496,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived training certificates',
       },
-      {
-        name: PERMISSIONS.TRAINING_CERTIFICATES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get training certificates list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.TRAINING_CERTIFICATES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.TRAINING_CERTIFICATES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of training certificates',
-      },
       // Training permissions (201-management)
       {
         name: PERMISSIONS.TRAININGS.CREATE,
@@ -688,12 +526,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.TRAININGS,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived trainings',
-      },
-      {
-        name: PERMISSIONS.TRAININGS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.TRAININGS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of trainings',
       },
       // Work Experience Company permissions (201-management)
       {
@@ -726,18 +558,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived work experience companies',
       },
-      {
-        name: PERMISSIONS.WORK_EXPERIENCE_COMPANIES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.WORK_EXPERIENCE_COMPANIES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get work experience companies list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.WORK_EXPERIENCE_COMPANIES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.WORK_EXPERIENCE_COMPANIES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of work experience companies',
-      },
       // Work Experience Job Title permissions (201-management)
       {
         name: PERMISSIONS.WORK_EXPERIENCE_JOBTITLES.CREATE,
@@ -768,18 +588,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.WORK_EXPERIENCE_JOBTITLES,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived work experience job titles',
-      },
-      {
-        name: PERMISSIONS.WORK_EXPERIENCE_JOBTITLES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.WORK_EXPERIENCE_JOBTITLES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get work experience job titles list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.WORK_EXPERIENCE_JOBTITLES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.WORK_EXPERIENCE_JOBTITLES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of work experience job titles',
       },
       // Work Experience permissions (201-management)
       {
@@ -812,12 +620,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived work experiences',
       },
-      {
-        name: PERMISSIONS.WORK_EXPERIENCES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.WORK_EXPERIENCES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of work experiences',
-      },
       // Education Course Level permissions (201-management)
       {
         name: PERMISSIONS.EDUCATION_COURSE_LEVELS.CREATE,
@@ -848,18 +650,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.EDUCATION_COURSE_LEVELS,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived education course levels',
-      },
-      {
-        name: PERMISSIONS.EDUCATION_COURSE_LEVELS.COMBOBOX,
-        resource: PERMISSION_RESOURCES.EDUCATION_COURSE_LEVELS,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get education course levels list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.EDUCATION_COURSE_LEVELS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.EDUCATION_COURSE_LEVELS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of education course levels',
       },
       // Education Course permissions (201-management)
       {
@@ -892,18 +682,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived education courses',
       },
-      {
-        name: PERMISSIONS.EDUCATION_COURSES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.EDUCATION_COURSES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get education courses list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.EDUCATION_COURSES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.EDUCATION_COURSES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of education courses',
-      },
       // Education Level permissions (201-management)
       {
         name: PERMISSIONS.EDUCATION_LEVELS.CREATE,
@@ -935,18 +713,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived education levels',
       },
-      {
-        name: PERMISSIONS.EDUCATION_LEVELS.COMBOBOX,
-        resource: PERMISSION_RESOURCES.EDUCATION_LEVELS,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get education levels list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.EDUCATION_LEVELS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.EDUCATION_LEVELS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of education levels',
-      },
       // Education School permissions (201-management)
       {
         name: PERMISSIONS.EDUCATION_SCHOOLS.CREATE,
@@ -977,18 +743,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.EDUCATION_SCHOOLS,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived education schools',
-      },
-      {
-        name: PERMISSIONS.EDUCATION_SCHOOLS.COMBOBOX,
-        resource: PERMISSION_RESOURCES.EDUCATION_SCHOOLS,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get education schools list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.EDUCATION_SCHOOLS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.EDUCATION_SCHOOLS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of education schools',
       },
       // Education permissions (201-management - employee education records)
       {
@@ -1052,18 +806,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived branches',
       },
-      {
-        name: PERMISSIONS.BRANCHES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.BRANCHES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get branches list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.BRANCHES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.BRANCHES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of branches',
-      },
       // Department permissions (shared-domain)
       {
         name: PERMISSIONS.DEPARTMENTS.CREATE,
@@ -1094,18 +836,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.DEPARTMENTS,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived departments',
-      },
-      {
-        name: PERMISSIONS.DEPARTMENTS.COMBOBOX,
-        resource: PERMISSION_RESOURCES.DEPARTMENTS,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get departments list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.DEPARTMENTS.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.DEPARTMENTS,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of departments',
       },
       // Jobtitle permissions (shared-domain)
       {
@@ -1138,18 +868,6 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived job titles',
       },
-      {
-        name: PERMISSIONS.JOBTITLES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.JOBTITLES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get job titles list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.JOBTITLES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.JOBTITLES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of job titles',
-      },
       // Leave type permissions (shared-domain)
       {
         name: PERMISSIONS.LEAVE_TYPES.CREATE,
@@ -1180,18 +898,6 @@ export class SeedPermissions {
         resource: PERMISSION_RESOURCES.LEAVE_TYPES,
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived leave types',
-      },
-      {
-        name: PERMISSIONS.LEAVE_TYPES.COMBOBOX,
-        resource: PERMISSION_RESOURCES.LEAVE_TYPES,
-        action: PERMISSION_ACTIONS.COMBOBOX,
-        description: 'Get leave types list for dropdowns',
-      },
-      {
-        name: PERMISSIONS.LEAVE_TYPES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.LEAVE_TYPES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of leave types',
       },
       // Employee permissions (shared-domain)
       {
@@ -1224,12 +930,7 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RESTORE,
         description: 'Restore archived employees',
       },
-      {
-        name: PERMISSIONS.EMPLOYEES.PAGINATED_LIST,
-        resource: PERMISSION_RESOURCES.EMPLOYEES,
-        action: PERMISSION_ACTIONS.PAGINATED_LIST,
-        description: 'Get paginated list of employees',
-      },
+
     ];
 
     /**

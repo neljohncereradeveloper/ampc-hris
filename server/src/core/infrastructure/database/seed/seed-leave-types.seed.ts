@@ -20,6 +20,7 @@ export class SeedLeaveTypes {
           code: item.code,
           desc1: item.desc1,
           paid: item.paid,
+          remarks: item.remarks ?? null,
         });
         await this.entityManager.save(entity);
         this.logger.log(`Created leave type: ${item.name} (${item.code})`);
