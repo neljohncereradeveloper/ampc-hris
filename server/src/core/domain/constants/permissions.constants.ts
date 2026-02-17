@@ -758,32 +758,32 @@ export const PERMISSIONS = {
   //   ),
   // },
   // // Leave balance permissions (leave-management; aligned with use cases)
-  // LEAVE_BALANCES: {
-  //   CREATE: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
-  //     PERMISSION_ACTIONS.CREATE,
-  //   ),
-  //   READ: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
-  //     PERMISSION_ACTIONS.READ,
-  //   ),
-  //   CLOSE: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
-  //     PERMISSION_ACTIONS.CLOSE,
-  //   ),
-  //   CLOSE_BALANCES_FOR_EMPLOYEE: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
-  //     PERMISSION_ACTIONS.CLOSE_BALANCES_FOR_EMPLOYEE,
-  //   ),
-  //   GENERATE_BALANCES_FOR_ALL_EMPLOYEES: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
-  //     PERMISSION_ACTIONS.GENERATE_BALANCES_FOR_ALL_EMPLOYEES,
-  //   ),
-  //   RESET_FOR_YEAR: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
-  //     PERMISSION_ACTIONS.RESET_FOR_YEAR,
-  //   ),
-  // },
+  LEAVE_BALANCES: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.READ,
+    ),
+    CLOSE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.CLOSE,
+    ),
+    CLOSE_BALANCES_FOR_EMPLOYEE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.CLOSE_BALANCES_FOR_EMPLOYEE,
+    ),
+    GENERATE_BALANCES_FOR_ALL_EMPLOYEES: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.GENERATE_BALANCES_FOR_ALL_EMPLOYEES,
+    ),
+    RESET_FOR_YEAR: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_BALANCES,
+      PERMISSION_ACTIONS.RESET_FOR_YEAR,
+    ),
+  },
   // // Leave encashment permissions (leave-management; strictly 1:1 with use cases)
   // LEAVE_ENCASHMENTS: {
   //   CREATE: buildPermissionName(
