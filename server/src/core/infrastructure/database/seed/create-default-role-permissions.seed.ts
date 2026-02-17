@@ -237,6 +237,23 @@ export class SeedRolePermissions {
         PERMISSIONS.WORK_EXPERIENCES.UPDATE,
         PERMISSIONS.WORK_EXPERIENCES.ARCHIVE,
         PERMISSIONS.WORK_EXPERIENCES.RESTORE,
+        /**
+         * Leave management permissions
+         */
+        // All leave year configuration permissions (leave-management)
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.CREATE,
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.READ,
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.UPDATE,
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.ARCHIVE,
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.RESTORE,
+        // All leave policy permissions (leave-management)
+        PERMISSIONS.LEAVE_POLICIES.CREATE,
+        PERMISSIONS.LEAVE_POLICIES.READ,
+        PERMISSIONS.LEAVE_POLICIES.UPDATE,
+        PERMISSIONS.LEAVE_POLICIES.ARCHIVE,
+        PERMISSIONS.LEAVE_POLICIES.RESTORE,
+        PERMISSIONS.LEAVE_POLICIES.ACTIVATE,
+        PERMISSIONS.LEAVE_POLICIES.RETIRE,
       ],
       [ROLES.EDITOR]: [
         /**
@@ -346,6 +363,23 @@ export class SeedRolePermissions {
         PERMISSIONS.WORK_EXPERIENCES.CREATE,
         PERMISSIONS.WORK_EXPERIENCES.READ,
         PERMISSIONS.WORK_EXPERIENCES.UPDATE,
+        /**
+         * Leave management permissions
+         */
+        // All leave year configuration permissions (leave-management)
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.CREATE,
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.READ,
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.UPDATE,
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.ARCHIVE,
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.RESTORE,
+        // All leave policy permissions (leave-management)
+        PERMISSIONS.LEAVE_POLICIES.CREATE,
+        PERMISSIONS.LEAVE_POLICIES.READ,
+        PERMISSIONS.LEAVE_POLICIES.UPDATE,
+        PERMISSIONS.LEAVE_POLICIES.ARCHIVE,
+        PERMISSIONS.LEAVE_POLICIES.RESTORE,
+        PERMISSIONS.LEAVE_POLICIES.ACTIVATE,
+        PERMISSIONS.LEAVE_POLICIES.RETIRE,
       ],
       [ROLES.VIEWER]: [
         /**
@@ -390,6 +424,12 @@ export class SeedRolePermissions {
         PERMISSIONS.WORK_EXPERIENCE_COMPANIES.READ,
         PERMISSIONS.WORK_EXPERIENCE_JOBTITLES.READ,
         PERMISSIONS.WORK_EXPERIENCES.READ,
+        /**
+         * Leave management permissions read-only
+         */
+        PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.READ,
+        // All leave policy permissions (leave-management)
+        PERMISSIONS.LEAVE_POLICIES.READ,
       ],
     };
 

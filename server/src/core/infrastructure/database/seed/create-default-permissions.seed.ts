@@ -931,6 +931,84 @@ export class SeedPermissions {
         description: 'Restore archived employees',
       },
 
+      /**
+       * Leave management permissions
+       */
+      // All leave year configuration permissions (leave-management)
+      {
+        name: PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.CREATE,
+        resource: PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
+        action: PERMISSION_ACTIONS.CREATE,
+        description: 'Create new leave year configurations',
+      },
+      {
+        name: PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.READ,
+        resource: PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
+        action: PERMISSION_ACTIONS.READ,
+        description: 'View leave year configuration details',
+      },
+      {
+        name: PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.UPDATE,
+        resource: PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
+        action: PERMISSION_ACTIONS.UPDATE,
+        description: 'Update leave year configuration information',
+      },
+      {
+        name: PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.ARCHIVE,
+        resource: PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
+        action: PERMISSION_ACTIONS.ARCHIVE,
+        description: 'Archive (soft delete) leave year configurations',
+      },
+      {
+        name: PERMISSIONS.LEAVE_YEAR_CONFIGURATIONS.RESTORE,
+        resource: PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
+        action: PERMISSION_ACTIONS.RESTORE,
+        description: 'Restore archived leave year configurations',
+      },
+      // Leave policy permissions (leave-management)
+      {
+        name: PERMISSIONS.LEAVE_POLICIES.CREATE,
+        resource: PERMISSION_RESOURCES.LEAVE_POLICIES,
+        action: PERMISSION_ACTIONS.CREATE,
+        description: 'Create new leave policies',
+      },
+      {
+        name: PERMISSIONS.LEAVE_POLICIES.READ,
+        resource: PERMISSION_RESOURCES.LEAVE_POLICIES,
+        action: PERMISSION_ACTIONS.READ,
+        description: 'View leave policy details',
+      },
+      {
+        name: PERMISSIONS.LEAVE_POLICIES.UPDATE,
+        resource: PERMISSION_RESOURCES.LEAVE_POLICIES,
+        action: PERMISSION_ACTIONS.UPDATE,
+        description: 'Update leave policy information',
+      },
+      {
+        name: PERMISSIONS.LEAVE_POLICIES.ARCHIVE,
+        resource: PERMISSION_RESOURCES.LEAVE_POLICIES,
+        action: PERMISSION_ACTIONS.ARCHIVE,
+        description: 'Archive (soft delete) leave policies',
+      },
+      {
+        name: PERMISSIONS.LEAVE_POLICIES.RESTORE,
+        resource: PERMISSION_RESOURCES.LEAVE_POLICIES,
+        action: PERMISSION_ACTIONS.RESTORE,
+        description: 'Restore archived leave policies',
+      },
+      {
+        name: PERMISSIONS.LEAVE_POLICIES.ACTIVATE,
+        resource: PERMISSION_RESOURCES.LEAVE_POLICIES,
+        action: PERMISSION_ACTIONS.ACTIVATE,
+        description: 'Activate leave policies',
+      },
+      {
+        name: PERMISSIONS.LEAVE_POLICIES.RETIRE,
+        resource: PERMISSION_RESOURCES.LEAVE_POLICIES,
+        action: PERMISSION_ACTIONS.RETIRE,
+        description: 'Retire leave policies',
+      },
+
     ];
 
     /**

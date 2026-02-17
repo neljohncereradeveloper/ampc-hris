@@ -29,7 +29,7 @@ export class UpdateLeaveYearConfigurationUseCase {
     private readonly repo: LeaveYearConfigurationRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -49,6 +49,9 @@ export class UpdateLeaveYearConfigurationUseCase {
 
         const tracking_config: FieldExtractorConfig[] = [
           { field: 'year' },
+          { field: 'remarks' },
+          { field: 'cutoff_start_date' },
+          { field: 'cutoff_end_date' },
           {
             field: 'updated_at',
             transform: (val: Date) => (val ? getPHDateTime(val) : null),

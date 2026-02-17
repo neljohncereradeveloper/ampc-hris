@@ -699,7 +699,7 @@ export const PERMISSIONS = {
       PERMISSION_ACTIONS.RESTORE,
     ),
   },
-  // Leave policy permissions (leave-management; strictly 1:1 with use cases)
+  // // Leave policy permissions (leave-management; strictly 1:1 with use cases)
   LEAVE_POLICIES: {
     CREATE: buildPermissionName(
       PERMISSION_RESOURCES.LEAVE_POLICIES,
@@ -730,76 +730,80 @@ export const PERMISSIONS = {
       PERMISSION_ACTIONS.RETIRE,
     ),
   },
-  // Leave request permissions (leave-management; aligned with use cases)
-  LEAVE_REQUESTS: {
-    CREATE: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_REQUESTS,
-      PERMISSION_ACTIONS.CREATE,
-    ),
-    READ: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_REQUESTS,
-      PERMISSION_ACTIONS.READ,
-    ),
-    UPDATE: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_REQUESTS,
-      PERMISSION_ACTIONS.UPDATE,
-    ),
-    APPROVE: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_REQUESTS,
-      PERMISSION_ACTIONS.APPROVE,
-    ),
-    REJECT: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_REQUESTS,
-      PERMISSION_ACTIONS.REJECT,
-    ),
-    CANCEL: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_REQUESTS,
-      PERMISSION_ACTIONS.CANCEL,
-    ),
-  },
-  // Leave balance permissions (leave-management; aligned with use cases)
-  LEAVE_BALANCES: {
-    CREATE: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_BALANCES,
-      PERMISSION_ACTIONS.CREATE,
-    ),
-    READ: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_BALANCES,
-      PERMISSION_ACTIONS.READ,
-    ),
-    CLOSE: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_BALANCES,
-      PERMISSION_ACTIONS.CLOSE,
-    ),
-    CLOSE_BALANCES_FOR_EMPLOYEE: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_BALANCES,
-      PERMISSION_ACTIONS.CLOSE_BALANCES_FOR_EMPLOYEE,
-    ),
-    GENERATE_BALANCES_FOR_ALL_EMPLOYEES: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_BALANCES,
-      PERMISSION_ACTIONS.GENERATE_BALANCES_FOR_ALL_EMPLOYEES,
-    ),
-    RESET_FOR_YEAR: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_BALANCES,
-      PERMISSION_ACTIONS.RESET_FOR_YEAR,
-    ),
-  },
-  // Leave encashment permissions (leave-management; strictly 1:1 with use cases)
-  LEAVE_ENCASHMENTS: {
-    CREATE: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_ENCASHMENTS,
-      PERMISSION_ACTIONS.CREATE,
-    ),
-    MARK_AS_PAID: buildPermissionName(
-      PERMISSION_RESOURCES.LEAVE_ENCASHMENTS,
-      PERMISSION_ACTIONS.MARK_AS_PAID,
-    ),
-  },
+  // // Leave request permissions (leave-management; aligned with use cases)
+  // LEAVE_REQUESTS: {
+  //   CREATE: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
+  //     PERMISSION_ACTIONS.CREATE,
+  //   ),
+  //   READ: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
+  //     PERMISSION_ACTIONS.READ,
+  //   ),
+  //   UPDATE: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
+  //     PERMISSION_ACTIONS.UPDATE,
+  //   ),
+  //   APPROVE: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
+  //     PERMISSION_ACTIONS.APPROVE,
+  //   ),
+  //   REJECT: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
+  //     PERMISSION_ACTIONS.REJECT,
+  //   ),
+  //   CANCEL: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
+  //     PERMISSION_ACTIONS.CANCEL,
+  //   ),
+  // },
+  // // Leave balance permissions (leave-management; aligned with use cases)
+  // LEAVE_BALANCES: {
+  //   CREATE: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
+  //     PERMISSION_ACTIONS.CREATE,
+  //   ),
+  //   READ: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
+  //     PERMISSION_ACTIONS.READ,
+  //   ),
+  //   CLOSE: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
+  //     PERMISSION_ACTIONS.CLOSE,
+  //   ),
+  //   CLOSE_BALANCES_FOR_EMPLOYEE: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
+  //     PERMISSION_ACTIONS.CLOSE_BALANCES_FOR_EMPLOYEE,
+  //   ),
+  //   GENERATE_BALANCES_FOR_ALL_EMPLOYEES: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
+  //     PERMISSION_ACTIONS.GENERATE_BALANCES_FOR_ALL_EMPLOYEES,
+  //   ),
+  //   RESET_FOR_YEAR: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_BALANCES,
+  //     PERMISSION_ACTIONS.RESET_FOR_YEAR,
+  //   ),
+  // },
+  // // Leave encashment permissions (leave-management; strictly 1:1 with use cases)
+  // LEAVE_ENCASHMENTS: {
+  //   CREATE: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_ENCASHMENTS,
+  //     PERMISSION_ACTIONS.CREATE,
+  //   ),
+  //   MARK_AS_PAID: buildPermissionName(
+  //     PERMISSION_RESOURCES.LEAVE_ENCASHMENTS,
+  //     PERMISSION_ACTIONS.MARK_AS_PAID,
+  //   ),
+  // },
   // Leave year configuration permissions (leave-management; strictly 1:1 with use cases)
   LEAVE_YEAR_CONFIGURATIONS: {
     CREATE: buildPermissionName(
       PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
       PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,
+      PERMISSION_ACTIONS.READ,
     ),
     UPDATE: buildPermissionName(
       PERMISSION_RESOURCES.LEAVE_YEAR_CONFIGURATIONS,

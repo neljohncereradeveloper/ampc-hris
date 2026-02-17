@@ -32,7 +32,7 @@ export class UpdateLeavePolicyUseCase {
     private readonly leavePolicyRepository: LeavePolicyRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -62,7 +62,14 @@ export class UpdateLeavePolicyUseCase {
           { field: 'annual_entitlement' },
           { field: 'carry_limit' },
           { field: 'encash_limit' },
-          { field: 'status' },
+          { field: 'carried_over_years' },
+          { field: 'effective_date' },
+          { field: 'expiry_date' },
+          { field: 'remarks' },
+          { field: 'minimum_service_months' },
+          { field: 'allowed_employment_types' },
+          { field: 'allowed_employee_statuses' },
+          { field: 'excluded_weekdays' },
           {
             field: 'updated_at',
             transform: (val) => (val ? getPHDateTime(val) : null),
@@ -85,7 +92,6 @@ export class UpdateLeavePolicyUseCase {
           excluded_weekdays: command.excluded_weekdays,
           updated_by: requestInfo?.user_name ?? null,
         });
-        policy.updated_at = getPHDateTime();
 
         const parameter_validation =
           this.activation_service.validatePolicyParameters(policy);

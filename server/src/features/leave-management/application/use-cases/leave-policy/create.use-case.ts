@@ -32,7 +32,7 @@ export class CreateLeavePolicyUseCase {
     private readonly leaveTypeRepository: LeaveTypeRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     command: CreateLeavePolicyCommand,
@@ -41,8 +41,8 @@ export class CreateLeavePolicyUseCase {
     return this.transactionHelper.executeTransaction(
       LEAVE_POLICY_ACTIONS.CREATE,
       async (manager) => {
-        const leave_type = await this.leaveTypeRepository.findById(
-          command.leave_type_id,
+        const leave_type = await this.leaveTypeRepository.findByDescription(
+          command.leave_type,
           manager,
         );
         if (!leave_type || leave_type.deleted_at) {
@@ -52,8 +52,9 @@ export class CreateLeavePolicyUseCase {
           );
         }
 
+        const leave_type_id = Number(leave_type.id);
         const policy = LeavePolicy.create({
-          leave_type_id: command.leave_type_id,
+          leave_type_id: leave_type_id,
           annual_entitlement: command.annual_entitlement,
           carry_limit: command.carry_limit,
           encash_limit: command.encash_limit,

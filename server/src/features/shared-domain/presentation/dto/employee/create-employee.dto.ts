@@ -1,20 +1,20 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,
   IsNotEmpty,
   IsOptional,
   IsNumber,
-  IsDateString,
   IsBoolean,
   IsEmail,
   MaxLength,
 } from 'class-validator';
 import {
   GenderEnum,
-  PaymentTypeEnum,
   LaborClassificationEnum,
   LaborClassificationStatusEnum,
 } from '@/features/shared-domain/domain/enum';
+import { IsDateStringCustom, transformDateString } from '@/core/utils/date.util';
+import { Transform } from 'class-transformer';
 
 export class CreateEmployeeDto {
   /** Employment information (descriptions from combobox) */
@@ -61,9 +61,14 @@ export class CreateEmployeeDto {
   @IsNotEmpty()
   department: string;
 
-  @ApiProperty({ description: 'Hire date', example: '2024-01-01' })
-  @IsDateString()
-  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Hire date',
+    example: '',
+    type: 'string',
+    format: 'date',
+  })
+  @Transform(({ value }) => transformDateString(value))
+  @IsDateStringCustom({ message: 'Hire date must be a valid date' })
   hire_date: Date;
 
   @ApiProperty({ description: 'Employee ID number', example: 'EMP001' })
@@ -121,9 +126,14 @@ export class CreateEmployeeDto {
   @MaxLength(10)
   suffix?: string;
 
-  @ApiProperty({ description: 'Birth date', example: '1990-01-01' })
-  @IsDateString()
-  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Birth date',
+    example: '',
+    type: 'string',
+    format: 'date',
+  })
+  @Transform(({ value }) => transformDateString(value))
+  @IsDateStringCustom({ message: 'Birth date must be a valid date' })
   birth_date: Date;
 
   @ApiProperty({
@@ -335,13 +345,16 @@ export class CreateEmployeeDto {
   @MaxLength(255)
   husband_or_wife_name?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Husband or wife birth date',
-    example: '1992-01-01',
+    example: '',
+    type: 'string',
+    format: 'date',
     required: false,
   })
-  @IsDateString()
+  @Transform(({ value }) => transformDateString(value))
   @IsOptional()
+  @IsDateStringCustom({ message: 'Husband or wife birth date must be a valid date' })
   husband_or_wife_birth_date?: Date;
 
   @ApiProperty({
@@ -373,13 +386,16 @@ export class CreateEmployeeDto {
   @MaxLength(255)
   fathers_name?: string;
 
-  @ApiProperty({
-    description: 'Fathers birth date',
-    example: '1960-01-01',
+  @ApiPropertyOptional({
+    description: 'Husband or wife birth date',
+    example: '',
+    type: 'string',
+    format: 'date',
     required: false,
   })
-  @IsDateString()
+  @Transform(({ value }) => transformDateString(value))
   @IsOptional()
+  @IsDateStringCustom({ message: 'Fathers birth date must be a valid date' })
   fathers_birth_date?: Date;
 
   @ApiProperty({
@@ -402,13 +418,16 @@ export class CreateEmployeeDto {
   @MaxLength(255)
   mothers_name?: string;
 
-  @ApiProperty({
-    description: 'Mothers birth date',
-    example: '1962-01-01',
+  @ApiPropertyOptional({
+    description: 'Husband or wife birth date',
+    example: '',
+    type: 'string',
+    format: 'date',
     required: false,
   })
-  @IsDateString()
+  @Transform(({ value }) => transformDateString(value))
   @IsOptional()
+  @IsDateStringCustom({ message: 'Mothers birth date must be a valid date' })
   mothers_birth_date?: Date;
 
   @ApiProperty({

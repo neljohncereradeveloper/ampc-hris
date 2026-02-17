@@ -23,7 +23,6 @@ import { SharedDomainModule } from '@/features/shared-domain/shared-domain.modul
 
 const leaveRequestUseCaseList = [
   LeaveRequestUseCases.CreateLeaveRequestUseCase,
-  LeaveRequestUseCases.GetLeaveRequestByIdUseCase,
   LeaveRequestUseCases.GetPaginatedLeaveRequestUseCase,
   LeaveRequestUseCases.GetPaginatedLeaveRequestByEmployeeUseCase,
   LeaveRequestUseCases.GetPaginatedPendingLeaveRequestsUseCase,
@@ -132,4 +131,4 @@ const leaveYearConfigurationUseCaseList = [
     ...leaveYearConfigurationUseCaseList,
   ],
 })
-export class LeaveManagementModule {}
+export class LeaveManagementModule { }
