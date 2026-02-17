@@ -5,6 +5,7 @@ import {
   OptionalStringValidation,
   RequiredNumberValidation,
 } from '../decorators';
+import { REGEX_CONST } from '@/features/shared-domain/domain/constants';
 
 export class PaginationQueryDto {
   @ApiPropertyOptional({
@@ -12,15 +13,15 @@ export class PaginationQueryDto {
     example: '',
     minLength: 0,
     maxLength: 255,
-    pattern: '^[a-zA-Z0-9\\s\\-\\.\\@]+$',
+    pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
   })
   @OptionalStringValidation({
     field_name: 'Search term',
     min_length: 0,
     max_length: 255,
-    pattern: /^[a-zA-Z0-9\s\-\.\@]+$/,
+    pattern: REGEX_CONST.LETTER_NUMBER_SPACE,
     pattern_message:
-      'Search term can only contain letters, numbers, spaces, hyphens, dots, and @ symbols',
+      'Search term can only contain letters, numbers, spaces, hyphens, and dots',
     sanitize: true,
   })
   term?: string;

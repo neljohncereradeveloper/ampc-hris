@@ -29,9 +29,7 @@ import {
     RequireRoles,
 } from '@/features/auth/infrastructure/decorators';
 import { PERMISSIONS, ROLES } from '@/core/domain/constants';
-import { LeaveBalance, LeavePolicy } from '../../domain/models';
-import { PaginatedResult } from '@/core/utils/pagination.util';
-import { PaginationQueryDto } from '@/core/infrastructure/dto';
+import { LeaveBalance } from '../../domain/models';
 import {
     RATE_LIMIT_MODERATE,
     RateLimit,
@@ -45,10 +43,12 @@ import {
     GetLeaveBalanceByLeaveTypeUseCase,
     GetLeaveBalanceByEmployeeYearUseCase,
     CreateLeaveBalanceUseCase,
+    GenerateBalancesForAllEmployeesResult,
 } from '../../application/use-cases/leave-balance';
 import { CreateLeaveBalanceDto } from '../dto/leave-balance/create-leave-balance.dto';
 import { GenerateForYearDto } from '../dto/leave-balance/generate-for-year.dto';
 import { CreateLeaveBalanceCommand } from '../../application/commands/leave-balance/create.command';
+import { ActiveEmployeeIdsFilters } from '../../domain';
 
 @ApiTags('Leave Balance')
 @Controller('leave-balances')
@@ -93,8 +93,6 @@ export class LeaveBalanceController {
         return this.createLeaveBalanceUseCase.execute(command, requestInfo);
     }
 
-
-
     @Version('1')
     @Patch(':id/close')
     @HttpCode(HttpStatus.OK)
@@ -137,6 +135,100 @@ export class LeaveBalanceController {
         return { success: true };
     }
 
+    @Version('1')
+    @Patch(':year/reset')
+    @HttpCode(HttpStatus.OK)
+    @RequireRoles(ROLES.ADMIN)
+    @RequirePermissions(PERMISSIONS.LEAVE_BALANCES.RESET_FOR_YEAR)
+    @ApiOperation({ summary: 'Reset balances for a year' })
+    @ApiParam({ name: 'year', description: 'Year', example: '2025' })
+    @ApiResponse({ status: 200, description: 'Balances reset successfully' })
+    @ApiResponse({ status: 400, description: 'Bad request - validation error' })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiBearerAuth('JWT-auth')
+    async resetBalancesForYear(
+        @Param('year') year: string,
+        @Req() request: Request,
+    ): Promise<{ success: boolean }> {
+        const requestInfo = createRequestInfo(request);
+        await this.resetBalancesForYearUseCase.execute(year, requestInfo);
+        return { success: true };
+    }
 
+    @Version('1')
+    @Get(':id')
+    @HttpCode(HttpStatus.OK)
+    @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
+    @RequirePermissions(PERMISSIONS.LEAVE_BALANCES.READ)
+    @ApiOperation({ summary: 'Get leave balance by ID' })
+    @ApiParam({ name: 'id', description: 'Leave balance ID', example: 1 })
+    @ApiResponse({ status: 200, description: 'Leave balance retrieved successfully' })
+    @ApiResponse({ status: 404, description: 'Leave balance not found' })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiBearerAuth('JWT-auth')
+    async getLeaveBalanceById(@Param('id', ParseIntPipe) id: number): Promise<LeaveBalance | null> {
+        return this.getLeaveBalanceByIdUseCase.execute(id);
+    }
+
+    @Version('1')
+    @Get(':employee_id/year/:year')
+    @HttpCode(HttpStatus.OK)
+    @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
+    @RequirePermissions(PERMISSIONS.LEAVE_BALANCES.READ)
+    @ApiOperation({ summary: 'Get leave balance by employee and year' })
+    @ApiParam({ name: 'employee_id', description: 'Employee ID', example: 1 })
+    @ApiParam({ name: 'year', description: 'Year', example: '2025' })
+    @ApiResponse({ status: 200, description: 'Leave balance retrieved successfully' })
+    @ApiResponse({ status: 404, description: 'Leave balance not found' })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiBearerAuth('JWT-auth')
+    async getLeaveBalanceByEmployeeYear(
+        @Param('employee_id', ParseIntPipe) employee_id: number,
+        @Param('year') year: string,
+    ): Promise<LeaveBalance[] | null> {
+        return this.getLeaveBalanceByEmployeeYearUseCase.execute(employee_id, year);
+    }
+
+    @Version('1')
+    @Get(':employee_id/leave-type/:leave_type_id/year/:year')
+    @HttpCode(HttpStatus.OK)
+    @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
+    @RequirePermissions(PERMISSIONS.LEAVE_BALANCES.READ)
+    @ApiOperation({ summary: 'Get leave balance by leave type' })
+    @ApiParam({ name: 'leave_type_id', description: 'Leave type ID', example: 1 })
+    @ApiResponse({ status: 200, description: 'Leave balance retrieved successfully' })
+    @ApiResponse({ status: 404, description: 'Leave balance not found' })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiBearerAuth('JWT-auth')
+    async getLeaveBalanceByLeaveType(
+        @Param('leave_type_code') leave_type_code: string,
+        @Param('employee_id', ParseIntPipe) employee_id: number,
+        @Param('year') year: string,
+    ): Promise<LeaveBalance | null> {
+        return this.getLeaveBalanceByLeaveTypeUseCase.execute(employee_id, leave_type_code, year);
+    }
+
+    @Version('1')
+    @Post('generate-for-all-employees')
+    @HttpCode(HttpStatus.OK)
+    @RequireRoles(ROLES.ADMIN)
+    @RequirePermissions(PERMISSIONS.LEAVE_BALANCES.GENERATE_BALANCES_FOR_ALL_EMPLOYEES)
+    @ApiOperation({ summary: 'Generate balances for all employees' })
+    @ApiResponse({ status: 200, description: 'Balances generated successfully' })
+    @ApiResponse({ status: 400, description: 'Bad request - validation error' })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiBearerAuth('JWT-auth')
+    async generateBalancesForAllEmployees(
+        @Body() presentationDto: GenerateForYearDto,
+        @Req() request: Request,
+    ): Promise<GenerateBalancesForAllEmployeesResult> {
+        const requestInfo = createRequestInfo(request);
+        const filters: ActiveEmployeeIdsFilters = {
+            employment_types: presentationDto.employment_types,
+            employment_statuses: presentationDto.employment_statuses,
+        };
+        const result = await this.generateBalancesForAllEmployeesUseCase.execute(presentationDto.year, filters, requestInfo);
+        return result;
+    }
 
 }
