@@ -9,16 +9,8 @@ export interface GenerateBalancesForYearEntry {
   leave_type_id: number;
   /** Policy that defines entitlement and rules. */
   policy_id: number;
-  /** Opening balance at start of year (default 0 if omitted). */
-  beginning_balance?: number;
-  /** Days earned for the year (default from policy if omitted). */
-  earned?: number;
-  /** Days used (default 0 if omitted). */
-  used?: number;
-  /** Days carried over from previous year (default 0 if omitted). */
-  carried_over?: number;
-  /** Days encashed (default 0 if omitted). */
-  encashed?: number;
+  /** Annual entitlement for the leave type. */
+  annual_entitlement: number;
   /** Available days (default derived from other fields if omitted). */
   remaining?: number;
   /** Optional notes. */

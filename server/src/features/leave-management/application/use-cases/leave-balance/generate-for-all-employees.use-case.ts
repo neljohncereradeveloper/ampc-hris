@@ -53,7 +53,7 @@ export class GenerateBalancesForAllEmployeesUseCase {
     @Inject(LEAVE_MANAGEMENT_TOKENS.LEAVE_POLICY)
     private readonly policyRepo: LeavePolicyRepository,
     private readonly bulkCreateService: LeaveBalanceBulkCreateService,
-  ) {}
+  ) { }
 
   async execute(
     year: string,
@@ -126,7 +126,7 @@ export class GenerateBalancesForAllEmployeesUseCase {
               employee_id,
               leave_type_id,
               policy_id,
-              earned: entitlement,
+              annual_entitlement: entitlement,
               remaining: entitlement,
             });
           }

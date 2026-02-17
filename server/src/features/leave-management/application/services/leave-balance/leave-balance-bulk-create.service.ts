@@ -27,7 +27,7 @@ export class LeaveBalanceBulkCreateService {
     private readonly repo: LeaveBalanceRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     year: string,
@@ -37,11 +37,14 @@ export class LeaveBalanceBulkCreateService {
   ): Promise<{ created_count: number; skipped_count: number }> {
     let created_count = 0;
     let skipped_count = 0;
+    let data: LeaveBalance[] = [];
 
     for (const entry of entries) {
       const employee_id = toNumber(entry.employee_id, -1);
+      if (employee_id < 0) continue;
       const leave_type_id = toNumber(entry.leave_type_id, -1);
-      if (employee_id < 0 || leave_type_id < 0) continue;
+      const policy_id = toNumber(entry.policy_id, -1);
+      const annual_entitlement = toNumber(entry.annual_entitlement, 0);
 
       const existing = await this.repo.findByLeaveType(
         employee_id,
@@ -54,19 +57,14 @@ export class LeaveBalanceBulkCreateService {
         continue;
       }
 
-      const beginning_balance = toNumber(entry.beginning_balance);
-      const earned = toNumber(entry.earned);
-      const used = toNumber(entry.used);
-      const carried_over = toNumber(entry.carried_over);
-      const encashed = toNumber(entry.encashed);
-      const remaining =
-        entry.remaining !== undefined && entry.remaining !== null
-          ? toNumber(entry.remaining)
-          : beginning_balance + earned - used + carried_over - encashed;
-      const policy_id = toNumber(entry.policy_id, -1);
-      if (policy_id < 0) continue;
+      const beginning_balance = 0;
+      const earned = annual_entitlement;
+      const used = 0;
+      const carried_over = 0;
+      const encashed = 0;
+      const remaining = annual_entitlement;
 
-      const entity = LeaveBalance.create({
+      const balance = LeaveBalance.create({
         employee_id,
         leave_type_id,
         policy_id,
@@ -82,8 +80,9 @@ export class LeaveBalanceBulkCreateService {
         created_by: requestInfo?.user_name ?? null,
       });
 
-      const created = await this.repo.create(entity, context);
+      const created = await this.repo.create(balance, context);
       if (created) created_count += 1;
+      data.push(balance);
     }
 
     const log = ActivityLog.create({
@@ -92,6 +91,7 @@ export class LeaveBalanceBulkCreateService {
       details: JSON.stringify({
         year,
         created_count,
+        data,
         skipped_count,
         generated_by: requestInfo?.user_name ?? '',
         generated_at: getPHDateTime(new Date()),
