@@ -3,14 +3,14 @@
  */
 
 export const WORK_EXPERIENCE_JOB_TITLES = [
-  'Software Developer',
-  'Project Manager',
-  'Accountant',
-  'Sales Associate',
-  'Customer Service Representative',
-  'Administrative Staff',
-  'Marketing Specialist',
-  'HR Specialist',
-  'Engineer',
-  'Other',
+  // Executive Level
+  'department head',
+  'full stack developer',
+  'it specialist hardware',
+  'it specialist software',
+  'general manager',
+  'branch manager',
+  'supervisor',
+  'payroll master',
+  'hr specialist',
 ] as const;

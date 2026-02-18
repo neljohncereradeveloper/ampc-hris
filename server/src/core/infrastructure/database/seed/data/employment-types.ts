@@ -4,10 +4,11 @@
  */
 
 export const EMPLOYMENT_TYPES = [
-  'Regular',
-  'Casual',
-  'Project',
-  'Seasonal',
-  'Fixed-Term',
-  'Probationary',
+  'regular',
+  'probationary',
+  'contractual',
+  'project-based',
+  'part-time',
+  'full-time',
+  'intern',
 ] as const;

@@ -3,11 +3,11 @@
  */
 
 export const CIVIL_STATUSES = [
-  'Single',
-  'Married',
-  'Widowed',
-  'Separated',
-  'Divorced',
-  'Annulled',
-  'Common-Law',
+  'single',
+  'married',
+  'widowed',
+  'divorced',
+  'separated',
+  'annulled',
+  'legally separated',
 ] as const;

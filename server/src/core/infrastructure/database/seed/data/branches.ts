@@ -3,9 +3,8 @@
  */
 
 export const BRANCHES = [
-  'Main Office',
-  'Headquarters',
-  'Regional Office - Luzon',
-  'Regional Office - Visayas',
-  'Regional Office - Mindanao',
+  {
+    desc1: 'default',
+    br_code: 'df',
+  }
 ] as const;

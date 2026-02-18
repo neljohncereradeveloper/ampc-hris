@@ -4,13 +4,9 @@
  */
 
 export const EDUCATION_LEVELS = [
-  'Kindergarten',
-  'Elementary',
-  'Junior High School',
-  'Senior High School',
-  'Vocational/Tech-Voc',
-  "Bachelor's Degree",
-  "Master's Degree",
-  'Doctorate',
-  'Post-Doctorate',
+  // Basic Education (Philippines)
+  'elementary',
+  'high school',
+  'senior high school',
+  'college',
 ] as const;

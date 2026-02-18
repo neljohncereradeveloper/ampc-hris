@@ -3,16 +3,14 @@
  */
 
 export const JOB_TITLES = [
-  'Software Engineer',
-  'Accountant',
-  'HR Manager',
-  'Administrative Assistant',
-  'Sales Representative',
-  'Marketing Officer',
-  'Operations Manager',
-  'IT Support',
-  'Finance Officer',
-  'Executive Assistant',
-  'Project Manager',
-  'Data Analyst',
+  // Executive Level
+  'department head',
+  'full stack developer',
+  'it specialist hardware',
+  'it specialist software',
+  'general manager',
+  'branch manager',
+  'supervisor',
+  'payroll master',
+  'hr specialist',
 ] as const;

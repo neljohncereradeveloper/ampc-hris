@@ -3,11 +3,11 @@
  */
 
 export const EMPLOYMENT_STATUSES = [
-  'Active',
-  'On-Leave',
-  'Resigned',
-  'Terminated',
-  'Retired',
-  'AWOL',
-  'Suspended',
+  'active',
+  'on-leave',
+  'suspended',
+  'terminated',
+  'resigned',
+  'retired',
+  'awol',
 ] as const;

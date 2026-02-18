@@ -7,11 +7,11 @@ import { BRANCHES } from './data';
 export class SeedBranches {
   private readonly logger = new Logger(SeedBranches.name);
 
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(private readonly entityManager: EntityManager) { }
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';
-    for (const desc1 of BRANCHES) {
+    for (const { desc1, br_code } of BRANCHES) {
       const existing = await this.entityManager.findOne(BranchEntity, {
         where: { desc1 },
         withDeleted: true,
@@ -19,6 +19,7 @@ export class SeedBranches {
       if (!existing) {
         const entity = this.entityManager.create(BranchEntity, {
           desc1,
+          br_code,
           created_by: seedBy,
           created_at: getPHDateTime(),
         });

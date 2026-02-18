@@ -7,11 +7,11 @@ import { DEPARTMENTS } from './data';
 export class SeedDepartments {
   private readonly logger = new Logger(SeedDepartments.name);
 
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(private readonly entityManager: EntityManager) { }
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';
-    for (const desc1 of DEPARTMENTS) {
+    for (const { desc1, code, designation } of DEPARTMENTS) {
       const existing = await this.entityManager.findOne(DepartmentEntity, {
         where: { desc1 },
         withDeleted: true,
@@ -19,6 +19,8 @@ export class SeedDepartments {
       if (!existing) {
         const entity = this.entityManager.create(DepartmentEntity, {
           desc1,
+          code,
+          designation,
           created_by: seedBy,
           created_at: getPHDateTime(),
         });

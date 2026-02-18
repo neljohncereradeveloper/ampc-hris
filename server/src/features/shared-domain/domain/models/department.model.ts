@@ -5,6 +5,9 @@ import { DepartmentBusinessException } from '../exceptions/department-business.e
 export class Department {
   id?: number;
   desc1: string;
+  code: string;
+  designation: string;
+  remarks?: string;
   deleted_by: string | null;
   deleted_at: Date | null;
   created_by: string | null;
@@ -15,6 +18,9 @@ export class Department {
   constructor(dto: {
     id?: number;
     desc1: string;
+    code: string;
+    designation: string;
+    remarks?: string;
     deleted_by?: string | null;
     deleted_at?: Date | null;
     created_by?: string | null;
@@ -24,6 +30,9 @@ export class Department {
   }) {
     this.id = dto.id;
     this.desc1 = dto.desc1;
+    this.code = dto.code;
+    this.designation = dto.designation;
+    this.remarks = dto.remarks;
     this.deleted_by = dto.deleted_by ?? null;
     this.deleted_at = dto.deleted_at ?? null;
     this.created_by = dto.created_by ?? null;
@@ -35,10 +44,16 @@ export class Department {
   /** Static factory: create and validate. */
   static create(params: {
     desc1: string;
+    code: string;
+    designation: string;
+    remarks?: string;
     created_by?: string | null;
   }): Department {
     const department = new Department({
       desc1: params.desc1,
+      code: params.code,
+      designation: params.designation,
+      remarks: params.remarks,
       created_by: params.created_by ?? null,
     });
     department.validate();
@@ -46,7 +61,7 @@ export class Department {
   }
 
   /** Update details; validate new state before applying. */
-  update(dto: { desc1: string; updated_by?: string | null }): void {
+  update(dto: { desc1: string; code: string; designation: string; remarks?: string; updated_by?: string | null }): void {
     if (this.deleted_at) {
       throw new DepartmentBusinessException(
         'Department is archived and cannot be updated',
@@ -56,11 +71,17 @@ export class Department {
     const temp_department = new Department({
       id: this.id,
       desc1: dto.desc1,
+      code: dto.code,
+      designation: dto.designation,
+      remarks: dto.remarks,
       created_at: this.created_at,
       updated_at: this.updated_at,
     });
     temp_department.validate();
     this.desc1 = dto.desc1;
+    this.code = dto.code;
+    this.designation = dto.designation;
+    this.remarks = dto.remarks;
     this.updated_by = dto.updated_by ?? null;
   }
 
@@ -105,6 +126,60 @@ export class Department {
     if (this.desc1.trim().length < 2) {
       throw new DepartmentBusinessException(
         'Department description (desc1) must be at least 2 characters long.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (!this.code || this.code.trim().length === 0) {
+      throw new DepartmentBusinessException(
+        'Department code is required and cannot be empty.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (this.code.length > 50) {
+      throw new DepartmentBusinessException(
+        'Department code must not exceed 50 characters.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (this.code.trim().length < 2) {
+      throw new DepartmentBusinessException(
+        'Department code must be at least 2 characters long.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (!this.designation || this.designation.trim().length === 0) {
+      throw new DepartmentBusinessException(
+        'Department designation is required and cannot be empty.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (this.designation.length > 255) {
+      throw new DepartmentBusinessException(
+        'Department designation must not exceed 255 characters.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (this.designation.trim().length < 2) {
+      throw new DepartmentBusinessException(
+        'Department designation must be at least 2 characters long.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (this.remarks && this.remarks.trim().length === 0) {
+      throw new DepartmentBusinessException(
+        'Department remarks is required and cannot be empty.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (this.remarks && this.remarks.length > 500) {
+      throw new DepartmentBusinessException(
+        'Department remarks must not exceed 500 characters.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+    if (this.remarks && this.remarks.trim().length < 2) {
+      throw new DepartmentBusinessException(
+        'Department remarks must be at least 2 characters long.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }

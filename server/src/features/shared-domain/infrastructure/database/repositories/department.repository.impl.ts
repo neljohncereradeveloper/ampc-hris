@@ -16,15 +16,18 @@ export class DepartmentRepositoryImpl implements DepartmentRepository<EntityMana
   ): Promise<Department> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.DEPARTMENTS} (
-        desc1, deleted_by, deleted_at,
+        desc1, code, designation, remarks, deleted_by, deleted_at,
         created_by, created_at, updated_by, updated_at
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING *
     `;
 
     const result = await manager.query(query, [
       department.desc1,
+      department.code,
+      department.designation,
+      department.remarks ?? null,
       department.deleted_by,
       department.deleted_at,
       department.created_by,
@@ -49,6 +52,18 @@ export class DepartmentRepositoryImpl implements DepartmentRepository<EntityMana
     if (dto.desc1 !== undefined) {
       updateFields.push(`desc1 = $${paramIndex++}`);
       values.push(dto.desc1);
+    }
+    if (dto.code !== undefined) {
+      updateFields.push(`code = $${paramIndex++}`);
+      values.push(dto.code);
+    }
+    if (dto.designation !== undefined) {
+      updateFields.push(`designation = $${paramIndex++}`);
+      values.push(dto.designation);
+    }
+    if (dto.remarks !== undefined) {
+      updateFields.push(`remarks = $${paramIndex++}`);
+      values.push(dto.remarks ?? null);
     }
     if (dto.deleted_by !== undefined) {
       updateFields.push(`deleted_by = $${paramIndex++}`);
@@ -190,6 +205,9 @@ export class DepartmentRepositoryImpl implements DepartmentRepository<EntityMana
     return new Department({
       id: entity.id as number,
       desc1: entity.desc1 as string,
+      code: entity.code as string,
+      designation: entity.designation as string,
+      remarks: (entity.remarks as string) ?? null,
       deleted_by: (entity.deleted_by as string) ?? null,
       deleted_at: (entity.deleted_at as Date) ?? null,
       created_by: (entity.created_by as string) ?? null,

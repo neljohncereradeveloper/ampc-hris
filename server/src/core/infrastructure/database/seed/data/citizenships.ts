@@ -3,7 +3,7 @@
  */
 
 export const CITIZENSHIPS = [
-  'Filipino',
-  'Dual Citizenship',
-  'Foreign National',
+  // Philippine Citizenship
+  'filipino',
+  'other',
 ] as const;

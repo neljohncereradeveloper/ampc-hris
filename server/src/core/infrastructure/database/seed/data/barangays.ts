@@ -5,17 +5,4 @@
 
 export const BARANGAYS = [
   'default',
-  'Ermita',
-  'Malate',
-  'Intramuros',
-  'Binondo',
-  'Quiapo',
-  'Sampaloc',
-  'Santa Mesa',
-  'San Miguel',
-  'Pandacan',
-  'Santa Ana',
-  'Barangay 1',
-  'Barangay 2',
-  'Barangay 3',
 ] as const;

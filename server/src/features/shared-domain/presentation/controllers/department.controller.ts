@@ -67,7 +67,7 @@ export class DepartmentController {
     private readonly restoreDepartmentUseCase: RestoreDepartmentUseCase,
     private readonly getPaginatedDepartmentUseCase: GetPaginatedDepartmentUseCase,
     private readonly comboboxDepartmentUseCase: ComboboxDepartmentUseCase,
-  ) {}
+  ) { }
 
   @Version('1')
   @Post()
@@ -87,6 +87,9 @@ export class DepartmentController {
     const requestInfo = createRequestInfo(request);
     const command: CreateDepartmentCommand = {
       desc1: presentationDto.desc1,
+      code: presentationDto.code,
+      designation: presentationDto.designation,
+      remarks: presentationDto.remarks,
     };
     return this.createDepartmentUseCase.execute(command, requestInfo);
   }
@@ -111,6 +114,9 @@ export class DepartmentController {
     const requestInfo = createRequestInfo(request);
     const command: UpdateDepartmentCommand = {
       desc1: presentationDto.desc1,
+      code: presentationDto.code,
+      designation: presentationDto.designation,
+      remarks: presentationDto.remarks,
     };
     return this.updateDepartmentUseCase.execute(id, command, requestInfo);
   }

@@ -24,7 +24,7 @@ export class CreateDepartmentUseCase {
     private readonly departmentRepository: DepartmentRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     command: CreateDepartmentCommand,
@@ -35,6 +35,9 @@ export class CreateDepartmentUseCase {
       async (manager) => {
         const new_department = Department.create({
           desc1: command.desc1,
+          code: command.code,
+          designation: command.designation,
+          remarks: command.remarks,
           created_by: requestInfo?.user_name || null,
         });
 
@@ -56,6 +59,9 @@ export class CreateDepartmentUseCase {
           details: JSON.stringify({
             id: created_department.id,
             desc1: created_department.desc1,
+            code: created_department.code,
+            designation: created_department.designation,
+            remarks: created_department.remarks,
             created_by: requestInfo?.user_name || '',
             created_at: getPHDateTime(created_department.created_at),
           }),

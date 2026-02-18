@@ -29,7 +29,7 @@ export class UpdateDepartmentUseCase {
     private readonly departmentRepository: DepartmentRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -52,6 +52,9 @@ export class UpdateDepartmentUseCase {
 
         const tracking_config: FieldExtractorConfig[] = [
           { field: 'desc1' },
+          { field: 'code' },
+          { field: 'designation' },
+          { field: 'remarks' },
           {
             field: 'updated_at',
             transform: (val) => (val ? getPHDateTime(val) : null),
@@ -63,6 +66,9 @@ export class UpdateDepartmentUseCase {
 
         department.update({
           desc1: command.desc1,
+          code: command.code,
+          designation: command.designation,
+          remarks: command.remarks,
           updated_by: requestInfo?.user_name || null,
         });
 

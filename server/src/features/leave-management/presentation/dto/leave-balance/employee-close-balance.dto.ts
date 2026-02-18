@@ -31,6 +31,4 @@ export class EmployeeCloseBalanceDto {
             'Year can only contain letters and numbers and must be 4 digits',
     })
     year: string;
-
-
 }

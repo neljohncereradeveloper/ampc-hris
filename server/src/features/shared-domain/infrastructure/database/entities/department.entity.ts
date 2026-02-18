@@ -24,6 +24,30 @@ export class DepartmentEntity {
   @Index()
   desc1: string;
 
+  @Column({
+    type: 'varchar',
+    length: 255,
+    comment: 'Department code (code)',
+  })
+  @Index()
+  code: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    comment: 'Department designation (designation)',
+  })
+  @Index()
+  designation: string;
+
+  @Column({
+    type: 'varchar',
+    length: 500,
+    nullable: true,
+    comment: 'Department remarks (remarks)',
+  })
+  remarks: string | null;
+
   // Audit fields (in standard order)
   @Column({
     type: 'varchar',

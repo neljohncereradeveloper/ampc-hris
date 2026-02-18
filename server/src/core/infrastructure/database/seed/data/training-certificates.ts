@@ -3,12 +3,12 @@
  */
 
 export const TRAINING_CERTIFICATES = [
-  'Leadership Development',
-  'Project Management Professional (PMP)',
-  'Data Privacy Act Compliance',
-  'First Aid and BLS',
-  'Fire Safety',
-  'ISO 9001 Internal Auditor',
-  'Microsoft Office Specialist',
-  'Other',
+  'leadership development',
+  'project management professional (pmp)',
+  'data privacy act compliance',
+  'first aid and bls',
+  'fire safety',
+  'iso 9001 internal auditor',
+  'microsoft office specialist',
+  'other',
 ];

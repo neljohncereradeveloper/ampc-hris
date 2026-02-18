@@ -3,11 +3,14 @@
  */
 
 export const EDUCATION_COURSE_LEVELS = [
-  '1st Year',
-  '2nd Year',
-  '3rd Year',
-  '4th Year',
-  '5th Year',
-  'Graduate',
-  'Post-Graduate',
+  // Basic Education Levels
+  'elementary',
+  'high school',
+  'senior high school',
+  'college',
+
+  // Higher Education Levels
+  "bachelor's degree",
+  "master's degree",
+  'doctorate',
 ] as const;
