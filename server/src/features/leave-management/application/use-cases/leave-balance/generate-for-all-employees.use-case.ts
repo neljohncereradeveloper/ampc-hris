@@ -86,6 +86,12 @@ export class GenerateBalancesForAllEmployeesUseCase {
           );
         const policies = await this.policyRepo.retrieveActivePolicies(manager);
 
+        if (policies.length === 0) {
+          throw new LeaveBalanceBusinessException(
+            'No active leave policies found',
+          );
+        }
+
         const yearStart = this.parseYearStartOrThrow(year);
         const entries: GenerateBalancesForYearEntry[] = [];
         const skipped_employees: SkippedEmployeeItem[] = [];
