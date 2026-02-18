@@ -13,7 +13,7 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
   async create(branch: Branch, manager: EntityManager): Promise<Branch> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.BRANCHES} (
-        desc1, deleted_by, deleted_at,
+        desc1, br_code, deleted_by, deleted_at,
         created_by, created_at, updated_by, updated_at
       )
       VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -22,6 +22,7 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
 
     const result = await manager.query(query, [
       branch.desc1,
+      branch.br_code,
       branch.deleted_by,
       branch.deleted_at,
       branch.created_by,
@@ -46,6 +47,10 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
     if (dto.desc1 !== undefined) {
       updateFields.push(`desc1 = $${paramIndex++}`);
       values.push(dto.desc1);
+    }
+    if (dto.br_code !== undefined) {
+      updateFields.push(`br_code = $${paramIndex++}`);
+      values.push(dto.br_code);
     }
     if (dto.deleted_by !== undefined) {
       updateFields.push(`deleted_by = $${paramIndex++}`);
@@ -168,7 +173,7 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
 
   async combobox(manager: EntityManager): Promise<Branch[]> {
     const query = `
-      SELECT id, desc1
+      SELECT id, desc1, br_code
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.BRANCHES}
       WHERE deleted_at IS NULL
       ORDER BY desc1 ASC
@@ -184,6 +189,7 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
     return new Branch({
       id: entity.id as number,
       desc1: entity.desc1 as string,
+      br_code: entity.br_code as string,
       deleted_by: (entity.deleted_by as string) ?? null,
       deleted_at: (entity.deleted_at as Date) ?? null,
       created_by: (entity.created_by as string) ?? null,

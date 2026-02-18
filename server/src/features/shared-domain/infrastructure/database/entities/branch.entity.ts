@@ -24,6 +24,14 @@ export class BranchEntity {
   @Index()
   desc1: string;
 
+  @Column({
+    type: 'varchar',
+    length: 255,
+    comment: 'Branch code (br_code)',
+  })
+  @Index()
+  br_code: string;
+
   // Audit fields (in standard order)
   @Column({
     type: 'varchar',

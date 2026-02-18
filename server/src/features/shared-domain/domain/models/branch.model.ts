@@ -5,6 +5,7 @@ import { BranchBusinessException } from '../exceptions/branch-business.exception
 export class Branch {
   id?: number;
   desc1: string;
+  br_code: string;
   deleted_by: string | null;
   deleted_at: Date | null;
   created_by: string | null;
@@ -15,6 +16,7 @@ export class Branch {
   constructor(dto: {
     id?: number;
     desc1: string;
+    br_code: string;
     deleted_by?: string | null;
     deleted_at?: Date | null;
     created_by?: string | null;
@@ -24,6 +26,7 @@ export class Branch {
   }) {
     this.id = dto.id;
     this.desc1 = dto.desc1;
+    this.br_code = dto.br_code;
     this.deleted_by = dto.deleted_by ?? null;
     this.deleted_at = dto.deleted_at ?? null;
     this.created_by = dto.created_by ?? null;
@@ -33,9 +36,10 @@ export class Branch {
   }
 
   /** Static factory: create and validate. */
-  static create(params: { desc1: string; created_by?: string | null }): Branch {
+  static create(params: { desc1: string; br_code: string; created_by?: string | null }): Branch {
     const branch = new Branch({
       desc1: params.desc1,
+      br_code: params.br_code,
       created_by: params.created_by ?? null,
     });
     branch.validate();
@@ -43,7 +47,7 @@ export class Branch {
   }
 
   /** Update details; validate new state before applying. */
-  update(dto: { desc1: string; updated_by?: string | null }): void {
+  update(dto: { desc1: string; br_code: string; updated_by?: string | null }): void {
     if (this.deleted_at) {
       throw new BranchBusinessException(
         'Branch is archived and cannot be updated',
@@ -53,6 +57,7 @@ export class Branch {
     const temp_branch = new Branch({
       id: this.id,
       desc1: dto.desc1,
+      br_code: dto.br_code,
       created_at: this.created_at,
       updated_at: this.updated_at,
     });

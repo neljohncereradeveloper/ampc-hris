@@ -24,7 +24,7 @@ export class CreateBranchUseCase {
     private readonly branchRepository: BranchRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     command: CreateBranchCommand,
@@ -35,6 +35,7 @@ export class CreateBranchUseCase {
       async (manager) => {
         const new_branch = Branch.create({
           desc1: command.desc1,
+          br_code: command.br_code,
           created_by: requestInfo?.user_name || null,
         });
 
@@ -56,6 +57,7 @@ export class CreateBranchUseCase {
           details: JSON.stringify({
             id: created_branch.id,
             desc1: created_branch.desc1,
+            br_code: created_branch.br_code,
             created_by: requestInfo?.user_name || '',
             created_at: getPHDateTime(created_branch.created_at),
           }),

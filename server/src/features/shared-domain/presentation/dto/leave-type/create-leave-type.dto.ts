@@ -1,48 +1,57 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { OptionalStringValidation, RequiredStringValidation } from '@/core/infrastructure/decorators';
+import { REGEX_CONST } from '@/features/shared-domain/domain/constants/regex.constants';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
-  IsString,
-  IsNotEmpty,
   IsBoolean,
-  IsOptional,
-  MaxLength,
-  MinLength,
 } from 'class-validator';
 
 export class CreateLeaveTypeDto {
   @ApiProperty({
-    description: 'Leave type name',
+    description: 'Leave type name (name)',
     example: 'Sick Leave',
-    maxLength: 100,
     minLength: 2,
+    maxLength: 100,
   })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(2)
-  @MaxLength(100)
+  @RequiredStringValidation({
+    field_name: 'Leave type name (name)',
+    min_length: 2,
+    max_length: 255,
+    pattern: REGEX_CONST.LETTER_NUMBER_SPACE,
+    pattern_message:
+      'Leave type name can only contain letters, numbers, and spaces',
+  })
   name: string;
 
   @ApiProperty({
-    description: 'Short code (e.g. VL, SL)',
+    description: 'Leave type code (code)',
     example: 'SL',
-    maxLength: 50,
-    minLength: 1,
+    minLength: 2,
+    maxLength: 100,
   })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(1)
-  @MaxLength(50)
+  @RequiredStringValidation({
+    field_name: 'Leave type code (code)',
+    min_length: 2,
+    max_length: 50,
+    pattern: REGEX_CONST.LETTER_NUMBER_SPACE,
+    pattern_message:
+      'Leave type code can only contain letters and numbers',
+  })
   code: string;
 
   @ApiProperty({
     description: 'Leave type description (desc1)',
-    example: 'Sick Leave',
-    maxLength: 255,
+    example: 'Leave type description Example',
     minLength: 2,
+    maxLength: 255,
   })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(2)
-  @MaxLength(255)
+  @RequiredStringValidation({
+    field_name: 'Leave type description (desc1)',
+    min_length: 2,
+    max_length: 255,
+    pattern: REGEX_CONST.LETTER_NUMBER_SPACE,
+    pattern_message:
+      'Leave type description can only contain letters, numbers, and spaces',
+  })
   desc1: string;
 
   @ApiProperty({
@@ -53,14 +62,19 @@ export class CreateLeaveTypeDto {
   @IsBoolean()
   paid: boolean;
 
-  @ApiProperty({
-    description: 'Optional remarks',
-    example: 'Requires medical certificate',
+  @ApiPropertyOptional({
+    description: 'Remarks',
+    example: 'Additional notes',
+    minLength: 1,
     maxLength: 500,
-    required: false,
   })
-  @IsOptional()
-  @IsString()
-  @MaxLength(500)
+  @OptionalStringValidation({
+    field_name: 'Remarks',
+    min_length: 2,
+    max_length: 500,
+    pattern: REGEX_CONST.DESCRIPTION,
+    pattern_message:
+      'Remarks can only contain letters, numbers, spaces, hyphens, apostrophes, periods, slashes, ampersands, exclamation marks, question marks, colons, and semicolons',
+  })
   remarks?: string;
 }

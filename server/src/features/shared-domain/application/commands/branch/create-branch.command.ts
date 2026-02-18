@@ -4,4 +4,5 @@
  */
 export interface CreateBranchCommand {
   desc1: string;
+  br_code: string;
 }

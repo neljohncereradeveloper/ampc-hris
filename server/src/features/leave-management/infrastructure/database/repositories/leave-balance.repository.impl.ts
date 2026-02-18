@@ -124,7 +124,7 @@ export class LeaveBalanceRepositoryImpl implements LeaveBalanceRepository<Entity
     return this.entityToModel(result[0]);
   }
 
-  async loadEmployeeBalanceByYear(
+  async loadEmployeeBalancesByYear(
     employee_id: number,
     year: string,
     manager: EntityManager,

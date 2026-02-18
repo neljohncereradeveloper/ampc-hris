@@ -44,7 +44,7 @@ export class CloseBalancesForEmployeeUseCase {
     return this.transactionHelper.executeTransaction(
       LEAVE_BALANCE_ACTIONS.CLOSE_BALANCES_FOR_EMPLOYEE,
       async (manager) => {
-        const balances = await this.repo.loadEmployeeBalanceByYear(
+        const balances = await this.repo.loadEmployeeBalancesByYear(
           employee_id,
           year,
           manager,

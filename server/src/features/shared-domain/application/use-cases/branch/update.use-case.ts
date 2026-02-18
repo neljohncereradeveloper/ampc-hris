@@ -29,7 +29,7 @@ export class UpdateBranchUseCase {
     private readonly branchRepository: BranchRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -49,6 +49,7 @@ export class UpdateBranchUseCase {
 
         const tracking_config: FieldExtractorConfig[] = [
           { field: 'desc1' },
+          { field: 'br_code' },
           {
             field: 'updated_at',
             transform: (val) => (val ? getPHDateTime(val) : null),
@@ -60,6 +61,7 @@ export class UpdateBranchUseCase {
 
         branch.update({
           desc1: command.desc1,
+          br_code: command.br_code,
           updated_by: requestInfo?.user_name || null,
         });
 

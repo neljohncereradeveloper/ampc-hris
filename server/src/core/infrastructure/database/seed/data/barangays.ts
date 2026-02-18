@@ -4,6 +4,7 @@
  */
 
 export const BARANGAYS = [
+  'default',
   'Ermita',
   'Malate',
   'Intramuros',
