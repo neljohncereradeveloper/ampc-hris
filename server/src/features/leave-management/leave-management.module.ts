@@ -9,7 +9,6 @@ import {
   LeaveBalanceRepositoryImpl,
   LeavePolicyRepositoryImpl,
   LeaveYearConfigurationRepositoryImpl,
-  LeaveEncashmentRepositoryImpl,
   LeaveTransactionRepositoryImpl,
 } from './infrastructure/database/repositories';
 import { ActiveEmployeeIdsAdapter } from './application/adapters/active-employee-ids.adapter';
@@ -17,9 +16,14 @@ import { LeaveBalanceBulkCreateService } from './application/services/leave-bala
 import * as LeaveRequestUseCases from './application/use-cases/leave-request';
 import * as LeaveBalanceUseCases from './application/use-cases/leave-balance';
 import * as LeavePolicyUseCases from './application/use-cases/leave-policy';
-import * as LeaveEncashmentUseCases from './application/use-cases/leave-encashment';
 import * as LeaveYearConfigurationUseCases from './application/use-cases/leave-year-configuration';
 import { SharedDomainModule } from '@/features/shared-domain/shared-domain.module';
+import {
+  LeaveBalanceController,
+  LeavePolicyController,
+  LeaveRequestController,
+  LeaveYearConfigurationController,
+} from './presentation/controllers';
 
 const leaveRequestUseCaseList = [
   LeaveRequestUseCases.CreateLeaveRequestUseCase,
@@ -55,11 +59,6 @@ const leavePolicyUseCaseList = [
   LeavePolicyUseCases.RetirePolicyUseCase,
 ];
 
-const leaveEncashmentUseCaseList = [
-  LeaveEncashmentUseCases.CreateLeaveEncashmentUseCase,
-  LeaveEncashmentUseCases.GetPaginatedLeaveEncashmentUseCase,
-  LeaveEncashmentUseCases.MarkAsPaidLeaveEncashmentUseCase,
-];
 
 const leaveYearConfigurationUseCaseList = [
   LeaveYearConfigurationUseCases.CreateLeaveYearConfigurationUseCase,
@@ -72,6 +71,12 @@ const leaveYearConfigurationUseCaseList = [
 
 @Module({
   imports: [PostgresqlDatabaseModule, SharedDomainModule],
+  controllers: [
+    LeaveRequestController,
+    LeaveBalanceController,
+    LeavePolicyController,
+    LeaveYearConfigurationController,
+  ],
   providers: [
     {
       provide: LEAVE_MANAGEMENT_TOKENS.LEAVE_REQUEST,
@@ -88,10 +93,6 @@ const leaveYearConfigurationUseCaseList = [
     {
       provide: LEAVE_MANAGEMENT_TOKENS.LEAVE_YEAR_CONFIGURATION,
       useClass: LeaveYearConfigurationRepositoryImpl,
-    },
-    {
-      provide: LEAVE_MANAGEMENT_TOKENS.LEAVE_ENCASHMENT,
-      useClass: LeaveEncashmentRepositoryImpl,
     },
     {
       provide: LEAVE_MANAGEMENT_TOKENS.LEAVE_TRANSACTION,
@@ -113,7 +114,6 @@ const leaveYearConfigurationUseCaseList = [
     ...leaveRequestUseCaseList,
     ...leaveBalanceUseCaseList,
     ...leavePolicyUseCaseList,
-    ...leaveEncashmentUseCaseList,
     ...leaveYearConfigurationUseCaseList,
   ],
   exports: [
@@ -121,13 +121,11 @@ const leaveYearConfigurationUseCaseList = [
     LEAVE_MANAGEMENT_TOKENS.LEAVE_BALANCE,
     LEAVE_MANAGEMENT_TOKENS.LEAVE_POLICY,
     LEAVE_MANAGEMENT_TOKENS.LEAVE_YEAR_CONFIGURATION,
-    LEAVE_MANAGEMENT_TOKENS.LEAVE_ENCASHMENT,
     LEAVE_MANAGEMENT_TOKENS.LEAVE_TRANSACTION,
     LEAVE_MANAGEMENT_TOKENS.ACTIVE_EMPLOYEE_IDS_PORT,
     ...leaveRequestUseCaseList,
     ...leaveBalanceUseCaseList,
     ...leavePolicyUseCaseList,
-    ...leaveEncashmentUseCaseList,
     ...leaveYearConfigurationUseCaseList,
   ],
 })

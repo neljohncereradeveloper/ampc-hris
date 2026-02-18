@@ -46,10 +46,11 @@ import {
     RetirePolicyUseCase,
     GetActivePolicyUseCase
 } from '../../application/use-cases/leave-policy';
-import { CreateLeavePolicyDto } from '../dto/leave-policy/create-leave-policy.dto';
-import { CreateLeavePolicyCommand } from '../../application/commands/leave-policy/create.command';
-import { UpdateLeavePolicyDto } from '../dto/leave-policy/update-leave-policy.dto';
-import { UpdateLeavePolicyCommand } from '../../application/commands/leave-policy';
+import { CreateLeavePolicyDto, UpdateLeavePolicyDto } from '../dto/leave-policy';
+import {
+    CreateLeavePolicyCommand,
+    UpdateLeavePolicyCommand,
+} from '../../application/commands/leave-policy';
 
 @ApiTags('Leave Policy')
 @Controller('leave-policies')

@@ -44,10 +44,11 @@ import {
     GetPaginatedLeaveYearConfigurationUseCase,
     FindActiveLeaveYearForDateUseCase
 } from '../../application/use-cases/leave-year-configuration';
-import { CreateLeaveYearConfigurationDto } from '../dto/leave-year-configuration/create-leave-configuration.dto';
-import { CreateLeaveYearConfigurationCommand } from '../../application/commands/leave-year-configuration/create.command';
-import { UpdateLeaveYearConfigurationDto } from '../dto/leave-year-configuration/update-leave-configuration.dto';
-import { UpdateLeaveYearConfigurationCommand } from '../../application/commands/leave-year-configuration/update.command';
+import {
+    CreateLeaveYearConfigurationCommand,
+    UpdateLeaveYearConfigurationCommand,
+} from '../../application/commands/leave-year-configuration';
+import { CreateLeaveYearConfigurationDto, UpdateLeaveYearConfigurationDto } from '../dto/leave-year-configuration';
 
 @ApiTags('Leave Year Configuration')
 @Controller('leave-year-configurations')

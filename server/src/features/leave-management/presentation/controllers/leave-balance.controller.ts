@@ -43,13 +43,15 @@ import {
     CreateLeaveBalanceUseCase,
     GenerateBalancesForAllEmployeesResult,
 } from '../../application/use-cases/leave-balance';
-import { CreateLeaveBalanceDto } from '../dto/leave-balance/create-leave-balance.dto';
-import { GenerateForYearDto } from '../dto/leave-balance/generate-for-year.dto';
-import { CreateLeaveBalanceCommand } from '../../application/commands/leave-balance/create.command';
+import { CreateLeaveBalanceCommand } from '../../application/commands/leave-balance';
 import { ActiveEmployeeIdsFilters } from '../../domain';
-import { EmployeeCloseBalanceDto } from '../dto/leave-balance/employee-close-balance.dto';
-import { LoadEmployeeBalancesByYearDto } from '../dto/leave-balance/load-employee-balances-by-year.dto';
-import { LoadEmployeeBalancesByLeaveTypeAndYearDto } from '../dto/leave-balance/load-employee-balances-by-leave-type-and-year.dto';
+import {
+    EmployeeCloseBalanceDto,
+    LoadEmployeeBalancesByYearDto,
+    LoadEmployeeBalancesByLeaveTypeAndYearDto,
+    CreateLeaveBalanceDto,
+    GenerateForYearDto
+} from '../dto/leave-balance';
 
 @ApiTags('Leave Balance')
 @Controller('leave-balances')

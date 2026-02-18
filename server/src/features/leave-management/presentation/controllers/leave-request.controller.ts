@@ -42,20 +42,24 @@ import {
     RejectLeaveRequestUseCase,
     UpdateLeaveRequestUseCase,
 } from '../../application/use-cases/leave-request';
-import { CreateLeaveRequestDto } from '../dto/leave-request/create-leave-request.dto';
-import { CreateLeaveRequestCommand } from '../../application/commands/leave-request/create.command';
-import { ApproveLeaveRequestDto } from '../dto/leave-request/approve-leave-request.dto';
-import { ApproveLeaveRequestCommand } from '../../application/commands/leave-request/approve.command';
-import { CancelLeaveRequestDto } from '../dto/leave-request/cancel-leave-request.dto';
-import { CancelLeaveRequestCommand } from '../../application/commands/leave-request/cancel.command';
-import { RejectLeaveRequestDto } from '../dto/leave-request/reject-leave-request.dto';
-import { RejectLeaveRequestCommand } from '../../application/commands/leave-request/reject.command';
+import {
+    CreateLeaveRequestDto,
+    ApproveLeaveRequestDto,
+    CancelLeaveRequestDto,
+    RejectLeaveRequestDto,
+    UpdateLeaveRequestDto,
+    GetPaginatedLeaveRequestByEmployeeDto,
+    GetPaginatedPendingLeaveRequestsDto,
+} from '../dto/leave-request';
+import {
+    ApproveLeaveRequestCommand,
+    CancelLeaveRequestCommand,
+    RejectLeaveRequestCommand,
+    UpdateLeaveRequestCommand,
+    CreateLeaveRequestCommand,
+} from '../../application/commands/leave-request';
 import { PaginatedResult } from '@/core/utils/pagination.util';
-import { GetPaginatedLeaveRequestByEmployeeDto } from '../dto/leave-request/pagination-query-by-employee.dto';
-import { GetPaginatedPendingLeaveRequestsDto } from '../dto/leave-request/pagination-query-pendings.dto';
 import { PaginationQueryDto } from '@/core/infrastructure/dto';
-import { UpdateLeaveRequestDto } from '../dto/leave-request/update-leave-request.dto';
-import { UpdateLeaveRequestCommand } from '../../application/commands/leave-request/update.command';
 
 @ApiTags('Leave Request')
 @Controller('leave-requests')
