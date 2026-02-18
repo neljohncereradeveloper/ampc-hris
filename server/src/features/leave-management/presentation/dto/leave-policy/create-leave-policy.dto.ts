@@ -17,7 +17,7 @@ export class CreateLeavePolicyDto {
         field_name: 'Leave type',
         min_length: 2,
         max_length: 255,
-        pattern: REGEX_CONST.LETTER_NUMBER,
+        pattern: REGEX_CONST.LETTER_NUMBER_SPACE,
         pattern_message:
             'Leave type code can only contain letters and numbers',
     })
