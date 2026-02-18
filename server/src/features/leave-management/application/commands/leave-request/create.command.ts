@@ -8,7 +8,7 @@ export interface CreateLeaveRequestCommand {
   /** Last day of the leave period. */
   end_date: Date;
   /** When true and start_date === end_date, total_days = 0.5. Otherwise total_days is calculated from date range. */
-  is_half_day?: boolean;
+  is_half_day: boolean;
   /** Reason or purpose for the leave. */
   reason: string;
   /** Optional remarks. */

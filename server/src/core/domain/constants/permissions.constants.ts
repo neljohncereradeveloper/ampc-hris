@@ -731,32 +731,32 @@ export const PERMISSIONS = {
     ),
   },
   // // Leave request permissions (leave-management; aligned with use cases)
-  // LEAVE_REQUESTS: {
-  //   CREATE: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
-  //     PERMISSION_ACTIONS.CREATE,
-  //   ),
-  //   READ: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
-  //     PERMISSION_ACTIONS.READ,
-  //   ),
-  //   UPDATE: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
-  //     PERMISSION_ACTIONS.UPDATE,
-  //   ),
-  //   APPROVE: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
-  //     PERMISSION_ACTIONS.APPROVE,
-  //   ),
-  //   REJECT: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
-  //     PERMISSION_ACTIONS.REJECT,
-  //   ),
-  //   CANCEL: buildPermissionName(
-  //     PERMISSION_RESOURCES.LEAVE_REQUESTS,
-  //     PERMISSION_ACTIONS.CANCEL,
-  //   ),
-  // },
+  LEAVE_REQUESTS: {
+    CREATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.CREATE,
+    ),
+    READ: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.READ,
+    ),
+    UPDATE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.UPDATE,
+    ),
+    APPROVE: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.APPROVE,
+    ),
+    REJECT: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.REJECT,
+    ),
+    CANCEL: buildPermissionName(
+      PERMISSION_RESOURCES.LEAVE_REQUESTS,
+      PERMISSION_ACTIONS.CANCEL,
+    ),
+  },
   // // Leave balance permissions (leave-management; aligned with use cases)
   LEAVE_BALANCES: {
     CREATE: buildPermissionName(

@@ -9,11 +9,9 @@ export interface UpdateLeaveRequestCommand {
   /** New last day of the leave period (optional). */
   end_date?: Date;
   /** When true and start_date === end_date, total_days = 0.5. Only used when dates are updated. */
-  is_half_day?: boolean;
+  is_half_day: boolean;
   /** New reason or purpose for the leave (optional). */
   reason?: string;
-  /** New leave balance record ID to debit (optional). */
-  balance_id?: number;
   /** Optional remarks. */
   remarks?: string;
 }

@@ -327,6 +327,7 @@ export class UpdateLeaveRequestUseCase {
           entity: LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_REQUESTS,
           details: JSON.stringify({
             id: updated_result?.id,
+            employee_name: employee_name,
             changed_fields,
             updated_by: requestInfo?.user_name ?? '',
             updated_at: getPHDateTime(updated_result?.updated_at ?? new Date()),
