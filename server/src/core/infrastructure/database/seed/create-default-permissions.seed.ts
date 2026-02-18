@@ -1008,7 +1008,80 @@ export class SeedPermissions {
         action: PERMISSION_ACTIONS.RETIRE,
         description: 'Retire leave policies',
       },
-
+      // leave balance permissions (leave-management)
+      {
+        name: PERMISSIONS.LEAVE_BALANCES.CREATE,
+        resource: PERMISSION_RESOURCES.LEAVE_BALANCES,
+        action: PERMISSION_ACTIONS.CREATE,
+        description: 'Create new leave balances',
+      },
+      {
+        name: PERMISSIONS.LEAVE_BALANCES.READ,
+        resource: PERMISSION_RESOURCES.LEAVE_BALANCES,
+        action: PERMISSION_ACTIONS.READ,
+        description: 'View leave balance details',
+      },
+      {
+        name: PERMISSIONS.LEAVE_BALANCES.CLOSE,
+        resource: PERMISSION_RESOURCES.LEAVE_BALANCES,
+        action: PERMISSION_ACTIONS.CLOSE,
+        description: 'Close leave balances',
+      },
+      {
+        name: PERMISSIONS.LEAVE_BALANCES.CLOSE_BALANCES_FOR_EMPLOYEE,
+        resource: PERMISSION_RESOURCES.LEAVE_BALANCES,
+        action: PERMISSION_ACTIONS.CLOSE_BALANCES_FOR_EMPLOYEE,
+        description: 'Close leave balances for employee',
+      },
+      {
+        name: PERMISSIONS.LEAVE_BALANCES.RESET_FOR_YEAR,
+        resource: PERMISSION_RESOURCES.LEAVE_BALANCES,
+        action: PERMISSION_ACTIONS.RESET_FOR_YEAR,
+        description: 'Reset leave balances for year',
+      },
+      {
+        name: PERMISSIONS.LEAVE_BALANCES.GENERATE_BALANCES_FOR_ALL_EMPLOYEES,
+        resource: PERMISSION_RESOURCES.LEAVE_BALANCES,
+        action: PERMISSION_ACTIONS.GENERATE_BALANCES_FOR_ALL_EMPLOYEES,
+        description: 'Generate leave balances for all employees',
+      },
+      // Leave request permissions (leave-management)
+      {
+        name: PERMISSIONS.LEAVE_REQUESTS.CREATE,
+        resource: PERMISSION_RESOURCES.LEAVE_REQUESTS,
+        action: PERMISSION_ACTIONS.CREATE,
+        description: 'Create new leave requests',
+      },
+      {
+        name: PERMISSIONS.LEAVE_REQUESTS.READ,
+        resource: PERMISSION_RESOURCES.LEAVE_REQUESTS,
+        action: PERMISSION_ACTIONS.READ,
+        description: 'View leave request details',
+      },
+      {
+        name: PERMISSIONS.LEAVE_REQUESTS.UPDATE,
+        resource: PERMISSION_RESOURCES.LEAVE_REQUESTS,
+        action: PERMISSION_ACTIONS.UPDATE,
+        description: 'Update leave request information',
+      },
+      {
+        name: PERMISSIONS.LEAVE_REQUESTS.APPROVE,
+        resource: PERMISSION_RESOURCES.LEAVE_REQUESTS,
+        action: PERMISSION_ACTIONS.APPROVE,
+        description: 'Approve leave requests',
+      },
+      {
+        name: PERMISSIONS.LEAVE_REQUESTS.REJECT,
+        resource: PERMISSION_RESOURCES.LEAVE_REQUESTS,
+        action: PERMISSION_ACTIONS.REJECT,
+        description: 'Reject leave requests',
+      },
+      {
+        name: PERMISSIONS.LEAVE_REQUESTS.CANCEL,
+        resource: PERMISSION_RESOURCES.LEAVE_REQUESTS,
+        action: PERMISSION_ACTIONS.CANCEL,
+        description: 'Cancel leave requests',
+      },
     ];
 
     /**
