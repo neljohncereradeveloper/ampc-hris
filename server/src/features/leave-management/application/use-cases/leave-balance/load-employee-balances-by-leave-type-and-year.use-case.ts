@@ -15,7 +15,7 @@ import { LeaveBalanceBusinessException } from '@/features/leave-management/domai
  * Retrieves the leave balance for a specific employee and leave type.
  */
 @Injectable()
-export class GetLeaveBalanceByLeaveTypeUseCase {
+export class LoadEmployeeBalancesByLeaveTypeAndYearUseCase {
   constructor(
     @Inject(LEAVE_MANAGEMENT_TOKENS.LEAVE_BALANCE)
     private readonly repo: LeaveBalanceRepository,
@@ -47,7 +47,7 @@ export class GetLeaveBalanceByLeaveTypeUseCase {
           throw new LeaveBalanceBusinessException(`Leave type with code "${leave_type_code}" not found`);
         }
         // Use the retrieved leave_type_id to get the balance
-        const result = await this.repo.findByLeaveType(employee_id, Number(leaveType.id), year, manager);
+        const result = await this.repo.loadEmployeeBalancesByLeaveTypeAndYear(employee_id, Number(leaveType.id), year, manager);
         return result;
       }
     );

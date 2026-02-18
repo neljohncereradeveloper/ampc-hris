@@ -46,7 +46,7 @@ export class LeaveBalanceBulkCreateService {
       const policy_id = toNumber(entry.policy_id, -1);
       const annual_entitlement = toNumber(entry.annual_entitlement, 0);
 
-      const existing = await this.repo.findByLeaveType(
+      const existing = await this.repo.loadEmployeeBalancesByLeaveTypeAndYear(
         employee_id,
         leave_type_id,
         year,

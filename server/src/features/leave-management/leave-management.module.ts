@@ -35,8 +35,8 @@ const leaveRequestUseCaseList = [
 const leaveBalanceUseCaseList = [
   LeaveBalanceUseCases.CreateLeaveBalanceUseCase,
   LeaveBalanceUseCases.GetLeaveBalanceByIdUseCase,
-  LeaveBalanceUseCases.GetLeaveBalanceByLeaveTypeUseCase,
-  LeaveBalanceUseCases.GetLeaveBalanceByEmployeeYearUseCase,
+  LeaveBalanceUseCases.LoadEmployeeBalancesByLeaveTypeAndYearUseCase,
+  LeaveBalanceUseCases.LoadEmployeeBalancesByYearUseCase,
   LeaveBalanceUseCases.CloseBalanceUseCase,
   LeaveBalanceUseCases.CloseBalancesForEmployeeUseCase,
   LeaveBalanceUseCases.ResetBalancesForYearUseCase,

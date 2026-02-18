@@ -37,7 +37,7 @@ export interface LeaveBalanceRepository<Context = unknown> {
    * @param year - Leave year (e.g. "2025")
    * @param context - Transaction or connection
    */
-  findByEmployeeYear(
+  loadEmployeeBalancesByYear(
     employee_id: number,
     year: string,
     context: Context,
@@ -50,7 +50,7 @@ export interface LeaveBalanceRepository<Context = unknown> {
    * @param year - Leave year (e.g. "2025")
    * @param context - Transaction or connection
    */
-  findByLeaveType(
+  loadEmployeeBalancesByLeaveTypeAndYear(
     employee_id: number,
     leave_type_id: number,
     year: string,

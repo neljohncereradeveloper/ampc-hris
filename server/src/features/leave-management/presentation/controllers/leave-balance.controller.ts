@@ -2,8 +2,6 @@ import {
     Controller,
     Get,
     Post,
-    Put,
-    Delete,
     Patch,
     Body,
     Param,
@@ -40,8 +38,8 @@ import {
     GenerateBalancesForAllEmployeesUseCase,
     ResetBalancesForYearUseCase,
     GetLeaveBalanceByIdUseCase,
-    GetLeaveBalanceByLeaveTypeUseCase,
-    GetLeaveBalanceByEmployeeYearUseCase,
+    LoadEmployeeBalancesByLeaveTypeAndYearUseCase,
+    LoadEmployeeBalancesByYearUseCase,
     CreateLeaveBalanceUseCase,
     GenerateBalancesForAllEmployeesResult,
 } from '../../application/use-cases/leave-balance';
@@ -49,6 +47,9 @@ import { CreateLeaveBalanceDto } from '../dto/leave-balance/create-leave-balance
 import { GenerateForYearDto } from '../dto/leave-balance/generate-for-year.dto';
 import { CreateLeaveBalanceCommand } from '../../application/commands/leave-balance/create.command';
 import { ActiveEmployeeIdsFilters } from '../../domain';
+import { EmployeeCloseBalanceDto } from '../dto/leave-balance/employee-close-balance.dto';
+import { LoadEmployeeBalancesByYearDto } from '../dto/leave-balance/load-employee-balances-by-year.dto';
+import { LoadEmployeeBalancesByLeaveTypeAndYearDto } from '../dto/leave-balance/load-employee-balances-by-leave-type-and-year.dto';
 
 @ApiTags('Leave Balance')
 @Controller('leave-balances')
@@ -64,8 +65,8 @@ export class LeaveBalanceController {
         private readonly generateBalancesForAllEmployeesUseCase: GenerateBalancesForAllEmployeesUseCase,
         private readonly resetBalancesForYearUseCase: ResetBalancesForYearUseCase,
         private readonly getLeaveBalanceByIdUseCase: GetLeaveBalanceByIdUseCase,
-        private readonly getLeaveBalanceByLeaveTypeUseCase: GetLeaveBalanceByLeaveTypeUseCase,
-        private readonly getLeaveBalanceByEmployeeYearUseCase: GetLeaveBalanceByEmployeeYearUseCase,
+        private readonly loadEmployeeBalancesByLeaveTypeAndYearUseCase: LoadEmployeeBalancesByLeaveTypeAndYearUseCase,
+        private readonly loadEmployeeBalancesByYearUseCase: LoadEmployeeBalancesByYearUseCase,
     ) { }
 
     @Version('1')
@@ -114,7 +115,7 @@ export class LeaveBalanceController {
     }
 
     @Version('1')
-    @Patch(':employee_id/close-for-year')
+    @Patch('employee-close-balances')
     @HttpCode(HttpStatus.OK)
     @RequireRoles(ROLES.ADMIN)
     @RequirePermissions(PERMISSIONS.LEAVE_BALANCES.CLOSE_BALANCES_FOR_EMPLOYEE)
@@ -126,12 +127,11 @@ export class LeaveBalanceController {
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiBearerAuth('JWT-auth')
     async closeBalancesForEmployee(
-        @Param('employee_id', ParseIntPipe) employee_id: number,
-        @Query('year') year: string,
+        @Query() queryDto: EmployeeCloseBalanceDto,
         @Req() request: Request,
     ): Promise<{ success: boolean }> {
         const requestInfo = createRequestInfo(request);
-        await this.closeBalancesForEmployeeUseCase.execute(employee_id, year, requestInfo);
+        await this.closeBalancesForEmployeeUseCase.execute(queryDto.employee_id, queryDto.year, requestInfo);
         return { success: true };
     }
 
@@ -171,41 +171,40 @@ export class LeaveBalanceController {
     }
 
     @Version('1')
-    @Get(':employee_id/year/:year')
+    @Get('load-employee-balances-by-year')
     @HttpCode(HttpStatus.OK)
     @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
     @RequirePermissions(PERMISSIONS.LEAVE_BALANCES.READ)
-    @ApiOperation({ summary: 'Get leave balance by employee and year' })
+    @ApiOperation({ summary: 'Load leave balance by employee and year' })
     @ApiParam({ name: 'employee_id', description: 'Employee ID', example: 1 })
     @ApiParam({ name: 'year', description: 'Year', example: '2025' })
-    @ApiResponse({ status: 200, description: 'Leave balance retrieved successfully' })
+    @ApiResponse({ status: 200, description: 'Leave balances loaded successfully' })
     @ApiResponse({ status: 404, description: 'Leave balance not found' })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiBearerAuth('JWT-auth')
-    async getLeaveBalanceByEmployeeYear(
-        @Param('employee_id', ParseIntPipe) employee_id: number,
-        @Param('year') year: string,
+    async loadEmployeeBalancesByYear(
+        @Query() queryDto: LoadEmployeeBalancesByYearDto,
     ): Promise<LeaveBalance[] | null> {
-        return this.getLeaveBalanceByEmployeeYearUseCase.execute(employee_id, year);
+        return this.loadEmployeeBalancesByYearUseCase.execute(queryDto.employee_id, queryDto.year);
     }
 
     @Version('1')
-    @Get(':employee_id/leave-type/:leave_type_id/year/:year')
+    @Get('load-employee-balances-by-leave-type-and-year')
     @HttpCode(HttpStatus.OK)
     @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
     @RequirePermissions(PERMISSIONS.LEAVE_BALANCES.READ)
-    @ApiOperation({ summary: 'Get leave balance by leave type' })
-    @ApiParam({ name: 'leave_type_id', description: 'Leave type ID', example: 1 })
-    @ApiResponse({ status: 200, description: 'Leave balance retrieved successfully' })
-    @ApiResponse({ status: 404, description: 'Leave balance not found' })
+    @ApiOperation({ summary: 'Load leave balance by leave type and year' })
+    @ApiParam({ name: 'employee_id', description: 'Employee ID', example: 1 })
+    @ApiParam({ name: 'leave_type_code', description: 'Leave type code', example: 'VL' })
+    @ApiParam({ name: 'year', description: 'Year', example: '2025' })
+    @ApiResponse({ status: 200, description: 'Leave balances loaded successfully' })
+    @ApiResponse({ status: 404, description: 'Leave balances not found' })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiBearerAuth('JWT-auth')
-    async getLeaveBalanceByLeaveType(
-        @Param('leave_type_code') leave_type_code: string,
-        @Param('employee_id', ParseIntPipe) employee_id: number,
-        @Param('year') year: string,
+    async loadEmployeeBalancesByLeaveTypeAndYear(
+        @Query() queryDto: LoadEmployeeBalancesByLeaveTypeAndYearDto,
     ): Promise<LeaveBalance | null> {
-        return this.getLeaveBalanceByLeaveTypeUseCase.execute(employee_id, leave_type_code, year);
+        return this.loadEmployeeBalancesByLeaveTypeAndYearUseCase.execute(queryDto.employee_id, queryDto.leave_type_code, queryDto.year);
     }
 
     @Version('1')

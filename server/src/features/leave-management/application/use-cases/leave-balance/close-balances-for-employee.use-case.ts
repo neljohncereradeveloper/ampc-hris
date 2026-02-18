@@ -27,7 +27,7 @@ export class CloseBalancesForEmployeeUseCase {
     private readonly repo: LeaveBalanceRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     employee_id: number,
@@ -44,7 +44,7 @@ export class CloseBalancesForEmployeeUseCase {
     return this.transactionHelper.executeTransaction(
       LEAVE_BALANCE_ACTIONS.CLOSE_BALANCES_FOR_EMPLOYEE,
       async (manager) => {
-        const balances = await this.repo.findByEmployeeYear(
+        const balances = await this.repo.loadEmployeeBalanceByYear(
           employee_id,
           year,
           manager,

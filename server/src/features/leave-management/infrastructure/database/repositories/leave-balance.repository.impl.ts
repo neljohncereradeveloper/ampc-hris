@@ -124,7 +124,7 @@ export class LeaveBalanceRepositoryImpl implements LeaveBalanceRepository<Entity
     return this.entityToModel(result[0]);
   }
 
-  async findByEmployeeYear(
+  async loadEmployeeBalanceByYear(
     employee_id: number,
     year: string,
     manager: EntityManager,
@@ -142,7 +142,7 @@ export class LeaveBalanceRepositoryImpl implements LeaveBalanceRepository<Entity
     );
   }
 
-  async findByLeaveType(
+  async loadEmployeeBalancesByLeaveTypeAndYear(
     employee_id: number,
     leave_type_id: number,
     year: string,

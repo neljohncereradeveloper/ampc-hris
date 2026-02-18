@@ -37,7 +37,7 @@ import { SHARED_DOMAIN_TOKENS } from '@/features/shared-domain/domain/constants'
 import type { Holiday } from '@/features/shared-domain/domain/models/holiday.model';
 
 /** Detail about excluded weekdays found in a date range (for validation errors). */
-export interface ExcludedWeekdayDetail {
+export interface ExcludedWeekdayDetailCreate {
   /** First weekday number found (0=Sunday, ..., 6=Saturday) for DAY_NAMES. */
   firstExcludedDay: number;
   /** All dates in the range that fall on excluded weekdays. */
@@ -65,7 +65,7 @@ export class CreateLeaveRequestUseCase {
     private readonly activityLogRepository: ActivityLogRepository,
     @Inject(SHARED_DOMAIN_TOKENS.EMPLOYEE)
     private readonly employeeRepository: EmployeeRepository,
-  ) {}
+  ) { }
 
   async execute(
     command: CreateLeaveRequestCommand,
@@ -212,7 +212,7 @@ export class CreateLeaveRequestUseCase {
           );
         }
         const year = yearConfig.year;
-        const balance = await this.leaveBalanceRepository.findByLeaveType(
+        const balance = await this.leaveBalanceRepository.loadEmployeeBalancesByLeaveTypeAndYear(
           employee_id,
           policy.leave_type_id,
           year,
@@ -444,7 +444,7 @@ export class CreateLeaveRequestUseCase {
     start_date: Date,
     end_date: Date,
     excluded_weekdays: number[],
-  ): ExcludedWeekdayDetail | null {
+  ): ExcludedWeekdayDetailCreate | null {
     if (!excluded_weekdays.length) return null;
     const excludedDates: Date[] = [];
     let firstExcludedDay: number | null = null;

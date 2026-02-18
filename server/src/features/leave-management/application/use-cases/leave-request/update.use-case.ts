@@ -43,7 +43,7 @@ import {
 } from '@/core/utils/change-tracking.util';
 
 /** Detail about excluded weekdays found in a date range (for validation errors). */
-export interface ExcludedWeekdayDetail {
+export interface ExcludedWeekdayDetailUpdate {
   /** First weekday number found (0=Sunday, ..., 6=Saturday) for DAY_NAMES. */
   firstExcludedDay: number;
   /** All dates in the range that fall on excluded weekdays. */
@@ -67,7 +67,7 @@ export class UpdateLeaveRequestUseCase {
     private readonly activityLogRepository: ActivityLogRepository,
     @Inject(SHARED_DOMAIN_TOKENS.EMPLOYEE)
     private readonly employeeRepository: EmployeeRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -461,7 +461,7 @@ export class UpdateLeaveRequestUseCase {
     start_date: Date,
     end_date: Date,
     excluded_weekdays: number[],
-  ): ExcludedWeekdayDetail | null {
+  ): ExcludedWeekdayDetailUpdate | null {
     if (!excluded_weekdays.length) return null;
     const excludedDates: Date[] = [];
     let firstExcludedDay: number | null = null;

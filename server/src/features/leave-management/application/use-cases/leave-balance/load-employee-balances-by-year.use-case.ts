@@ -9,7 +9,7 @@ import {
 } from '@/features/leave-management/domain/constants';
 
 @Injectable()
-export class GetLeaveBalanceByEmployeeYearUseCase {
+export class LoadEmployeeBalancesByYearUseCase {
   constructor(
     @Inject(LEAVE_MANAGEMENT_TOKENS.LEAVE_BALANCE)
     private readonly repo: LeaveBalanceRepository,
@@ -26,9 +26,9 @@ export class GetLeaveBalanceByEmployeeYearUseCase {
    */
   async execute(employee_id: number, year: string): Promise<LeaveBalance[]> {
     return this.transactionHelper.executeTransaction(
-      LEAVE_BALANCE_ACTIONS.GET_BY_EMPLOYEE_YEAR,
+      LEAVE_BALANCE_ACTIONS.LOAD_EMPLOYEE_BALANCES_BY_YEAR,
       async (manager) => {
-        const result = await this.repo.findByEmployeeYear(employee_id, year, manager);
+        const result = await this.repo.loadEmployeeBalancesByYear(employee_id, year, manager);
         return Array.isArray(result) ? result : [];
       },
     );
