@@ -22,7 +22,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -69,6 +70,7 @@ INSERT INTO employees (
     42,  -- age
     'male',
     1,  -- filipino
+    1,  -- default
     '789 Tech Park Avenue',
     2,  -- davao city
     1,  -- metro manila
@@ -117,7 +119,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -161,6 +164,7 @@ INSERT INTO employees (
     35,  -- age
     'male',
     1,  -- filipino
+    1,  -- default
     '456 Innovation Drive',
     3,  -- valencia city
     2,  -- ilocos norte
@@ -206,7 +210,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -250,6 +255,7 @@ INSERT INTO employees (
     32,  -- age
     'male',
     1,  -- filipino
+    1,  -- default
     '321 Code Street',
     4,  -- tagum city
     3,  -- ilocos sur
@@ -295,7 +301,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -339,6 +346,7 @@ INSERT INTO employees (
     29,  -- age
     'female',
     1,  -- filipino
+    1,  -- default
     '654 Developer Lane',
     5,  -- digos city
     1,  -- metro manila
@@ -384,7 +392,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -431,6 +440,7 @@ INSERT INTO employees (
     28,  -- age
     'male',
     1,  -- filipino
+    1,  -- default
     '987 Hardware Boulevard',
     2,  -- davao city
     1,  -- metro manila
@@ -460,21 +470,4 @@ INSERT INTO employees (
     'Nurse'
 );
 
--- Verify the inserted IT Department employees
-SELECT 
-    id,
-    id_number,
-    first_name,
-    last_name,
-    (SELECT desc1 FROM job_titles WHERE id = job_title_id) as job_title,
-    (SELECT desc1 FROM employment_types WHERE id = employment_type_id) as employment_type,
-    (SELECT desc1 FROM employment_statuses WHERE id = employment_status_id) as employment_status,
-    hire_date,
-    regularization_date,
-    EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date)) as years_of_service,
-    age
-FROM employees
-WHERE department_id = 2
-  AND deleted_at IS NULL
-ORDER BY hire_date ASC;
 

@@ -22,7 +22,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -69,6 +70,7 @@ INSERT INTO employees (
     46,  -- age
     'female',
     1,  -- filipino
+    1,  -- default
     '123 Accounting Excellence Plaza',
     2,  -- davao city
     1,  -- metro manila
@@ -117,7 +119,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -161,6 +164,7 @@ INSERT INTO employees (
     35,  -- age
     'male',
     1,  -- filipino
+    1,  -- default
     '456 Financial Control Street',
     3,  -- valencia city
     2,  -- ilocos norte
@@ -206,7 +210,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -253,6 +258,7 @@ INSERT INTO employees (
     34,  -- age
     'female',
     1,  -- filipino
+    1,  -- default
     '789 Audit Compliance Lane',
     4,  -- tagum city
     3,  -- ilocos sur
@@ -301,7 +307,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -345,6 +352,7 @@ INSERT INTO employees (
     28,  -- age
     'male',
     1,  -- filipino
+    1,  -- default
     '321 Bookkeeping Boulevard',
     5,  -- digos city
     1,  -- metro manila
@@ -390,7 +398,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -434,6 +443,7 @@ INSERT INTO employees (
     27,  -- age
     'female',
     1,  -- filipino
+    1,  -- default
     '654 Accounts Payable Road',
     2,  -- davao city
     1,  -- metro manila
@@ -460,22 +470,5 @@ INSERT INTO employees (
     'Accountant'
 );
 
--- Verify the inserted Accounting Department employees
-SELECT 
-    id,
-    id_number,
-    first_name,
-    last_name,
-    (SELECT desc1 FROM job_titles WHERE id = job_title_id) as job_title,
-    (SELECT desc1 FROM employment_types WHERE id = employment_type_id) as employment_type,
-    (SELECT desc1 FROM employment_statuses WHERE id = employment_status_id) as employment_status,
-    hire_date,
-    regularization_date,
-    EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date)) as years_of_service,
-    age,
-    (SELECT desc1 FROM civil_statuses WHERE id = civil_status_id) as civil_status
-FROM employees
-WHERE department_id = 4
-  AND deleted_at IS NULL
-ORDER BY hire_date ASC;
+
 

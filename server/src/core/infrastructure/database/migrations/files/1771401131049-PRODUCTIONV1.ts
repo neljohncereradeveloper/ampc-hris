@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class PRODUCTIONV11771396458780 implements MigrationInterface {
-    name = 'PRODUCTIONV11771396458780'
+export class PRODUCTIONV11771401131049 implements MigrationInterface {
+    name = 'PRODUCTIONV11771401131049'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -205,6 +205,7 @@ export class PRODUCTIONV11771396458780 implements MigrationInterface {
             CREATE TABLE "branches" (
                 "id" SERIAL NOT NULL,
                 "desc1" character varying(255) NOT NULL,
+                "br_code" character varying(255) NOT NULL,
                 "deleted_by" character varying(255),
                 "deleted_at" TIMESTAMP,
                 "created_by" character varying(255),
@@ -214,6 +215,7 @@ export class PRODUCTIONV11771396458780 implements MigrationInterface {
                 CONSTRAINT "PK_7f37d3b42defea97f1df0d19535" PRIMARY KEY ("id")
             );
             COMMENT ON COLUMN "branches"."desc1" IS 'Branch description (desc1)';
+            COMMENT ON COLUMN "branches"."br_code" IS 'Branch code (br_code)';
             COMMENT ON COLUMN "branches"."deleted_by" IS 'User who deleted the branch';
             COMMENT ON COLUMN "branches"."created_by" IS 'User who created the branch';
             COMMENT ON COLUMN "branches"."updated_by" IS 'User who last updated the branch'
@@ -222,12 +224,18 @@ export class PRODUCTIONV11771396458780 implements MigrationInterface {
             CREATE INDEX "IDX_2030d136f5302cedcb8f64f387" ON "branches" ("desc1")
         `);
         await queryRunner.query(`
+            CREATE INDEX "IDX_ab876e4a78faa382b469b619ef" ON "branches" ("br_code")
+        `);
+        await queryRunner.query(`
             CREATE INDEX "IDX_95185a2e3516c149ddf58faab5" ON "branches" ("deleted_at")
         `);
         await queryRunner.query(`
             CREATE TABLE "departments" (
                 "id" SERIAL NOT NULL,
                 "desc1" character varying(255) NOT NULL,
+                "code" character varying(255) NOT NULL,
+                "designation" character varying(255) NOT NULL,
+                "remarks" character varying(500),
                 "deleted_by" character varying(255),
                 "deleted_at" TIMESTAMP,
                 "created_by" character varying(255),
@@ -237,12 +245,21 @@ export class PRODUCTIONV11771396458780 implements MigrationInterface {
                 CONSTRAINT "PK_839517a681a86bb84cbcc6a1e9d" PRIMARY KEY ("id")
             );
             COMMENT ON COLUMN "departments"."desc1" IS 'Department description (desc1)';
+            COMMENT ON COLUMN "departments"."code" IS 'Department code (code)';
+            COMMENT ON COLUMN "departments"."designation" IS 'Department designation (designation)';
+            COMMENT ON COLUMN "departments"."remarks" IS 'Department remarks (remarks)';
             COMMENT ON COLUMN "departments"."deleted_by" IS 'User who deleted the department';
             COMMENT ON COLUMN "departments"."created_by" IS 'User who created the department';
             COMMENT ON COLUMN "departments"."updated_by" IS 'User who last updated the department'
         `);
         await queryRunner.query(`
             CREATE INDEX "IDX_8f232676ee7f0c19afb3b2fac9" ON "departments" ("desc1")
+        `);
+        await queryRunner.query(`
+            CREATE INDEX "IDX_91fddbe23e927e1e525c152baa" ON "departments" ("code")
+        `);
+        await queryRunner.query(`
+            CREATE INDEX "IDX_7e86d9ff3f6ec480185c8b5c7c" ON "departments" ("designation")
         `);
         await queryRunner.query(`
             CREATE INDEX "IDX_ea648afc7dd92d1402daac6964" ON "departments" ("deleted_at")
@@ -1962,6 +1979,12 @@ export class PRODUCTIONV11771396458780 implements MigrationInterface {
             DROP INDEX "public"."IDX_ea648afc7dd92d1402daac6964"
         `);
         await queryRunner.query(`
+            DROP INDEX "public"."IDX_7e86d9ff3f6ec480185c8b5c7c"
+        `);
+        await queryRunner.query(`
+            DROP INDEX "public"."IDX_91fddbe23e927e1e525c152baa"
+        `);
+        await queryRunner.query(`
             DROP INDEX "public"."IDX_8f232676ee7f0c19afb3b2fac9"
         `);
         await queryRunner.query(`
@@ -1969,6 +1992,9 @@ export class PRODUCTIONV11771396458780 implements MigrationInterface {
         `);
         await queryRunner.query(`
             DROP INDEX "public"."IDX_95185a2e3516c149ddf58faab5"
+        `);
+        await queryRunner.query(`
+            DROP INDEX "public"."IDX_ab876e4a78faa382b469b619ef"
         `);
         await queryRunner.query(`
             DROP INDEX "public"."IDX_2030d136f5302cedcb8f64f387"

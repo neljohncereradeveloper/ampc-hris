@@ -22,7 +22,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -69,6 +70,7 @@ INSERT INTO employees (
     49,  -- age
     'male',
     1,  -- filipino
+    1,  -- default
     '123 Executive Plaza',
     2,  -- davao city
     1,  -- metro manila
@@ -117,7 +119,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -161,6 +164,7 @@ INSERT INTO employees (
     31,  -- age
     'female',
     1,  -- filipino
+    1,  -- default
     '456 Administrative Center Street',
     3,  -- valencia city
     2,  -- ilocos norte
@@ -206,7 +210,8 @@ INSERT INTO employees (
     civil_status_id,
     age,
     gender,
-    citizenship_id,
+    citizen_ship_id,
+    home_address_barangay_id,
     home_address_street,
     home_address_city_id,
     home_address_province_id,
@@ -250,6 +255,7 @@ INSERT INTO employees (
     29,  -- age
     'female',
     1,  -- filipino
+    1,  -- default
     '789 Office Support Lane',
     4,  -- tagum city
     3,  -- ilocos sur
@@ -276,22 +282,5 @@ INSERT INTO employees (
     'Teacher'
 );
 
--- Verify the inserted Administration Department employees
-SELECT 
-    id,
-    id_number,
-    first_name,
-    last_name,
-    (SELECT desc1 FROM job_titles WHERE id = job_title_id) as job_title,
-    (SELECT desc1 FROM employment_types WHERE id = employment_type_id) as employment_type,
-    (SELECT desc1 FROM employment_statuses WHERE id = employment_status_id) as employment_status,
-    hire_date,
-    regularization_date,
-    EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date)) as years_of_service,
-    age,
-    (SELECT desc1 FROM civil_statuses WHERE id = civil_status_id) as civil_status
-FROM employees
-WHERE department_id = 6
-  AND deleted_at IS NULL
-ORDER BY hire_date ASC;
+
 

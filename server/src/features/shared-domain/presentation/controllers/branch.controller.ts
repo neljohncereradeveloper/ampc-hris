@@ -67,7 +67,7 @@ export class BranchController {
     private readonly restoreBranchUseCase: RestoreBranchUseCase,
     private readonly getPaginatedBranchUseCase: GetPaginatedBranchUseCase,
     private readonly comboboxBranchUseCase: ComboboxBranchUseCase,
-  ) {}
+  ) { }
 
   @Version('1')
   @Post()
@@ -87,6 +87,7 @@ export class BranchController {
     const requestInfo = createRequestInfo(request);
     const command: CreateBranchCommand = {
       desc1: presentationDto.desc1,
+      br_code: presentationDto.br_code,
     };
     return this.createBranchUseCase.execute(command, requestInfo);
   }
@@ -111,6 +112,7 @@ export class BranchController {
     const requestInfo = createRequestInfo(request);
     const command: UpdateBranchCommand = {
       desc1: presentationDto.desc1,
+      br_code: presentationDto.br_code,
     };
     return this.updateBranchUseCase.execute(id, command, requestInfo);
   }
