@@ -4,13 +4,13 @@
  */
 
 /**
- * Coerce unknown to number; use default if not a finite number.
+ * Coerce unknown to number; return null if not a finite number.
  * @param value - Any value (string, number, object, etc.)
- * @param defaultVal - Value to return when coercion fails (default 0)
+ * @returns The coerced number, or null if coercion fails
  */
-export function toNumber(value: unknown, defaultVal = 0): number {
+export function toNumber(value: unknown): number | null {
   const n = typeof value === 'number' ? value : Number(value);
-  return Number.isFinite(n) ? n : defaultVal;
+  return Number.isFinite(n) ? n : null;
 }
 
 /**
@@ -18,11 +18,11 @@ export function toNumber(value: unknown, defaultVal = 0): number {
  * Accepts Date instances, ISO strings, and numeric timestamps.
  * @param value - Any value to parse as a date
  */
-export function toDate(value: unknown): Date | undefined {
-  if (value instanceof Date) return isNaN(value.getTime()) ? undefined : value;
-  if (value == null) return undefined;
+export function toDate(value: unknown): Date | null {
+  if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+  if (value == null) return null;
   const d = new Date(value as string | number);
-  return isNaN(d.getTime()) ? undefined : d;
+  return isNaN(d.getTime()) ? null : d;
 }
 
 /**
@@ -32,27 +32,27 @@ export function toDate(value: unknown): Date | undefined {
  * @param value - Any value (string, number, object, etc.)
  * @returns string (lowercased), or undefined if not convertible
  */
-export function toLowerCaseString(value: unknown): string | undefined {
+export function toLowerCaseString(value: unknown): string | null {
   if (typeof value === 'string') return (value as string).toLowerCase();
-  return undefined;
+  return null;
 }
 
 
 /**
  * Converts a value into a string array (lowercased), for leave policy fields which
  * are stored as JSON arrays or comma-separated strings in the database.
- * Returns undefined if the value cannot be converted.
+  * Returns null if the value cannot be converted.
  *
  * @param value - Array<string>, JSON string, or null/undefined
- * @returns string[] (lowercased), or undefined if not convertible
+ * @returns string[] (lowercased), or null if not convertible
  */
-export function parseJsonArray(value: unknown): string[] | undefined {
-  if (value == null) return undefined;
+export function parseJsonArray(value: unknown): string[] | null {
+  if (value == null) return null;
   if (Array.isArray(value)) {
     // Direct array; coerce and lowercase each string element, filter out undefined
     return (value as string[])
       .map((v) => toLowerCaseString(v))
-      .filter((v): v is string => typeof v === 'string');
+      .filter((v): v is string => typeof v === 'string' && v !== null);
   }
   if (typeof value === 'string') {
     try {
@@ -60,42 +60,42 @@ export function parseJsonArray(value: unknown): string[] | undefined {
       return Array.isArray(arr)
         ? arr
           .map((v: unknown) => toLowerCaseString(v))
-          .filter((v): v is string => typeof v === 'string')
-        : undefined;
+          .filter((v): v is string => typeof v === 'string' && v !== null)
+        : null;
     } catch {
       // Not valid JSON -- fallback: try splitting by comma
       // (optional: depends on legacy data needs)
       // return value.split(',').map(s => toLowerCaseString(s.trim())).filter((v): v is string => typeof v === 'string');
-      return undefined;
+      return null;
     }
   }
-  return undefined;
+  return null;
 }
 
 
 /**
  * Converts a value into a number array (using toNumber), for leave policy fields which
  * are stored as JSON arrays or comma-separated strings in the database.
- * Returns undefined if the value cannot be converted.
+ * Returns null if the value cannot be converted.
  *
  * @param value - Array<number> | JSON string | null/undefined
- * @returns number[] or undefined if not convertible
+ * @returns number[] or null if not convertible
  */
-export function parseJsonNumberArray(value: unknown): number[] | undefined {
-  if (value == null) return undefined;
+export function parseJsonNumberArray(value: unknown): number[] | null {
+  if (value == null) return null;
   if (Array.isArray(value)) {
-    return (value as unknown[]).map((v) => toNumber(v));
+    return (value as unknown[]).map((v) => toNumber(v)).filter((v): v is number => v !== null);
   }
   if (typeof value === 'string') {
     try {
       const arr = JSON.parse(value);
       return Array.isArray(arr)
-        ? arr.map((v: unknown) => toNumber(v))
-        : undefined;
+        ? arr.map((v: unknown) => toNumber(v)).filter((v): v is number => v !== null)
+        : null;
     } catch {
       // Could extend for legacy comma-separated, but skip for now.
-      return undefined;
+      return null;
     }
   }
-  return undefined;
+  return null;
 }

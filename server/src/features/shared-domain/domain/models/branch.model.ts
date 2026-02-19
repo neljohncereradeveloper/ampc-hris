@@ -1,38 +1,37 @@
 import { HTTP_STATUS } from '@/core/domain/constants';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { BranchBusinessException } from '../exceptions/branch-business.exception';
+import { toDate, toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
 
 export class Branch {
-  id?: number;
+  id?: number | null;
   desc1: string;
   br_code: string;
   deleted_by: string | null;
   deleted_at: Date | null;
   created_by: string | null;
-  created_at: Date;
+  created_at: Date | null;
   updated_by: string | null;
-  updated_at: Date;
+  updated_at: Date | null;
 
   constructor(dto: {
-    id?: number;
+    id?: number | null;
     desc1: string;
     br_code: string;
+    created_by: string | null;
     deleted_by?: string | null;
-    deleted_at?: Date | null;
-    created_by?: string | null;
-    created_at?: Date;
     updated_by?: string | null;
-    updated_at?: Date;
   }) {
-    this.id = dto.id;
-    this.desc1 = dto.desc1;
-    this.br_code = dto.br_code;
-    this.deleted_by = dto.deleted_by ?? null;
-    this.deleted_at = dto.deleted_at ?? null;
-    this.created_by = dto.created_by ?? null;
-    this.created_at = dto.created_at ?? getPHDateTime();
-    this.updated_by = dto.updated_by ?? null;
-    this.updated_at = dto.updated_at ?? getPHDateTime();
+    this.id = toNumber(dto.id);
+    this.desc1 = toLowerCaseString(dto.desc1) ?? '';
+    this.br_code = toLowerCaseString(dto.br_code) ?? '';
+    this.created_by = toLowerCaseString(dto.created_by)!;
+    this.created_at = getPHDateTime(); // created now
+    this.updated_by = null; // not updated by default
+    this.updated_at = null; // not updated by default
+    this.deleted_at = null; // not deleted by default
+    this.deleted_by = null; // not deleted by default
+
   }
 
   /** Static factory: create and validate. */
@@ -46,7 +45,6 @@ export class Branch {
     return branch;
   }
 
-  /** Update details; validate new state before applying. */
   update(dto: { desc1: string; br_code: string; updated_by?: string | null }): void {
     if (this.deleted_at) {
       throw new BranchBusinessException(
@@ -54,16 +52,13 @@ export class Branch {
         HTTP_STATUS.CONFLICT,
       );
     }
-    const temp_branch = new Branch({
-      id: this.id,
-      desc1: dto.desc1,
-      br_code: dto.br_code,
-      created_at: this.created_at,
-      updated_at: this.updated_at,
-    });
-    temp_branch.validate();
-    this.desc1 = dto.desc1;
-    this.updated_by = dto.updated_by ?? null;
+
+    this.desc1 = toLowerCaseString(dto.desc1) ?? '';
+    this.br_code = toLowerCaseString(dto.br_code) ?? '';
+    this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
+    this.updated_at = getPHDateTime();
+
+    this.validate();
   }
 
   /** Soft-delete. */
@@ -75,7 +70,7 @@ export class Branch {
       );
     }
     this.deleted_at = getPHDateTime();
-    this.deleted_by = deleted_by;
+    this.deleted_by = toLowerCaseString(deleted_by) ?? null;
   }
 
   /** Restore from archive. */

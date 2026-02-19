@@ -1,6 +1,8 @@
 import { HTTP_STATUS } from '@/core/domain/constants';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { HolidayBusinessException } from '../exceptions/holiday-business.exception';
+import { toLowerCaseString } from '@/core/utils/coercion.util';
+import { toDate, toNumber } from '@/core/utils/coercion.util';
 
 export class Holiday {
   id?: number;
@@ -30,18 +32,18 @@ export class Holiday {
     updated_by?: string | null;
     updated_at?: Date;
   }) {
-    this.id = dto.id;
-    this.name = dto.name;
-    this.date = dto.date;
-    this.type = dto.type;
-    this.description = dto.description ?? null;
+    this.id = toNumber(dto.id);
+    this.name = toLowerCaseString(dto.name)!;
+    this.date = toDate(dto.date)!;
+    this.type = toLowerCaseString(dto.type)!;
+    this.description = toLowerCaseString(dto.description) ?? null;
     this.is_recurring = dto.is_recurring ?? false;
-    this.deleted_by = dto.deleted_by ?? null;
-    this.deleted_at = dto.deleted_at ?? null;
-    this.created_by = dto.created_by ?? null;
-    this.created_at = dto.created_at ?? getPHDateTime();
-    this.updated_by = dto.updated_by ?? null;
-    this.updated_at = dto.updated_at ?? getPHDateTime();
+    this.deleted_by = toLowerCaseString(dto.deleted_by) ?? null;
+    this.deleted_at = toDate(dto.deleted_at) ?? null;
+    this.created_by = toLowerCaseString(dto.created_by) ?? null;
+    this.created_at = toDate(dto.created_at) ?? getPHDateTime();
+    this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
+    this.updated_at = toDate(dto.updated_at) ?? getPHDateTime();
   }
 
   /** Static factory: create and validate. */

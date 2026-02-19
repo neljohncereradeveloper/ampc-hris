@@ -1,6 +1,7 @@
 import { HTTP_STATUS } from '@/core/domain/constants';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { LeaveTypeBusinessException } from '../exceptions/leave-type-business.exception';
+import { toDate, toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
 
 export class LeaveType {
   id?: number;
@@ -30,18 +31,18 @@ export class LeaveType {
     updated_by?: string | null;
     updated_at?: Date;
   }) {
-    this.id = dto.id;
-    this.name = dto.name;
-    this.code = dto.code;
-    this.desc1 = dto.desc1;
+    this.id = toNumber(dto.id);
+    this.name = toLowerCaseString(dto.name)!;
+    this.code = toLowerCaseString(dto.code)!;
+    this.desc1 = toLowerCaseString(dto.desc1)!;
     this.paid = dto.paid;
-    this.remarks = dto.remarks;
-    this.deleted_by = dto.deleted_by ?? null;
-    this.deleted_at = dto.deleted_at ?? null;
-    this.created_by = dto.created_by ?? null;
-    this.created_at = dto.created_at ?? getPHDateTime();
-    this.updated_by = dto.updated_by ?? null;
-    this.updated_at = dto.updated_at ?? getPHDateTime();
+    this.remarks = toLowerCaseString(dto.remarks);
+    this.deleted_by = toLowerCaseString(dto.deleted_by) ?? null;
+    this.deleted_at = toDate(dto.deleted_at) ?? null;
+    this.created_by = toLowerCaseString(dto.created_by) ?? null;
+    this.created_at = toDate(dto.created_at) ?? getPHDateTime();
+    this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
+    this.updated_at = toDate(dto.updated_at) ?? getPHDateTime();
   }
 
   /** Static factory: create and validate. */
@@ -80,12 +81,12 @@ export class LeaveType {
         HTTP_STATUS.CONFLICT,
       );
     }
-    if (dto.name !== undefined) this.name = dto.name;
-    if (dto.code !== undefined) this.code = dto.code;
-    if (dto.desc1 !== undefined) this.desc1 = dto.desc1;
+    if (dto.name !== undefined) this.name = toLowerCaseString(dto.name)!;
+    if (dto.code !== undefined) this.code = toLowerCaseString(dto.code)!;
+    if (dto.desc1 !== undefined) this.desc1 = toLowerCaseString(dto.desc1)!;
     if (dto.paid !== undefined) this.paid = dto.paid;
-    if (dto.remarks !== undefined) this.remarks = dto.remarks;
-    this.updated_by = dto.updated_by ?? null;
+    if (dto.remarks !== undefined) this.remarks = toLowerCaseString(dto.remarks);
+    this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
     this.validate();
   }
 
@@ -98,7 +99,7 @@ export class LeaveType {
       );
     }
     this.deleted_at = getPHDateTime();
-    this.deleted_by = deleted_by;
+    this.deleted_by = toLowerCaseString(deleted_by) ?? null;
   }
 
   /** Restore from archive. */

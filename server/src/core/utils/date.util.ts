@@ -112,18 +112,20 @@ export function formatDate(date: Date): string {
 /**
  * Returns a Date interpreted in Philippine time (Asia/Manila). Use for audit timestamps and "today" in PH.
  *
- * Process: Convert the given date (or now) to a string in Asia/Manila, then parse back to a Date so time reflects PH.
+ * Process: If date is provided and valid, output Asia/Manila's local time as Date; else use current time.
+ * Warning: The resulting Date object represents the same absolute instant as in UTC, but constructed using a locale string. Use with care!
  *
- * @param date - Optional; if omitted, uses current date/time
+ * @param date - Optional Date object; if omitted or invalid, uses current date/time
  * @returns Date object whose local time reflects Philippine timezone
  */
-export function getPHDateTime(date?: Date): Date {
-  const phDate = date ? new Date(date) : new Date();
-  const phTime = new Date(
-    phDate.toLocaleString('en-US', { timeZone: 'Asia/Manila' }),
-  );
-
-  return phTime;
+export function getPHDateTime(date?: Date | null): Date {
+  // Always produce "now" in PH if no date is passed or it's falsy
+  const baseDate = date instanceof Date && !isNaN(date.getTime())
+    ? date
+    : new Date();
+  // Get string as it appears in PH, then parse back a Date (local JS time)
+  const phString = baseDate.toLocaleString('en-US', { timeZone: 'Asia/Manila' });
+  return new Date(phString);
 }
 
 /**

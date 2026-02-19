@@ -1,6 +1,7 @@
 import { HTTP_STATUS } from '@/core/domain/constants';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { DepartmentBusinessException } from '../exceptions/department-business.exception';
+import { toDate, toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
 
 export class Department {
   id?: number;
@@ -28,17 +29,17 @@ export class Department {
     updated_by?: string | null;
     updated_at?: Date;
   }) {
-    this.id = dto.id;
-    this.desc1 = dto.desc1;
-    this.code = dto.code;
-    this.designation = dto.designation;
-    this.remarks = dto.remarks;
-    this.deleted_by = dto.deleted_by ?? null;
-    this.deleted_at = dto.deleted_at ?? null;
-    this.created_by = dto.created_by ?? null;
-    this.created_at = dto.created_at ?? getPHDateTime();
-    this.updated_by = dto.updated_by ?? null;
-    this.updated_at = dto.updated_at ?? getPHDateTime();
+    this.id = toNumber(dto.id);
+    this.desc1 = toLowerCaseString(dto.desc1)!;
+    this.code = toLowerCaseString(dto.code)!;
+    this.designation = toLowerCaseString(dto.designation)!;
+    this.remarks = toLowerCaseString(dto.remarks);
+    this.deleted_by = toLowerCaseString(dto.deleted_by) ?? null;
+    this.deleted_at = toDate(dto.deleted_at) ?? null;
+    this.created_by = toLowerCaseString(dto.created_by) ?? null;
+    this.created_at = toDate(dto.created_at) ?? getPHDateTime();
+    this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
+    this.updated_at = toDate(dto.updated_at) ?? getPHDateTime();
   }
 
   /** Static factory: create and validate. */
@@ -78,11 +79,11 @@ export class Department {
       updated_at: this.updated_at,
     });
     temp_department.validate();
-    this.desc1 = dto.desc1;
-    this.code = dto.code;
-    this.designation = dto.designation;
-    this.remarks = dto.remarks;
-    this.updated_by = dto.updated_by ?? null;
+    this.desc1 = toLowerCaseString(dto.desc1)!;
+    this.code = toLowerCaseString(dto.code)!;
+    this.designation = toLowerCaseString(dto.designation)!;
+    this.remarks = toLowerCaseString(dto.remarks);
+    this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
   }
 
   /** Soft-delete. */
@@ -94,7 +95,7 @@ export class Department {
       );
     }
     this.deleted_at = getPHDateTime();
-    this.deleted_by = deleted_by;
+    this.deleted_by = toLowerCaseString(deleted_by) ?? null;
   }
 
   /** Restore from archive. */
