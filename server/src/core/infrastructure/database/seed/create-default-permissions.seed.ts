@@ -7,6 +7,7 @@ import {
   PERMISSION_RESOURCES,
   PERMISSION_ACTIONS,
 } from '@/core/domain/constants';
+import { toLowerCaseString } from '@/core/utils/coercion.util';
 
 /**
  * SeedPermissions
@@ -1100,27 +1101,27 @@ export class SeedPermissions {
       const existing_permission = await this.entityManager.findOne(
         PermissionEntity,
         {
-          where: { name: permission.name },
+          where: { name: toLowerCaseString(permission.name) },
           withDeleted: true,
         },
       );
 
       if (!existing_permission) {
         const permission_entity = this.entityManager.create(PermissionEntity, {
-          name: permission.name,
-          resource: permission.resource,
-          action: permission.action,
-          description: permission.description,
+          name: toLowerCaseString(permission.name)!,
+          resource: toLowerCaseString(permission.resource)!,
+          action: toLowerCaseString(permission.action)!,
+          description: toLowerCaseString(permission.description),
           created_by: 'auto generated',
           created_at: getPHDateTime(),
         });
 
         const saved_permission =
           await this.entityManager.save(permission_entity);
-        permissionMap.set(permission.name, saved_permission.id);
+        permissionMap.set(toLowerCaseString(permission.name)!, saved_permission.id);
         this.logger.log(`Created permission: ${permission.name}`);
       } else {
-        permissionMap.set(permission.name, existing_permission.id);
+        permissionMap.set(toLowerCaseString(permission.name)!, existing_permission.id);
         this.logger.log(`Permission already exists: ${permission.name}`);
       }
     }

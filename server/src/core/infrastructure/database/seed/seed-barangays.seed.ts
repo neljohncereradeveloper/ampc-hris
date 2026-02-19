@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { BarangayEntity } from '@/features/201-management/infrastructure/database/entities/barangay.entity';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { BARANGAYS } from './data';
+import { toLowerCaseString } from '@/core/utils/coercion.util';
 
 export class SeedBarangays {
   private readonly logger = new Logger(SeedBarangays.name);
@@ -13,18 +14,18 @@ export class SeedBarangays {
     const seedBy = 'seed-runner';
     for (const desc1 of BARANGAYS) {
       const existing = await this.entityManager.findOne(BarangayEntity, {
-        where: { desc1 },
+        where: { desc1: toLowerCaseString(desc1) },
         withDeleted: true,
       });
       if (!existing) {
         const entity = this.entityManager.create(BarangayEntity, {
-          desc1,
+          desc1: toLowerCaseString(desc1)!,
 
           created_by: seedBy,
           created_at: getPHDateTime(),
         });
         await this.entityManager.save(entity);
-        this.logger.log(`Created barangay: ${desc1}`);
+        this.logger.log(`Created barangay: ${toLowerCaseString(desc1)!}`);
       }
     }
   }

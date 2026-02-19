@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { RoleEntity } from '@/features/rbac/infrastructure/database/entities/role.entity';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { ROLES } from '@/core/domain/constants';
+import { toLowerCaseString } from '@/core/utils/coercion.util';
 
 /**
  * SeedRoles
@@ -26,7 +27,7 @@ import { ROLES } from '@/core/domain/constants';
 export class SeedRoles {
   private readonly logger = new Logger(SeedRoles.name);
 
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(private readonly entityManager: EntityManager) { }
 
   /**
    * Executes the seed operation to create default role entries.
@@ -75,24 +76,24 @@ export class SeedRoles {
      */
     for (const role of roles) {
       const existing_role = await this.entityManager.findOne(RoleEntity, {
-        where: { name: role.name },
+        where: { name: toLowerCaseString(role.name) },
         withDeleted: true,
       });
 
       if (!existing_role) {
         const role_entity = this.entityManager.create(RoleEntity, {
-          name: role.name,
-          description: role.description,
+          name: toLowerCaseString(role.name)!,
+          description: toLowerCaseString(role.description),
           created_by: 'auto generated',
           created_at: getPHDateTime(),
         });
 
         const saved_role = await this.entityManager.save(role_entity);
-        roleMap.set(role.name, saved_role.id);
-        this.logger.log(`Created role: ${role.name}`);
+        roleMap.set(toLowerCaseString(role.name)!, saved_role.id);
+        this.logger.log(`Created role: ${toLowerCaseString(role.name)!}`);
       } else {
-        roleMap.set(role.name, existing_role.id);
-        this.logger.log(`Role already exists: ${role.name}`);
+        roleMap.set(toLowerCaseString(role.name)!, existing_role.id);
+        this.logger.log(`Role already exists: ${toLowerCaseString(role.name)!}`);
       }
     }
 

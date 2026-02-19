@@ -3,11 +3,12 @@ import { Logger } from '@nestjs/common';
 import { WorkExperienceCompanyEntity } from '@/features/201-management/infrastructure/database/entities/work-experience-company.entity';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { WORK_EXPERIENCE_COMPANIES } from './data';
+import { toLowerCaseString } from '@/core/utils/coercion.util';
 
 export class SeedWorkExperienceCompanies {
   private readonly logger = new Logger(SeedWorkExperienceCompanies.name);
 
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(private readonly entityManager: EntityManager) { }
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';
@@ -15,18 +16,18 @@ export class SeedWorkExperienceCompanies {
       const existing = await this.entityManager.findOne(
         WorkExperienceCompanyEntity,
         {
-          where: { desc1 },
+          where: { desc1: toLowerCaseString(desc1) },
           withDeleted: true,
         },
       );
       if (!existing) {
         const entity = this.entityManager.create(WorkExperienceCompanyEntity, {
-          desc1,
-          created_by: seedBy,
+          desc1: toLowerCaseString(desc1)!,
+          created_by: toLowerCaseString(seedBy)!,
           created_at: getPHDateTime(),
         });
         await this.entityManager.save(entity);
-        this.logger.log(`Created work experience company: ${desc1}`);
+        this.logger.log(`Created work experience company: ${toLowerCaseString(desc1)!}`);
       }
     }
   }

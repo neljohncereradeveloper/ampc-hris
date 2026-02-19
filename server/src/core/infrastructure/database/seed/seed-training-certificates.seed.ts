@@ -3,11 +3,12 @@ import { Logger } from '@nestjs/common';
 import { TrainingCertificateEntity } from '@/features/201-management/infrastructure/database/entities/training-certificate.entity';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { TRAINING_CERTIFICATES } from './data';
+import { toDate, toLowerCaseString } from '@/core/utils/coercion.util';
 
 export class SeedTrainingCertificates {
   private readonly logger = new Logger(SeedTrainingCertificates.name);
 
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(private readonly entityManager: EntityManager) { }
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';
@@ -18,24 +19,24 @@ export class SeedTrainingCertificates {
       const existing = await this.entityManager.findOne(
         TrainingCertificateEntity,
         {
-          where: { certificate_name: certificateName },
+          where: { certificate_name: toLowerCaseString(certificateName) },
           withDeleted: true,
         },
       );
 
       if (!existing) {
         const entity = this.entityManager.create(TrainingCertificateEntity, {
-          certificate_name: certificateName,
-          issuing_organization: defaultOrg,
-          issue_date: defaultIssueDate,
+          certificate_name: toLowerCaseString(certificateName)!,
+          issuing_organization: toLowerCaseString(defaultOrg)!,
+          issue_date: toDate(defaultIssueDate),
           expiry_date: null,
           certificate_number: null,
           file_path: null,
-          created_by: seedBy,
+          created_by: toLowerCaseString(seedBy)!,
           created_at: getPHDateTime(),
         });
         await this.entityManager.save(entity);
-        this.logger.log(`Created training certificate: ${certificateName}`);
+        this.logger.log(`Created training certificate: ${toLowerCaseString(certificateName)!}`);
       }
     }
   }

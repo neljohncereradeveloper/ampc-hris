@@ -326,7 +326,7 @@ export class CreateLeaveRequestUseCase {
       );
     }
     const d = toDate(value);
-    if (d === null) {
+    if (d === undefined) {
       throw new LeaveRequestBusinessException(
         `Invalid ${label.toLowerCase()}`,
         HTTP_STATUS.BAD_REQUEST,
@@ -424,7 +424,7 @@ export class CreateLeaveRequestUseCase {
         const is_holiday = holidays.some((h) => {
           const holidayDate = toDate(h.date);
           return (
-            holidayDate !== null && isSameCalendarDay(holidayDate, current)
+            holidayDate !== undefined && isSameCalendarDay(holidayDate, current)
           );
         });
         if (!is_holiday) count++;

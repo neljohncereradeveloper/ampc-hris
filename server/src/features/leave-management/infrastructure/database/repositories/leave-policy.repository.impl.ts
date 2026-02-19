@@ -5,42 +5,17 @@ import { LeavePolicy } from '@/features/leave-management/domain/models/leave-pol
 import { LEAVE_MANAGEMENT_DATABASE_MODELS } from '@/features/leave-management/domain/constants';
 import { SHARED_DOMAIN_DATABASE_MODELS } from '@/features/shared-domain/domain/constants';
 
-const LP = LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES;
-const LT = SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES;
+const lp = LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES.toLowerCase();
+const lt = SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES.toLowerCase();
 import {
   PaginatedResult,
   calculatePagination,
 } from '@/core/utils/pagination.util';
-import { toNumber } from '@/core/utils/coercion.util';
+import { parseJsonArray, parseJsonNumberArray, toDate, toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
 import { EnumLeavePolicyStatus } from '@/features/leave-management/domain/enum';
 
-function parseJsonArray(value: unknown): string[] | undefined {
-  if (value == null) return undefined;
-  if (Array.isArray(value)) return value as string[];
-  if (typeof value === 'string') {
-    try {
-      const arr = JSON.parse(value);
-      return Array.isArray(arr) ? arr : undefined;
-    } catch {
-      return undefined;
-    }
-  }
-  return undefined;
-}
 
-function parseJsonNumberArray(value: unknown): number[] | undefined {
-  if (value == null) return undefined;
-  if (Array.isArray(value)) return value as number[];
-  if (typeof value === 'string') {
-    try {
-      const arr = JSON.parse(value);
-      return Array.isArray(arr) ? arr : undefined;
-    } catch {
-      return undefined;
-    }
-  }
-  return undefined;
-}
+
 
 @Injectable()
 export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityManager> {
@@ -49,41 +24,35 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     manager: EntityManager,
   ): Promise<LeavePolicy> {
     const query = `
-      INSERT INTO ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES} (
+      insert into ${lp} (
         leave_type_id, annual_entitlement, carry_limit, encash_limit,
         carried_over_years, effective_date, expiry_date, status, remarks,
         minimum_service_months, allowed_employment_types, allowed_employee_statuses, excluded_weekdays,
         deleted_by, deleted_at, created_by, created_at, updated_by, updated_at
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
-      RETURNING *
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
+      returning *
     `;
     const result = await manager.query(query, [
-      leave_policy.leave_type_id,
-      leave_policy.annual_entitlement,
-      leave_policy.carry_limit,
-      leave_policy.encash_limit,
-      leave_policy.carried_over_years,
-      leave_policy.effective_date ?? null,
-      leave_policy.expiry_date ?? null,
-      leave_policy.status,
-      leave_policy.remarks ?? null,
-      leave_policy.minimum_service_months ?? null,
-      leave_policy.allowed_employment_types
-        ? JSON.stringify(leave_policy.allowed_employment_types)
-        : null,
-      leave_policy.allowed_employee_statuses
-        ? JSON.stringify(leave_policy.allowed_employee_statuses)
-        : null,
-      leave_policy.excluded_weekdays
-        ? JSON.stringify(leave_policy.excluded_weekdays)
-        : null,
-      leave_policy.deleted_by ?? null,
-      leave_policy.deleted_at ?? null,
-      leave_policy.created_by ?? null,
-      leave_policy.created_at ?? new Date(),
-      leave_policy.updated_by ?? null,
-      leave_policy.updated_at ?? new Date(),
+      toNumber(leave_policy.leave_type_id),
+      toNumber(leave_policy.annual_entitlement),
+      toNumber(leave_policy.carry_limit),
+      toNumber(leave_policy.encash_limit),
+      toNumber(leave_policy.carried_over_years),
+      toDate(leave_policy.effective_date),
+      toDate(leave_policy.expiry_date),
+      toLowerCaseString(leave_policy.status),
+      toLowerCaseString(leave_policy.remarks),
+      toNumber(leave_policy.minimum_service_months),
+      parseJsonArray(leave_policy.allowed_employment_types),
+      parseJsonArray(leave_policy.allowed_employee_statuses),
+      parseJsonNumberArray(leave_policy.excluded_weekdays),
+      toLowerCaseString(leave_policy.deleted_by),
+      toDate(leave_policy.deleted_at),
+      toLowerCaseString(leave_policy.created_by),
+      toDate(leave_policy.created_at),
+      toLowerCaseString(leave_policy.updated_by),
+      toDate(leave_policy.updated_at),
     ]);
     return this.entityToModel(result[0]);
   }
@@ -98,19 +67,19 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     let paramIndex = 1;
     if (dto.annual_entitlement !== undefined) {
       updateFields.push(`annual_entitlement = $${paramIndex++}`);
-      values.push(dto.annual_entitlement);
+      values.push(toNumber(dto.annual_entitlement));
     }
     if (dto.carry_limit !== undefined) {
       updateFields.push(`carry_limit = $${paramIndex++}`);
-      values.push(dto.carry_limit);
+      values.push(toNumber(dto.carry_limit));
     }
     if (dto.encash_limit !== undefined) {
       updateFields.push(`encash_limit = $${paramIndex++}`);
-      values.push(dto.encash_limit);
+      values.push(toNumber(dto.encash_limit));
     }
     if (dto.carried_over_years !== undefined) {
       updateFields.push(`carried_over_years = $${paramIndex++}`);
-      values.push(dto.carried_over_years);
+      values.push(toNumber(dto.carried_over_years));
     }
     if (dto.effective_date !== undefined) {
       updateFields.push(`effective_date = $${paramIndex++}`);
@@ -122,39 +91,43 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     }
     if (dto.status !== undefined) {
       updateFields.push(`status = $${paramIndex++}`);
-      values.push(dto.status);
+      values.push(toLowerCaseString(dto.status));
     }
     if (dto.remarks !== undefined) {
       updateFields.push(`remarks = $${paramIndex++}`);
-      values.push(dto.remarks);
+      values.push(toLowerCaseString(dto.remarks));
     }
     if (dto.minimum_service_months !== undefined) {
       updateFields.push(`minimum_service_months = $${paramIndex++}`);
-      values.push(dto.minimum_service_months);
+      values.push(toNumber(dto.minimum_service_months));
     }
     if (dto.allowed_employment_types !== undefined) {
       updateFields.push(`allowed_employment_types = $${paramIndex++}`);
-      values.push(JSON.stringify(dto.allowed_employment_types));
+      values.push(
+        parseJsonArray(dto.allowed_employment_types)
+      );
     }
     if (dto.allowed_employee_statuses !== undefined) {
       updateFields.push(`allowed_employee_statuses = $${paramIndex++}`);
-      values.push(JSON.stringify(dto.allowed_employee_statuses));
+      values.push(
+        parseJsonArray(dto.allowed_employee_statuses)
+      );
     }
     if (dto.excluded_weekdays !== undefined) {
       updateFields.push(`excluded_weekdays = $${paramIndex++}`);
-      values.push(JSON.stringify(dto.excluded_weekdays));
+      values.push(parseJsonNumberArray(dto.excluded_weekdays));
     }
     if (dto.updated_by !== undefined) {
       updateFields.push(`updated_by = $${paramIndex++}`);
-      values.push(dto.updated_by);
+      values.push(toLowerCaseString(dto.updated_by));
     }
     if (updateFields.length === 0) return false;
     values.push(id);
     const query = `
-      UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
-      SET ${updateFields.join(', ')}
-      WHERE id = $${paramIndex} AND deleted_at IS NULL
-      RETURNING id
+      update ${lp}
+      set ${updateFields.join(', ')}
+      where id = $${paramIndex} and deleted_at is null
+      returning id
     `;
     const result = await manager.query(query, values);
     return result.length > 0;
@@ -165,14 +138,14 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     manager: EntityManager,
   ): Promise<LeavePolicy | null> {
     const query = `
-      SELECT 
+      select 
         lp.*, 
-        lt.name AS leave_type_name,
+        lt.name as leave_type_name,
         lp.effective_date::text,
         lp.expiry_date::text
-      FROM ${LP} lp
-      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
-      WHERE lp.id = $1
+      from ${lp} lp
+      left join ${lt} lt on lp.leave_type_id = lt.id
+      where lp.id = $1
     `;
     const result = await manager.query(query, [id]);
     if (result.length === 0) return null;
@@ -187,23 +160,23 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     manager: EntityManager,
   ): Promise<PaginatedResult<LeavePolicy>> {
     const offset = (page - 1) * limit;
-    const searchTerm = term ? `%${term}%` : '%';
+    const searchTerm = term ? `%${toLowerCaseString(term)}%` : '%';
 
     const joinClause = `
-      FROM ${LP} lp
-      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
+      from ${lp} lp
+      left join ${lt} lt on lp.leave_type_id = lt.id
     `;
-    let whereClause = `WHERE lp.deleted_at ${is_archived ? 'IS NOT NULL' : 'IS NULL'}`;
+    let whereClause = `where lp.deleted_at ${is_archived ? 'is not null' : 'is null'}`;
     const queryParams: unknown[] = [];
     let paramIndex = 1;
     if (term) {
-      whereClause += ` AND (lp.remarks ILIKE $${paramIndex} OR lt.name ILIKE $${paramIndex})`;
+      whereClause += ` and (lower(lp.remarks) ilike $${paramIndex} or lower(lt.name) ilike $${paramIndex})`;
       queryParams.push(searchTerm);
       paramIndex++;
     }
 
     const countQuery = `
-      SELECT COUNT(*) as total ${joinClause}
+      select count(*) as total ${joinClause}
       ${whereClause}
     `;
     const countResult = await manager.query(countQuery, queryParams);
@@ -211,15 +184,15 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
 
     queryParams.push(limit, offset);
     const dataQuery = `
-      SELECT 
+      select 
         lp.*, 
-        lt.name AS leave_type_name,
+        lt.name as leave_type_name,
         lp.effective_date::text,
         lp.expiry_date::text
       ${joinClause}
       ${whereClause}
-      ORDER BY lp.created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      order by lp.created_at desc
+      limit $${paramIndex} offset $${paramIndex + 1}
     `;
     const dataResult = await manager.query(dataQuery, queryParams);
     const data = dataResult.map((row: Record<string, unknown>) =>
@@ -230,13 +203,13 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
 
   async retrieveActivePolicies(manager: EntityManager): Promise<LeavePolicy[]> {
     const query = `
-      SELECT lp.*, lt.name AS leave_type_name
-      FROM ${LP} lp
-      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
-      WHERE lp.status = $1 AND lp.deleted_at IS NULL
-      ORDER BY lp.leave_type_id
+      select lp.*, lt.name as leave_type_name
+      from ${lp} lp
+      left join ${lt} lt on lp.leave_type_id = lt.id
+      where lp.status = $1 and lp.deleted_at is null
+      order by lp.leave_type_id
     `;
-    const result = await manager.query(query, [EnumLeavePolicyStatus.ACTIVE]);
+    const result = await manager.query(query, [toLowerCaseString(EnumLeavePolicyStatus.ACTIVE)]);
     return result.map((row: Record<string, unknown>) =>
       this.entityToModel(row),
     );
@@ -247,14 +220,14 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     manager: EntityManager,
   ): Promise<LeavePolicy | null> {
     const query = `
-      SELECT lp.*, lt.name AS leave_type_name
-      FROM ${LP} lp
-      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
-      WHERE lp.leave_type_id = $1 AND lp.status = $2 AND lp.deleted_at IS NULL
+      select lp.*, lt.name as leave_type_name
+      from ${lp} lp
+      left join ${lt} lt on lp.leave_type_id = lt.id
+      where lp.leave_type_id = $1 and lp.status = $2 and lp.deleted_at is null
     `;
     const result = await manager.query(query, [
       leave_type_id,
-      EnumLeavePolicyStatus.ACTIVE,
+      toLowerCaseString(EnumLeavePolicyStatus.ACTIVE),
     ]);
     if (result.length === 0) return null;
     return this.entityToModel(result[0]);
@@ -262,11 +235,11 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
 
   async activatePolicy(id: number, manager: EntityManager): Promise<boolean> {
     const query = `
-      UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
-      SET status = $1 WHERE id = $2 AND deleted_at IS NULL RETURNING id
+      update ${lp}
+      set status = $1 where id = $2 and deleted_at is null returning id
     `;
     const result = await manager.query(query, [
-      EnumLeavePolicyStatus.ACTIVE,
+      toLowerCaseString(EnumLeavePolicyStatus.ACTIVE),
       id,
     ]);
     return result.length > 0;
@@ -279,22 +252,22 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
   ): Promise<boolean> {
     if (expiry_date) {
       const query = `
-        UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
-        SET status = $1, expiry_date = $2 WHERE id = $3 AND deleted_at IS NULL RETURNING id
+        update ${lp}
+        set status = $1, expiry_date = $2 where id = $3 and deleted_at is null returning id
       `;
       const result = await manager.query(query, [
-        EnumLeavePolicyStatus.RETIRED,
+        toLowerCaseString(EnumLeavePolicyStatus.RETIRED),
         expiry_date,
         id,
       ]);
       return result.length > 0;
     }
     const query = `
-      UPDATE ${LEAVE_MANAGEMENT_DATABASE_MODELS.LEAVE_POLICIES}
-      SET status = $1 WHERE id = $2 AND deleted_at IS NULL RETURNING id
+      update ${lp}
+      set status = $1 where id = $2 and deleted_at is null returning id
     `;
     const result = await manager.query(query, [
-      EnumLeavePolicyStatus.RETIRED,
+      toLowerCaseString(EnumLeavePolicyStatus.RETIRED),
       id,
     ]);
     return result.length > 0;
@@ -302,10 +275,10 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
 
   async findByLeaveType(leave_type_id: number, manager: EntityManager): Promise<LeavePolicy | null> {
     const query = `
-      SELECT lp.*, lt.name AS leave_type_name
-      FROM ${LP} lp
-      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
-      WHERE lp.leave_type_id = $1 AND lp.deleted_at IS NULL
+      select lp.*, lt.name as leave_type_name
+      from ${lp} lp
+      left join ${lt} lt on lp.leave_type_id = lt.id
+      where lp.leave_type_id = $1 and lp.deleted_at is null
     `;
     const result = await manager.query(query, [leave_type_id]);
     if (result.length === 0) return null;
@@ -314,12 +287,12 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
 
   async findAllByLeaveTypeAndEffectiveDateYear(leave_type_id: number, effective_date_year: number, manager: EntityManager): Promise<LeavePolicy[]> {
     const query = `
-      SELECT lp.*, lt.name AS leave_type_name
-      FROM ${LP} lp
-      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
-      WHERE lp.leave_type_id = $1 AND lp.deleted_at IS NULL AND EXTRACT(YEAR FROM lp.effective_date) = $2
+      select lp.*, lt.name as leave_type_name
+      from ${lp} lp
+      left join ${lt} lt on lp.leave_type_id = lt.id
+      where lp.leave_type_id = $1 and lp.deleted_at is null and extract(year from lp.effective_date) = $2
     `;
-    const result = await manager.query(query, [leave_type_id, effective_date_year]);
+    const result = await manager.query(query, [leave_type_id, toNumber(effective_date_year)]);
     return result.map((row: Record<string, unknown>) =>
       this.entityToModel(row),
     );
@@ -335,42 +308,71 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
    * @param exclude_policy_id - Optionally exclude a certain policy id (for updates)
    * @returns True if there is at least one overlapping policy (ignoring soft-deleted records)
    */
-  async hasOverlappingDateRange(leave_type_id: number, effective_date: Date, expiry_date: Date | undefined, manager: EntityManager, exclude_policy_id?: number): Promise<boolean> {
-    const query = `
-      SELECT COUNT(*) as total
-      FROM ${LP} lp
-      WHERE lp.leave_type_id = $1 AND lp.deleted_at IS NULL AND lp.effective_date <= $2 AND lp.expiry_date >= $3
+  async hasOverlappingDateRange(
+    leave_type_id: number,
+    effective_date: Date,
+    expiry_date: Date | undefined,
+    manager: EntityManager,
+    exclude_policy_id?: number
+  ): Promise<boolean> {
+    // Build query parts
+    let query = `
+      select count(*)::int as total
+      from ${lp} lp
+      where lp.leave_type_id = $1 
+        and lp.deleted_at is null
+        and lp.effective_date <= $2
+        and lp.expiry_date >= $3
     `;
-    const result = await manager.query(query, [leave_type_id, effective_date, expiry_date]);
-    return result.length > 0;
+    const params: unknown[] = [
+      leave_type_id,
+      toDate(expiry_date ?? effective_date), // If expiry is missing, treat as open-ended period
+      toDate(effective_date),
+    ];
+
+    // Exclude a policy by id if provided (for updates)
+    if (exclude_policy_id) {
+      query += ` and lp.id != $4`;
+      params.push(exclude_policy_id);
+    }
+
+    // Param order: leave_type_id, (expiry), (effective), [exclude_id]
+    // logic: only overlap if periods intersect:
+    //  (existing.effective_date <= new.expiry_date) AND (existing.expiry_date >= new.effective_date)
+    // If expiry_date is undefined, treat new as open-ended (from effective_date onwards)
+    // For backwards compatibility, if expiry is undefined, use effective_date for that predicate
+
+    // Note: Convert all dates for query safety.
+    const result = await manager.query(query, params);
+
+    // Parse total result.
+    const total = result?.[0]?.total ?? 0;
+    return total > 0;
   }
 
   private entityToModel(entity: Record<string, unknown>): LeavePolicy {
     return new LeavePolicy({
-      id: entity.id as number,
-      leave_type_id: entity.leave_type_id as number,
-      leave_type: (entity.leave_type_name as string) ?? undefined,
+      id: toNumber(entity.id),
+      leave_type_id: toNumber(entity.leave_type_id),
+      leave_type: toLowerCaseString(entity.leave_type_name),
       annual_entitlement: toNumber(entity.annual_entitlement),
       carry_limit: toNumber(entity.carry_limit),
       encash_limit: toNumber(entity.encash_limit),
-      carried_over_years: (entity.carried_over_years as number) ?? 0,
-      effective_date: (entity.effective_date as Date) ?? undefined,
-      expiry_date: (entity.expiry_date as Date) ?? undefined,
-      status: entity.status as EnumLeavePolicyStatus,
-      remarks: (entity.remarks as string) ?? undefined,
-      minimum_service_months:
-        (entity.minimum_service_months as number) ?? undefined,
+      carried_over_years: toNumber(entity.carried_over_years),
+      effective_date: toDate(entity.effective_date),
+      expiry_date: toDate(entity.expiry_date),
+      status: toLowerCaseString(entity.status) as EnumLeavePolicyStatus,
+      remarks: toLowerCaseString(entity.remarks),
+      minimum_service_months: toNumber(entity.minimum_service_months),
       allowed_employment_types: parseJsonArray(entity.allowed_employment_types),
-      allowed_employee_statuses: parseJsonArray(
-        entity.allowed_employee_statuses,
-      ),
+      allowed_employee_statuses: parseJsonArray(entity.allowed_employee_statuses),
       excluded_weekdays: parseJsonNumberArray(entity.excluded_weekdays),
-      deleted_by: (entity.deleted_by as string) ?? null,
-      deleted_at: (entity.deleted_at as Date) ?? null,
-      created_by: (entity.created_by as string) ?? null,
-      created_at: entity.created_at as Date,
-      updated_by: (entity.updated_by as string) ?? null,
-      updated_at: entity.updated_at as Date,
+      deleted_by: toLowerCaseString(entity.deleted_by),
+      deleted_at: toDate(entity.deleted_at),
+      created_by: toLowerCaseString(entity.created_by),
+      created_at: toDate(entity.created_at),
+      updated_by: toLowerCaseString(entity.updated_by),
+      updated_at: toDate(entity.updated_at),
     });
   }
 }

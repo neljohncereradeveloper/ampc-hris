@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { RolePermissionEntity } from '@/features/rbac/infrastructure/database/entities/role-permission.entity';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { ROLES, PERMISSIONS } from '@/core/domain/constants';
+import { toNumber } from '@/core/utils/coercion.util';
 
 /**
  * SeedRolePermissions
@@ -500,8 +501,8 @@ export class SeedRolePermissions {
           RolePermissionEntity,
           {
             where: {
-              role_id: roleId,
-              permission_id: permissionId,
+              role_id: toNumber(roleId),
+              permission_id: toNumber(permissionId),
             },
           },
         );
@@ -510,8 +511,8 @@ export class SeedRolePermissions {
           const role_permission_entity = this.entityManager.create(
             RolePermissionEntity,
             {
-              role_id: roleId,
-              permission_id: permissionId,
+              role_id: toNumber(roleId),
+              permission_id: toNumber(permissionId),
               created_by: 'auto generated',
               created_at: getPHDateTime(),
             },

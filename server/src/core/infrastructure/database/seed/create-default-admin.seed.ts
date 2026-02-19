@@ -5,6 +5,7 @@ import { UserRoleEntity } from '@/features/rbac/infrastructure/database/entities
 import { getPHDateTime } from '@/core/utils/date.util';
 import { PasswordUtil } from '@/core/utils/password.util';
 import { ROLES } from '@/core/domain/constants';
+import { toLowerCaseString } from '@/core/utils/coercion.util';
 
 /**
  * SeedAdminAccount
@@ -42,7 +43,7 @@ import { ROLES } from '@/core/domain/constants';
 export class SeedAdminAccount {
   private readonly logger = new Logger(SeedAdminAccount.name);
 
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(private readonly entityManager: EntityManager) { }
 
   /**
    * Executes the seed operation to create default admin account.
@@ -63,13 +64,11 @@ export class SeedAdminAccount {
    */
   async run(roleMap: Map<string, number>): Promise<void> {
     // Get admin credentials from environment variables or use defaults
-    const adminUsername =
-      process.env.ADMIN_USERNAME?.trim().toLowerCase() || 'admin';
-    const adminEmail =
-      process.env.ADMIN_EMAIL?.trim().toLowerCase() || 'admin@example.com';
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-    const adminFirstName = process.env.ADMIN_FIRST_NAME || 'System';
-    const adminLastName = process.env.ADMIN_LAST_NAME || 'Administrator';
+    const adminUsername = toLowerCaseString(process.env.ADMIN_USERNAME ?? 'admin');
+    const adminEmail = toLowerCaseString(process.env.ADMIN_EMAIL ?? 'admin@example.com');
+    const adminPassword = toLowerCaseString(process.env.ADMIN_PASSWORD ?? 'admin');
+    const adminFirstName = toLowerCaseString(process.env.ADMIN_FIRST_NAME ?? 'system');
+    const adminLastName = toLowerCaseString(process.env.ADMIN_LAST_NAME ?? 'administrator');
 
     // Get Admin role ID from roleMap
     const adminRoleId = roleMap.get(ROLES.ADMIN);
@@ -90,7 +89,7 @@ export class SeedAdminAccount {
 
     if (!existingAdmin) {
       // Hash password before creating user
-      const hashedPassword = await PasswordUtil.hash(adminPassword);
+      const hashedPassword = await PasswordUtil.hash(adminPassword!);
 
       // Create new admin user
       const adminUser = this.entityManager.create(UserEntity, {
@@ -116,7 +115,7 @@ export class SeedAdminAccount {
 
       // Update email if different (in case env var changed)
       if (existingAdmin.email !== adminEmail) {
-        existingAdmin.email = adminEmail;
+        existingAdmin.email = adminEmail!;
         existingAdmin.updated_by = 'auto generated';
         await this.entityManager.save(existingAdmin);
         this.logger.log(
