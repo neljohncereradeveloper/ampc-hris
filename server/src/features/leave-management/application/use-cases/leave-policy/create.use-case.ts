@@ -18,6 +18,7 @@ import { EnumLeavePolicyStatus } from '@/features/leave-management/domain/enum';
 import { PolicyActivationService } from '@/features/leave-management/domain/services';
 import { LeaveTypeRepository } from '@/features/shared-domain/domain/repositories';
 import { SHARED_DOMAIN_TOKENS } from '@/features/shared-domain/domain/constants';
+import { toDate } from '@/core/utils/coercion.util';
 
 @Injectable()
 export class CreateLeavePolicyUseCase {
@@ -34,6 +35,12 @@ export class CreateLeavePolicyUseCase {
     private readonly activityLogRepository: ActivityLogRepository,
   ) { }
 
+  /**
+   * Executes the create leave policy use case.
+   * @param command - The create leave policy command.
+   * @param requestInfo - The request information.
+   * @returns The created leave policy.
+   */
   async execute(
     command: CreateLeavePolicyCommand,
     requestInfo?: RequestInfo,
@@ -49,6 +56,60 @@ export class CreateLeavePolicyUseCase {
           throw new LeavePolicyBusinessException(
             'Leave type not found or archived',
             HTTP_STATUS.NOT_FOUND,
+          );
+        }
+
+        // Check if the effective date is valid
+        const effectiveDate = toDate(command.effective_date); // required
+        const expiryDate = toDate(command.expiry_date); // optional
+        if (!effectiveDate) {
+          throw new LeavePolicyBusinessException(
+            'Invalid effective date format provided for leave policy',
+            HTTP_STATUS.BAD_REQUEST,
+          );
+        }
+
+
+        // Adjusted logic: Prevent creation if there is an overlapping date range
+        if (effectiveDate && expiryDate) {
+          // Retrieve all policies for this leave type
+          const overlap = await this.leavePolicyRepository.hasOverlappingDateRange(
+            Number(leave_type.id),
+            effectiveDate,
+            expiryDate,
+            manager,
+          );
+          if (overlap) {
+            throw new LeavePolicyBusinessException(
+              `A leave policy for "${leave_type.name}" already exists that overlaps the time range ${command.effective_date} - ${command.expiry_date}. You cannot create another leave policy for the same period.`,
+              HTTP_STATUS.CONFLICT,
+            );
+          }
+        } else {
+          // Fallback: Check for same year-only logic (legacy constraint)
+          const effectiveYear = effectiveDate.getFullYear();
+          const existingPolicyInYear = await this.leavePolicyRepository.findAllByLeaveTypeAndEffectiveDateYear(
+            Number(leave_type.id),
+            effectiveYear,
+            manager,
+          );
+          if (existingPolicyInYear.length > 0) {
+            throw new LeavePolicyBusinessException(
+              `A leave policy for "${leave_type.name}" already exists for the year ${effectiveYear}. You cannot create another for the same year.`,
+              HTTP_STATUS.CONFLICT,
+            );
+          }
+        }
+
+        // Check if there is already an ACTIVE policy for the leave type
+        const existing_policy = await this.leavePolicyRepository.findByLeaveType(
+          Number(leave_type.id),
+          manager,
+        );
+        if (existing_policy && existing_policy.status === EnumLeavePolicyStatus.ACTIVE) {
+          throw new LeavePolicyBusinessException(
+            `Leave policy for leave type "${leave_type.name}" already exists and is active`,
+            HTTP_STATUS.BAD_REQUEST,
           );
         }
 

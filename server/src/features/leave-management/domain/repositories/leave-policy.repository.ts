@@ -82,4 +82,40 @@ export interface LeavePolicyRepository<Context = unknown> {
     context: Context,
     expiry_date?: Date,
   ): Promise<boolean>;
+
+  /**
+   * Find a policy by leave type id.
+   * @param leave_type_id - Leave type primary key
+   * @param context - Transaction or connection
+   */
+  findByLeaveType(leave_type_id: number, context: Context): Promise<LeavePolicy | null>;
+
+  /**
+   * Find all policies by leave type id and effective date year.
+   * @param leave_type_id - Leave type primary key
+   * @param effective_date_year - Effective date year
+   * @param context - Transaction or connection
+   */
+  findAllByLeaveTypeAndEffectiveDateYear(
+    leave_type_id: number,
+    effective_date_year: number,
+    context: Context
+  ): Promise<LeavePolicy[]>;
+
+  /**
+   * Determines whether there exists any leave policy for the given leave type that overlaps with the given effective and expiry date (inclusive).
+   * Should return true if there is at least one overlapping policy (ignoring soft-deleted records).
+   * @param leave_type_id - Leave type primary key
+   * @param effective_date - Proposed effective date of new policy
+   * @param expiry_date - Proposed expiry date of new policy (may be undefined for open-ended)
+   * @param context - Transaction or connection
+   * @param exclude_policy_id - Optionally exclude a certain policy id (for updates)
+   */
+  hasOverlappingDateRange(
+    leave_type_id: number,
+    effective_date: Date,
+    expiry_date: Date | undefined,
+    context: Context,
+    exclude_policy_id?: number
+  ): Promise<boolean>;
 }

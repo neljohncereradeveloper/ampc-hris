@@ -165,7 +165,11 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     manager: EntityManager,
   ): Promise<LeavePolicy | null> {
     const query = `
-      SELECT lp.*, lt.name AS leave_type_name
+      SELECT 
+        lp.*, 
+        lt.name AS leave_type_name,
+        lp.effective_date::text,
+        lp.expiry_date::text
       FROM ${LP} lp
       LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
       WHERE lp.id = $1
@@ -207,7 +211,11 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
 
     queryParams.push(limit, offset);
     const dataQuery = `
-      SELECT lp.*, lt.name AS leave_type_name
+      SELECT 
+        lp.*, 
+        lt.name AS leave_type_name,
+        lp.effective_date::text,
+        lp.expiry_date::text
       ${joinClause}
       ${whereClause}
       ORDER BY lp.created_at DESC
@@ -289,6 +297,51 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
       EnumLeavePolicyStatus.RETIRED,
       id,
     ]);
+    return result.length > 0;
+  }
+
+  async findByLeaveType(leave_type_id: number, manager: EntityManager): Promise<LeavePolicy | null> {
+    const query = `
+      SELECT lp.*, lt.name AS leave_type_name
+      FROM ${LP} lp
+      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
+      WHERE lp.leave_type_id = $1 AND lp.deleted_at IS NULL
+    `;
+    const result = await manager.query(query, [leave_type_id]);
+    if (result.length === 0) return null;
+    return this.entityToModel(result[0]);
+  }
+
+  async findAllByLeaveTypeAndEffectiveDateYear(leave_type_id: number, effective_date_year: number, manager: EntityManager): Promise<LeavePolicy[]> {
+    const query = `
+      SELECT lp.*, lt.name AS leave_type_name
+      FROM ${LP} lp
+      LEFT JOIN ${LT} lt ON lp.leave_type_id = lt.id
+      WHERE lp.leave_type_id = $1 AND lp.deleted_at IS NULL AND EXTRACT(YEAR FROM lp.effective_date) = $2
+    `;
+    const result = await manager.query(query, [leave_type_id, effective_date_year]);
+    return result.map((row: Record<string, unknown>) =>
+      this.entityToModel(row),
+    );
+  }
+
+  /**
+   * Determines whether there exists any leave policy for the given leave type that overlaps with the given effective and expiry date (inclusive).
+   * Should return true if there is at least one overlapping policy (ignoring soft-deleted records).
+   * @param leave_type_id - Leave type primary key
+   * @param effective_date - Proposed effective date of new policy
+   * @param expiry_date - Proposed expiry date of new policy (may be undefined for open-ended)
+   * @param manager - Entity manager
+   * @param exclude_policy_id - Optionally exclude a certain policy id (for updates)
+   * @returns True if there is at least one overlapping policy (ignoring soft-deleted records)
+   */
+  async hasOverlappingDateRange(leave_type_id: number, effective_date: Date, expiry_date: Date | undefined, manager: EntityManager, exclude_policy_id?: number): Promise<boolean> {
+    const query = `
+      SELECT COUNT(*) as total
+      FROM ${LP} lp
+      WHERE lp.leave_type_id = $1 AND lp.deleted_at IS NULL AND lp.effective_date <= $2 AND lp.expiry_date >= $3
+    `;
+    const result = await manager.query(query, [leave_type_id, effective_date, expiry_date]);
     return result.length > 0;
   }
 

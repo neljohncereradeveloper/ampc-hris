@@ -24,7 +24,7 @@ export class CreateLeaveTypeUseCase {
     private readonly leaveTypeRepository: LeaveTypeRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     command: CreateLeaveTypeCommand,
@@ -33,6 +33,26 @@ export class CreateLeaveTypeUseCase {
     return this.transactionHelper.executeTransaction(
       LEAVE_TYPE_ACTIONS.CREATE,
       async (manager) => {
+        const existing_leave_type = await this.leaveTypeRepository.findByCode(
+          command.code,
+          manager,
+        );
+        if (existing_leave_type) {
+          throw new LeaveTypeBusinessException(
+            'Leave type code already exists',
+            HTTP_STATUS.BAD_REQUEST,
+          );
+        }
+        const existing_leave_type_name = await this.leaveTypeRepository.findByName(
+          command.name,
+          manager,
+        );
+        if (existing_leave_type_name) {
+          throw new LeaveTypeBusinessException(
+            'Leave type name already exists',
+            HTTP_STATUS.BAD_REQUEST,
+          );
+        }
         const new_leaveType = LeaveType.create({
           name: command.name,
           code: command.code,
