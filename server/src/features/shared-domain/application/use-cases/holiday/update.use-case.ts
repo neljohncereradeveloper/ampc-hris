@@ -29,7 +29,7 @@ export class UpdateHolidayUseCase {
     private readonly holidayRepository: HolidayRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -69,9 +69,9 @@ export class UpdateHolidayUseCase {
           name: command.name,
           date: command.date,
           type: command.type,
-          description: command.description ?? null,
-          is_recurring: command.is_recurring ?? false,
-          updated_by: requestInfo?.user_name || null,
+          description: command.description,
+          is_recurring: command.is_recurring,
+          updated_by: requestInfo?.user_name,
         });
 
         const success = await this.holidayRepository.update(

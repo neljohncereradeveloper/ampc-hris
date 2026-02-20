@@ -62,7 +62,7 @@ export class UpdateBranchUseCase {
         branch.update({
           desc1: command.desc1,
           br_code: command.br_code,
-          updated_by: requestInfo?.user_name || null,
+          updated_by: requestInfo?.user_name,
         });
 
         const success = await this.branchRepository.update(id, branch, manager);

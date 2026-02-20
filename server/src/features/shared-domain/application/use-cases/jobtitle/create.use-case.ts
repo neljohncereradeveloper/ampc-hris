@@ -24,7 +24,7 @@ export class CreateJobtitleUseCase {
     private readonly jobtitleRepository: JobtitleRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     command: CreateJobtitleCommand,
@@ -35,7 +35,7 @@ export class CreateJobtitleUseCase {
       async (manager) => {
         const new_jobtitle = Jobtitle.create({
           desc1: command.desc1,
-          created_by: requestInfo?.user_name || null,
+          created_by: requestInfo?.user_name || '',
         });
 
         const created_jobtitle = await this.jobtitleRepository.create(

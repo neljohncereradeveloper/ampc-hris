@@ -24,7 +24,7 @@ export class CreateHolidayUseCase {
     private readonly holidayRepository: HolidayRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     command: CreateHolidayCommand,
@@ -37,9 +37,9 @@ export class CreateHolidayUseCase {
           name: command.name,
           date: command.date,
           type: command.type,
-          description: command.description ?? null,
-          is_recurring: command.is_recurring ?? false,
-          created_by: requestInfo?.user_name || null,
+          description: command.description,
+          is_recurring: command.is_recurring,
+          created_by: requestInfo?.user_name || '',
         });
 
         const created_holiday = await this.holidayRepository.create(

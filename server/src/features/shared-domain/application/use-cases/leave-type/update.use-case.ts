@@ -29,7 +29,7 @@ export class UpdateLeaveTypeUseCase {
     private readonly leaveTypeRepository: LeaveTypeRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) {}
+  ) { }
 
   async execute(
     id: number,
@@ -68,7 +68,7 @@ export class UpdateLeaveTypeUseCase {
           desc1: command.desc1,
           paid: command.paid,
           remarks: command.remarks,
-          updated_by: requestInfo?.user_name || null,
+          updated_by: requestInfo?.user_name,
         });
         leaveType.updated_at = getPHDateTime();
 

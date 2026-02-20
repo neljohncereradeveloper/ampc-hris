@@ -53,7 +53,7 @@ export class UpdateDepartmentUseCase {
         const tracking_config: FieldExtractorConfig[] = [
           { field: 'desc1' },
           { field: 'code' },
-          { field: 'designation' },
+          { field: 'scope' },
           { field: 'remarks' },
           {
             field: 'updated_at',
@@ -67,9 +67,9 @@ export class UpdateDepartmentUseCase {
         department.update({
           desc1: command.desc1,
           code: command.code,
-          designation: command.designation,
+          scope: command.scope,
           remarks: command.remarks,
-          updated_by: requestInfo?.user_name || null,
+          updated_by: requestInfo?.user_name,
         });
 
         const success = await this.departmentRepository.update(

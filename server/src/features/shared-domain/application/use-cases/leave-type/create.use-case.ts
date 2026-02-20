@@ -59,7 +59,7 @@ export class CreateLeaveTypeUseCase {
           desc1: command.desc1,
           paid: command.paid,
           remarks: command.remarks,
-          created_by: requestInfo?.user_name || null,
+          created_by: requestInfo?.user_name || '',
         });
 
         const created_leaveType = await this.leaveTypeRepository.create(

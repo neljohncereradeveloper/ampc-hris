@@ -36,7 +36,7 @@ export class CreateBranchUseCase {
         const new_branch = Branch.create({
           desc1: command.desc1,
           br_code: command.br_code,
-          created_by: requestInfo?.user_name || null,
+          created_by: requestInfo?.user_name || '',
         });
 
         const created_branch = await this.branchRepository.create(

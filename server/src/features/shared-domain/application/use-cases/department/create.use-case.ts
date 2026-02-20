@@ -36,9 +36,9 @@ export class CreateDepartmentUseCase {
         const new_department = Department.create({
           desc1: command.desc1,
           code: command.code,
-          designation: command.designation,
+          scope: command.scope,
           remarks: command.remarks,
-          created_by: requestInfo?.user_name || null,
+          created_by: requestInfo?.user_name || '',
         });
 
         const created_department = await this.departmentRepository.create(
@@ -60,7 +60,7 @@ export class CreateDepartmentUseCase {
             id: created_department.id,
             desc1: created_department.desc1,
             code: created_department.code,
-            designation: created_department.designation,
+            scope: created_department.scope.toString(),
             remarks: created_department.remarks,
             created_by: requestInfo?.user_name || '',
             created_at: getPHDateTime(created_department.created_at),
