@@ -1,92 +1,138 @@
 import { HTTP_STATUS } from '@/core/domain/constants';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { DepartmentBusinessException } from '../exceptions/department-business.exception';
-import { toDate, toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
+import { toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
 
+/**
+ * Department domain entity.
+ *
+ * Encapsulates all business rules and state transitions for a department.
+ * Use the static `create()` factory method to instantiate a validated department.
+ */
 export class Department {
-  id?: number;
-  desc1: string;
-  code: string;
-  designation: string;
-  remarks?: string;
-  deleted_by: string | null;
-  deleted_at: Date | null;
-  created_by: string | null;
-  created_at: Date;
-  updated_by: string | null;
-  updated_at: Date;
+  /** Auto-incremented primary key. Null when not yet persisted. */
+  id?: number | null;
 
+  /** Department description / name. */
+  desc1: string;
+
+  /** Unique department code identifier. */
+  code: string;
+
+  /** Department designation. */
+  designation: string;
+
+  /** Department remarks (optional). */
+  remarks?: string;
+
+  /** Who created this department. Required at creation time. */
+  created_by: string;
+
+  /** Timestamp when this department was created. Always set on construction. */
+  created_at: Date;
+
+  /** Who last updated this department. Null until first update. */
+  updated_by: string | null;
+
+  /** Timestamp of the last update. Null until first update. */
+  updated_at: Date | null;
+
+  /** Who archived (soft-deleted) this department. Null if not archived. */
+  deleted_by: string | null;
+
+  /** Timestamp when this department was archived. Null if not archived. */
+  deleted_at: Date | null;
+
+  /**
+   * Normalizes and initializes department fields from a raw DTO.
+   *
+   * Responsibilities:
+   * - Coerces all string fields to lowercase via `toLowerCaseString`
+   * - Sets audit timestamps (`created_at`)
+   * - Defaults optional fields (`updated_by`, `updated_at`, `deleted_by`, `deleted_at`) to null
+   *
+   * Does NOT validate business rules — call `validate()` or use `create()` for that.
+   */
   constructor(dto: {
-    id?: number;
+    id?: number | null;
     desc1: string;
     code: string;
     designation: string;
     remarks?: string;
+    created_by: string;
     deleted_by?: string | null;
-    deleted_at?: Date | null;
-    created_by?: string | null;
-    created_at?: Date;
     updated_by?: string | null;
-    updated_at?: Date;
   }) {
     this.id = toNumber(dto.id);
-    this.desc1 = toLowerCaseString(dto.desc1)!;
-    this.code = toLowerCaseString(dto.code)!;
-    this.designation = toLowerCaseString(dto.designation)!;
-    this.remarks = toLowerCaseString(dto.remarks);
-    this.deleted_by = toLowerCaseString(dto.deleted_by) ?? null;
-    this.deleted_at = toDate(dto.deleted_at) ?? null;
-    this.created_by = toLowerCaseString(dto.created_by) ?? null;
-    this.created_at = toDate(dto.created_at) ?? getPHDateTime();
-    this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
-    this.updated_at = toDate(dto.updated_at) ?? getPHDateTime();
+    this.desc1 = toLowerCaseString(dto.desc1) ?? '';
+    this.code = toLowerCaseString(dto.code) ?? '';
+    this.designation = toLowerCaseString(dto.designation) ?? '';
+    this.remarks = dto.remarks !== undefined ? toLowerCaseString(dto.remarks) ?? undefined : undefined;
+    this.created_by = toLowerCaseString(dto.created_by) ?? '';
+    this.created_at = getPHDateTime();
+    this.updated_by = null;
+    this.updated_at = null;
+    this.deleted_at = null;
+    this.deleted_by = null;
   }
 
-  /** Static factory: create and validate. */
+  /**
+   * Static factory method — the preferred way to create a new Department.
+   *
+   * Constructs and validates the department in one step.
+   * Throws `DepartmentBusinessException` if any business rule is violated.
+   */
   static create(params: {
     desc1: string;
     code: string;
     designation: string;
     remarks?: string;
-    created_by?: string | null;
+    created_by: string;
   }): Department {
     const department = new Department({
       desc1: params.desc1,
       code: params.code,
       designation: params.designation,
       remarks: params.remarks,
-      created_by: params.created_by ?? null,
+      created_by: params.created_by,
     });
     department.validate();
     return department;
   }
 
-  /** Update details; validate new state before applying. */
+  /**
+   * Updates the department details, audit fields.
+   *
+   * - Throws if the department is currently archived.
+   * - Normalizes inputs before applying.
+   * - Validates the new state after applying changes.
+   * - Refreshes `updated_at` to the current PH datetime.
+   */
   update(dto: { desc1: string; code: string; designation: string; remarks?: string; updated_by?: string | null }): void {
     if (this.deleted_at) {
       throw new DepartmentBusinessException(
-        'Department is archived and cannot be updated',
+        'Department is archived and cannot be updated.',
         HTTP_STATUS.CONFLICT,
       );
     }
-    const temp_department = new Department({
-      id: this.id,
-      desc1: dto.desc1,
-      code: dto.code,
-      designation: dto.designation,
-      remarks: dto.remarks,
-      created_at: this.created_at,
-      updated_at: this.updated_at,
-    });
-    temp_department.validate();
-    this.desc1 = toLowerCaseString(dto.desc1)!;
-    this.code = toLowerCaseString(dto.code)!;
-    this.designation = toLowerCaseString(dto.designation)!;
-    this.remarks = toLowerCaseString(dto.remarks);
+
+    this.desc1 = toLowerCaseString(dto.desc1) ?? '';
+    this.code = toLowerCaseString(dto.code) ?? '';
+    this.designation = toLowerCaseString(dto.designation) ?? '';
+    this.remarks = dto.remarks !== undefined ? toLowerCaseString(dto.remarks) ?? undefined : undefined;
     this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
+    this.updated_at = getPHDateTime();
+
+    this.validate();
   }
 
-  /** Soft-delete. */
+  /**
+   * Soft-deletes the department (archive).
+   *
+   * - Throws if the department is already archived.
+   * - Sets `deleted_at` to the current PH datetime.
+   * - Records who performed the archive.
+   */
   archive(deleted_by: string): void {
     if (this.deleted_at) {
       throw new DepartmentBusinessException(
@@ -98,7 +144,12 @@ export class Department {
     this.deleted_by = toLowerCaseString(deleted_by) ?? null;
   }
 
-  /** Restore from archive. */
+  /**
+   * Restores an archived department.
+   *
+   * - Throws if the department is not currently archived.
+   * - Clears `deleted_at` and `deleted_by`.
+   */
   restore(): void {
     if (!this.deleted_at) {
       throw new DepartmentBusinessException(
@@ -110,17 +161,17 @@ export class Department {
     this.deleted_by = null;
   }
 
-  /** Enforce business rules. */
+  /**
+   * Enforces business rules on the current state.
+   *
+   * Called by `create()` and `update()`.
+   * Throws `DepartmentBusinessException` with BAD_REQUEST on any violation.
+   */
   validate(): void {
+    // desc1 validations
     if (!this.desc1 || this.desc1.trim().length === 0) {
       throw new DepartmentBusinessException(
         'Department description (desc1) is required and cannot be empty.',
-        HTTP_STATUS.BAD_REQUEST,
-      );
-    }
-    if (this.desc1.length > 255) {
-      throw new DepartmentBusinessException(
-        'Department description (desc1) must not exceed 255 characters.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }
@@ -130,6 +181,14 @@ export class Department {
         HTTP_STATUS.BAD_REQUEST,
       );
     }
+    if (this.desc1.length > 255) {
+      throw new DepartmentBusinessException(
+        'Department description (desc1) must not exceed 255 characters.',
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+
+    // code validations
     if (!this.code || this.code.trim().length === 0) {
       throw new DepartmentBusinessException(
         'Department code is required and cannot be empty.',
@@ -142,21 +201,11 @@ export class Department {
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    if (this.code.trim().length < 2) {
-      throw new DepartmentBusinessException(
-        'Department code must be at least 2 characters long.',
-        HTTP_STATUS.BAD_REQUEST,
-      );
-    }
+
+    // designation validations
     if (!this.designation || this.designation.trim().length === 0) {
       throw new DepartmentBusinessException(
         'Department designation is required and cannot be empty.',
-        HTTP_STATUS.BAD_REQUEST,
-      );
-    }
-    if (this.designation.length > 255) {
-      throw new DepartmentBusinessException(
-        'Department designation must not exceed 255 characters.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }
@@ -166,23 +215,33 @@ export class Department {
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    if (this.remarks && this.remarks.trim().length === 0) {
+    if (this.designation.length > 255) {
       throw new DepartmentBusinessException(
-        'Department remarks is required and cannot be empty.',
+        'Department designation must not exceed 255 characters.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    if (this.remarks && this.remarks.length > 500) {
-      throw new DepartmentBusinessException(
-        'Department remarks must not exceed 500 characters.',
-        HTTP_STATUS.BAD_REQUEST,
-      );
-    }
-    if (this.remarks && this.remarks.trim().length < 2) {
-      throw new DepartmentBusinessException(
-        'Department remarks must be at least 2 characters long.',
-        HTTP_STATUS.BAD_REQUEST,
-      );
+
+    // remarks validations (optional, if provided)
+    if (this.remarks !== undefined && this.remarks !== null) {
+      if (this.remarks.trim().length === 0) {
+        throw new DepartmentBusinessException(
+          'Department remarks is required and cannot be empty.',
+          HTTP_STATUS.BAD_REQUEST,
+        );
+      }
+      if (this.remarks.length > 500) {
+        throw new DepartmentBusinessException(
+          'Department remarks must not exceed 500 characters.',
+          HTTP_STATUS.BAD_REQUEST,
+        );
+      }
+      if (this.remarks.trim().length < 2) {
+        throw new DepartmentBusinessException(
+          'Department remarks must be at least 2 characters long.',
+          HTTP_STATUS.BAD_REQUEST,
+        );
+      }
     }
   }
 }
