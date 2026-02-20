@@ -2,6 +2,7 @@ import { HTTP_STATUS } from '@/core/domain/constants';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { DepartmentBusinessException } from '../exceptions/department-business.exception';
 import { toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
+import { DepartmentScope } from '../enum';
 
 /**
  * Department domain entity.
@@ -13,16 +14,24 @@ export class Department {
   /** Auto-incremented primary key. Null when not yet persisted. */
   id?: number | null;
 
-  /** Department description / name. */
+  /** Department description / name. e.g. 'human resources', 'information technology' */
+  /** Example: Human Resources, Information Technology, etc. */
   desc1: string;
 
-  /** Unique department code identifier. */
+  /** Unique department code identifier. e.g. 'hr', 'it', 'fin' */
+  /** Example: HR, IT, FIN, etc. */
   code: string;
 
-  /** Department designation. */
-  designation: string;
+  /**
+   * Determines payroll grouping behavior.
+   * HEAD_OFFICE = payroll grouped by department.
+   * BRANCH = payroll grouped by branch.
+   */
+  /** Example: HEAD_OFFICE, BRANCH, etc. */
+  scope: DepartmentScope;
 
-  /** Department remarks (optional). */
+  /** Optional remarks or additional info about the department. */
+  /** Example: Human Resources Department, Information Technology Department, etc. */
   remarks?: string;
 
   /** Who created this department. Required at creation time. */
@@ -57,7 +66,7 @@ export class Department {
     id?: number | null;
     desc1: string;
     code: string;
-    designation: string;
+    scope: DepartmentScope;
     remarks?: string;
     created_by: string;
     deleted_by?: string | null;
@@ -66,7 +75,7 @@ export class Department {
     this.id = toNumber(dto.id);
     this.desc1 = toLowerCaseString(dto.desc1) ?? '';
     this.code = toLowerCaseString(dto.code) ?? '';
-    this.designation = toLowerCaseString(dto.designation) ?? '';
+    this.scope = dto.scope;
     this.remarks = dto.remarks !== undefined ? toLowerCaseString(dto.remarks) ?? undefined : undefined;
     this.created_by = toLowerCaseString(dto.created_by) ?? '';
     this.created_at = getPHDateTime();
@@ -85,14 +94,14 @@ export class Department {
   static create(params: {
     desc1: string;
     code: string;
-    designation: string;
+    scope: DepartmentScope;
     remarks?: string;
     created_by: string;
   }): Department {
     const department = new Department({
       desc1: params.desc1,
       code: params.code,
-      designation: params.designation,
+      scope: params.scope,
       remarks: params.remarks,
       created_by: params.created_by,
     });
@@ -101,14 +110,20 @@ export class Department {
   }
 
   /**
-   * Updates the department details, audit fields.
+   * Updates the department details and audit fields.
    *
    * - Throws if the department is currently archived.
    * - Normalizes inputs before applying.
    * - Validates the new state after applying changes.
    * - Refreshes `updated_at` to the current PH datetime.
    */
-  update(dto: { desc1: string; code: string; designation: string; remarks?: string; updated_by?: string | null }): void {
+  update(dto: {
+    desc1: string;
+    code: string;
+    scope: DepartmentScope;
+    remarks?: string;
+    updated_by?: string | null;
+  }): void {
     if (this.deleted_at) {
       throw new DepartmentBusinessException(
         'Department is archived and cannot be updated.',
@@ -118,7 +133,7 @@ export class Department {
 
     this.desc1 = toLowerCaseString(dto.desc1) ?? '';
     this.code = toLowerCaseString(dto.code) ?? '';
-    this.designation = toLowerCaseString(dto.designation) ?? '';
+    this.scope = dto.scope;
     this.remarks = dto.remarks !== undefined ? toLowerCaseString(dto.remarks) ?? undefined : undefined;
     this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
     this.updated_at = getPHDateTime();
@@ -202,22 +217,11 @@ export class Department {
       );
     }
 
-    // designation validations
-    if (!this.designation || this.designation.trim().length === 0) {
+    // scope validation
+    const validScopes = Object.values(DepartmentScope);
+    if (!validScopes.includes(this.scope)) {
       throw new DepartmentBusinessException(
-        'Department designation is required and cannot be empty.',
-        HTTP_STATUS.BAD_REQUEST,
-      );
-    }
-    if (this.designation.trim().length < 2) {
-      throw new DepartmentBusinessException(
-        'Department designation must be at least 2 characters long.',
-        HTTP_STATUS.BAD_REQUEST,
-      );
-    }
-    if (this.designation.length > 255) {
-      throw new DepartmentBusinessException(
-        'Department designation must not exceed 255 characters.',
+        `Department scope must be one of: ${validScopes.join(', ')}.`,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
@@ -226,19 +230,19 @@ export class Department {
     if (this.remarks !== undefined && this.remarks !== null) {
       if (this.remarks.trim().length === 0) {
         throw new DepartmentBusinessException(
-          'Department remarks is required and cannot be empty.',
-          HTTP_STATUS.BAD_REQUEST,
-        );
-      }
-      if (this.remarks.length > 500) {
-        throw new DepartmentBusinessException(
-          'Department remarks must not exceed 500 characters.',
+          'Department remarks cannot be empty if provided.',
           HTTP_STATUS.BAD_REQUEST,
         );
       }
       if (this.remarks.trim().length < 2) {
         throw new DepartmentBusinessException(
           'Department remarks must be at least 2 characters long.',
+          HTTP_STATUS.BAD_REQUEST,
+        );
+      }
+      if (this.remarks.length > 500) {
+        throw new DepartmentBusinessException(
+          'Department remarks must not exceed 500 characters.',
           HTTP_STATUS.BAD_REQUEST,
         );
       }

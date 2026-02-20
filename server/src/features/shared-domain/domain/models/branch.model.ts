@@ -14,9 +14,11 @@ export class Branch {
   id?: number | null;
 
   /** Branch description / name. */
+  /** Example: Manila Branch, Cebu Branch, etc. */
   desc1: string;
 
   /** Unique branch code identifier. */
+  /** Example: MNL, CEB, etc. */
   br_code: string;
 
   /** Who created this branch. Required at creation time. */

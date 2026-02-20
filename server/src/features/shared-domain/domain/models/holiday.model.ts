@@ -14,18 +14,23 @@ export class Holiday {
   id?: number | null;
 
   /** Holiday name/description. */
+  /** Example: New Year's Day, Independence Day, etc. */
   name: string;
 
   /** Holiday date (required, always in PH timezone). */
+  /** Example: January 1, 2026, July 4, 2026, etc. */
   date: Date;
 
   /** Holiday type (e.g. 'regular', 'special', etc). */
+  /** Example: regular, special, etc. */
   type: string;
 
   /** Optional description, extended info. */
+  /** Example: New Year's Day is a national holiday in the Philippines. */
   description: string | null;
 
   /** If true, holiday recurs annually. */
+  /** Example: true for holidays that recur annually, false for holidays that do not recur annually. */
   is_recurring: boolean;
 
   /** Who created this holiday. Required at creation time. */
