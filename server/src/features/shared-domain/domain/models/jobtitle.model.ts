@@ -7,27 +7,37 @@ import { toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
  * Jobtitle domain entity.
  *
  * Encapsulates all business rules and state transitions for a jobtitle.
- * Use the static `create()` factory method to instantiate a validated jobtitle.
+ *
+ * Two ways to instantiate:
+ * - `Jobtitle.create()` — for new jobtitles (validates business rules)
+ * - `Jobtitle.fromPersistence()` — for rehydrating from the database (no validation)
  */
 export class Jobtitle {
   /** Auto-incremented primary key. Null when not yet persisted. */
   id?: number | null;
 
-  /** Jobtitle description / name. */
-  /** Example: Manager, Supervisor, etc. */
+  /** Jobtitle description / name. e.g. 'manager', 'supervisor', etc. */
   desc1: string;
 
   /** Who created this jobtitle. Required at creation time. */
   created_by: string;
 
-  /** Timestamp when this jobtitle was created. Always set on construction. */
+  /**
+   * Timestamp when this jobtitle was created.
+   * Set temporarily in-memory on construction; TypeORM overrides this on INSERT via @CreateDateColumn.
+   * Authoritative value comes from the database after persist.
+   */
   created_at: Date;
 
   /** Who last updated this jobtitle. Null until first update. */
   updated_by: string | null;
 
-  /** Timestamp of the last update. Null until first update. */
-  updated_at: Date | null;
+  /**
+   * Timestamp of the last update.
+   * Set temporarily in-memory on construction; TypeORM overrides this on UPDATE via @UpdateDateColumn.
+   * Authoritative value comes from the database after persist.
+   */
+  updated_at: Date;
 
   /** Who archived (soft-deleted) this jobtitle. Null if not archived. */
   deleted_by: string | null;
@@ -40,8 +50,12 @@ export class Jobtitle {
    *
    * Responsibilities:
    * - Coerces all string fields to lowercase via `toLowerCaseString`
-   * - Sets audit timestamps (`created_at`)
-   * - Defaults optional fields (`updated_by`, `updated_at`, `deleted_by`, `deleted_at`) to null
+   * - Defaults optional audit fields to null
+   * - Sets in-memory timestamps for `created_at` and `updated_at` if not provided
+   *
+   * Note: `created_at` and `updated_at` are managed by TypeORM (@CreateDateColumn /
+   * @UpdateDateColumn) at the DB level. Values set here are temporary and will be
+   * overridden on persist. Authoritative values come back via `fromPersistence()`.
    *
    * Does NOT validate business rules — call `validate()` or use `create()` for that.
    */
@@ -49,17 +63,20 @@ export class Jobtitle {
     id?: number | null;
     desc1: string;
     created_by: string;
-    deleted_by?: string | null;
+    created_at?: Date;
     updated_by?: string | null;
+    updated_at?: Date;
+    deleted_by?: string | null;
+    deleted_at?: Date | null;
   }) {
     this.id = toNumber(dto.id);
     this.desc1 = toLowerCaseString(dto.desc1) ?? '';
     this.created_by = toLowerCaseString(dto.created_by) ?? '';
-    this.created_at = getPHDateTime();
-    this.updated_by = null;
-    this.updated_at = null;
-    this.deleted_by = null;
-    this.deleted_at = null;
+    this.created_at = dto.created_at ?? getPHDateTime(); // temporary; TypeORM overrides on INSERT
+    this.updated_by = dto.updated_by ?? null;
+    this.updated_at = dto.updated_at ?? getPHDateTime(); // temporary; TypeORM overrides on UPDATE
+    this.deleted_by = dto.deleted_by ?? null;
+    this.deleted_at = dto.deleted_at ?? null;
   }
 
   /**
@@ -78,12 +95,31 @@ export class Jobtitle {
   }
 
   /**
+   * Rehydrates a Jobtitle from a raw database record.
+   *
+   * Used in repository `entityToModel()` to map DB rows back to the domain model.
+   * Bypasses validation since data from the DB is already assumed to be valid.
+   */
+  static fromPersistence(entity: Record<string, unknown>): Jobtitle {
+    return new Jobtitle({
+      id: entity.id as number,
+      desc1: entity.desc1 as string,
+      created_by: entity.created_by as string,
+      created_at: entity.created_at as Date,
+      updated_by: entity.updated_by as string | null,
+      updated_at: entity.updated_at as Date,
+      deleted_by: entity.deleted_by as string | null,
+      deleted_at: entity.deleted_at as Date | null,
+    });
+  }
+
+  /**
    * Updates the jobtitle description and audit fields.
    *
    * - Throws if the jobtitle is currently archived.
    * - Normalizes inputs before applying.
    * - Validates the new state after applying changes.
-   * - Refreshes `updated_at` to the current PH datetime.
+   * - Note: `updated_at` is managed by TypeORM (@UpdateDateColumn), not set here.
    */
   update(dto: { desc1: string; updated_by?: string | null }): void {
     if (this.deleted_at) {
@@ -92,9 +128,9 @@ export class Jobtitle {
         HTTP_STATUS.CONFLICT,
       );
     }
+
     this.desc1 = toLowerCaseString(dto.desc1) ?? '';
     this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
-    this.updated_at = getPHDateTime();
 
     this.validate();
   }

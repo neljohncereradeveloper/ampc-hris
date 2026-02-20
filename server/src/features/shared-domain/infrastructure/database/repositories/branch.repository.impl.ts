@@ -13,22 +13,16 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
   async create(branch: Branch, manager: EntityManager): Promise<Branch> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.BRANCHES} (
-        desc1, br_code, deleted_by, deleted_at,
-        created_by, created_at, updated_by, updated_at
+        desc1, br_code, created_by
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      VALUES ($1, $2, $3)
       RETURNING *
     `;
 
     const result = await manager.query(query, [
       branch.desc1,
       branch.br_code,
-      branch.deleted_by,
-      branch.deleted_at,
       branch.created_by,
-      branch.created_at,
-      branch.updated_by,
-      branch.updated_at,
     ]);
 
     const savedEntity = result[0];
@@ -190,11 +184,11 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
       id: entity.id as number,
       desc1: entity.desc1 as string,
       br_code: entity.br_code as string,
-      deleted_by: (entity.deleted_by as string) ?? null,
-      deleted_at: (entity.deleted_at as Date) ?? null,
-      created_by: (entity.created_by as string) ?? null,
+      deleted_by: entity.deleted_by as string | null,
+      deleted_at: entity.deleted_at as Date | null,
+      created_by: entity.created_by as string,
       created_at: entity.created_at as Date,
-      updated_by: (entity.updated_by as string) ?? null,
+      updated_by: entity.updated_by as string | null,
       updated_at: entity.updated_at as Date,
     });
   }

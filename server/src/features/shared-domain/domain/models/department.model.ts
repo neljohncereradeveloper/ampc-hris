@@ -8,18 +8,19 @@ import { DepartmentScope } from '../enum';
  * Department domain entity.
  *
  * Encapsulates all business rules and state transitions for a department.
- * Use the static `create()` factory method to instantiate a validated department.
+ *
+ * Two ways to instantiate:
+ * - `Department.create()` — for new departments (validates business rules)
+ * - `Department.fromPersistence()` — for rehydrating from the database (no validation)
  */
 export class Department {
   /** Auto-incremented primary key. Null when not yet persisted. */
   id?: number | null;
 
   /** Department description / name. e.g. 'human resources', 'information technology' */
-  /** Example: Human Resources, Information Technology, etc. */
   desc1: string;
 
   /** Unique department code identifier. e.g. 'hr', 'it', 'fin' */
-  /** Example: HR, IT, FIN, etc. */
   code: string;
 
   /**
@@ -27,24 +28,30 @@ export class Department {
    * HEAD_OFFICE = payroll grouped by department.
    * BRANCH = payroll grouped by branch.
    */
-  /** Example: HEAD_OFFICE, BRANCH, etc. */
   scope: DepartmentScope;
 
   /** Optional remarks or additional info about the department. */
-  /** Example: Human Resources Department, Information Technology Department, etc. */
   remarks?: string;
 
   /** Who created this department. Required at creation time. */
   created_by: string;
 
-  /** Timestamp when this department was created. Always set on construction. */
+  /**
+   * Timestamp when this department was created.
+   * Set temporarily in-memory on construction; TypeORM overrides this on INSERT via @CreateDateColumn.
+   * Authoritative value comes from the database after persist.
+   */
   created_at: Date;
 
   /** Who last updated this department. Null until first update. */
   updated_by: string | null;
 
-  /** Timestamp of the last update. Null until first update. */
-  updated_at: Date | null;
+  /**
+   * Timestamp of the last update.
+   * Set temporarily in-memory on construction; TypeORM overrides this on UPDATE via @UpdateDateColumn.
+   * Authoritative value comes from the database after persist.
+   */
+  updated_at: Date;
 
   /** Who archived (soft-deleted) this department. Null if not archived. */
   deleted_by: string | null;
@@ -57,8 +64,12 @@ export class Department {
    *
    * Responsibilities:
    * - Coerces all string fields to lowercase via `toLowerCaseString`
-   * - Sets audit timestamps (`created_at`)
-   * - Defaults optional fields (`updated_by`, `updated_at`, `deleted_by`, `deleted_at`) to null
+   * - Defaults optional audit fields to null
+   * - Sets in-memory timestamps for `created_at` and `updated_at` if not provided
+   *
+   * Note: `created_at` and `updated_at` are managed by TypeORM (@CreateDateColumn /
+   * @UpdateDateColumn) at the DB level. Values set here are temporary and will be
+   * overridden on persist. Authoritative values come back via `fromPersistence()`.
    *
    * Does NOT validate business rules — call `validate()` or use `create()` for that.
    */
@@ -69,8 +80,11 @@ export class Department {
     scope: DepartmentScope;
     remarks?: string;
     created_by: string;
-    deleted_by?: string | null;
+    created_at?: Date;
     updated_by?: string | null;
+    updated_at?: Date;
+    deleted_by?: string | null;
+    deleted_at?: Date | null;
   }) {
     this.id = toNumber(dto.id);
     this.desc1 = toLowerCaseString(dto.desc1) ?? '';
@@ -78,11 +92,11 @@ export class Department {
     this.scope = dto.scope;
     this.remarks = dto.remarks !== undefined ? toLowerCaseString(dto.remarks) ?? undefined : undefined;
     this.created_by = toLowerCaseString(dto.created_by) ?? '';
-    this.created_at = getPHDateTime();
-    this.updated_by = null;
-    this.updated_at = null;
-    this.deleted_at = null;
-    this.deleted_by = null;
+    this.created_at = dto.created_at ?? getPHDateTime(); // temporary; TypeORM overrides on INSERT
+    this.updated_by = dto.updated_by ?? null;
+    this.updated_at = dto.updated_at ?? getPHDateTime(); // temporary; TypeORM overrides on UPDATE
+    this.deleted_by = dto.deleted_by ?? null;
+    this.deleted_at = dto.deleted_at ?? null;
   }
 
   /**
@@ -110,12 +124,34 @@ export class Department {
   }
 
   /**
+   * Rehydrates a Department from a raw database record.
+   *
+   * Used in repository `entityToModel()` to map DB rows back to the domain model.
+   * Bypasses validation since data from the DB is already assumed to be valid.
+   */
+  static fromPersistence(entity: Record<string, unknown>): Department {
+    return new Department({
+      id: entity.id as number,
+      desc1: entity.desc1 as string,
+      code: entity.code as string,
+      scope: entity.scope as DepartmentScope,
+      remarks: entity.remarks as string | undefined,
+      created_by: entity.created_by as string,
+      created_at: entity.created_at as Date,
+      updated_by: entity.updated_by as string | null,
+      updated_at: entity.updated_at as Date,
+      deleted_by: entity.deleted_by as string | null,
+      deleted_at: entity.deleted_at as Date | null,
+    });
+  }
+
+  /**
    * Updates the department details and audit fields.
    *
    * - Throws if the department is currently archived.
    * - Normalizes inputs before applying.
    * - Validates the new state after applying changes.
-   * - Refreshes `updated_at` to the current PH datetime.
+   * - Note: `updated_at` is managed by TypeORM (@UpdateDateColumn), not set here.
    */
   update(dto: {
     desc1: string;
@@ -136,7 +172,6 @@ export class Department {
     this.scope = dto.scope;
     this.remarks = dto.remarks !== undefined ? toLowerCaseString(dto.remarks) ?? undefined : undefined;
     this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
-    this.updated_at = getPHDateTime();
 
     this.validate();
   }

@@ -7,48 +7,54 @@ import { toLowerCaseString, toNumber, toDate } from '@/core/utils/coercion.util'
  * Holiday domain entity.
  *
  * Encapsulates all business rules and state transitions for a holiday.
- * Use the static `create()` factory method to instantiate a validated holiday.
+ *
+ * Two ways to instantiate:
+ * - `Holiday.create()` — for new holidays (validates business rules)
+ * - `Holiday.fromPersistence()` — for rehydrating from the database (no validation)
  */
 export class Holiday {
-  /** Auto-incremented primary key. */
+  /** Auto-incremented primary key. Null when not yet persisted. */
   id?: number | null;
 
-  /** Holiday name/description. */
-  /** Example: New Year's Day, Independence Day, etc. */
+  /** Holiday name/description. e.g. "new year's day", "independence day" */
   name: string;
 
-  /** Holiday date (required, always in PH timezone). */
-  /** Example: January 1, 2026, July 4, 2026, etc. */
+  /** Holiday date (required, always in PH timezone). e.g. January 1, 2026 */
   date: Date;
 
   /** Holiday type (e.g. 'regular', 'special', etc). */
-  /** Example: National, Regional, Special, etc. */
   type: string;
 
   /** Optional description, extended info. */
-  /** Example: New Year's Day is a national holiday in the Philippines. */
   description: string | null;
 
   /** If true, holiday recurs annually. */
-  /** Example: true for holidays that recur annually, false for holidays that do not recur annually. */
   is_recurring: boolean;
 
   /** Who created this holiday. Required at creation time. */
   created_by: string;
 
-  /** Timestamp when this holiday was created. Always set on construction. */
+  /**
+   * Timestamp when this holiday was created.
+   * Set temporarily in-memory on construction; TypeORM overrides this on INSERT via @CreateDateColumn.
+   * Authoritative value comes from the database after persist.
+   */
   created_at: Date;
 
   /** Who archived (soft-deleted) this holiday. Null if not archived. */
   deleted_by: string | null;
 
-  /** Timestamp of archive. Null if not archived. */
+  /** Timestamp when this holiday was archived. Null if not archived. */
   deleted_at: Date | null;
 
   /** Who last updated this holiday. Null until first update. */
   updated_by: string | null;
 
-  /** Timestamp of the last update. */
+  /**
+   * Timestamp of the last update.
+   * Set temporarily in-memory on construction; TypeORM overrides this on UPDATE via @UpdateDateColumn.
+   * Authoritative value comes from the database after persist.
+   */
   updated_at: Date | null;
 
   /**
@@ -57,9 +63,8 @@ export class Holiday {
    * Responsibilities:
    * - Coerces all string fields to lowercase via `toLowerCaseString`
    * - Coerces dates to Date
-   * - Defaults audit fields to sensible values (now if missing)
-   * - Defaults booleans to false
-   * - Defaults optional fields (`updated_by`, `deleted_by`, etc) to null
+   * - Defaults optional audit fields to null
+   * - Sets in-memory timestamps for created_at and updated_at if not provided
    *
    * Does NOT validate business rules — call `validate()` or use `create()` for that.
    */
@@ -71,10 +76,12 @@ export class Holiday {
     created_by: string;
     description?: string | null;
     is_recurring?: boolean;
-    deleted_by?: string | null;
+    created_at?: Date;
     updated_by?: string | null;
+    updated_at?: Date;
+    deleted_by?: string | null;
+    deleted_at?: Date | null;
   }) {
-    // note: only allow undefined/null for id
     this.id = toNumber(dto.id);
     this.name = toLowerCaseString(dto.name) ?? '';
     this.date = toDate(dto.date)!;
@@ -82,11 +89,11 @@ export class Holiday {
     this.description = toLowerCaseString(dto.description) ?? null;
     this.is_recurring = dto.is_recurring ?? false;
     this.created_by = toLowerCaseString(dto.created_by) ?? '';
-    this.created_at = getPHDateTime();
-    this.updated_by = null;
-    this.updated_at = null;
-    this.deleted_by = null;
-    this.deleted_at = null;
+    this.created_at = dto.created_at ?? getPHDateTime(); // temporary; TypeORM overrides on INSERT
+    this.updated_by = dto.updated_by ?? null;
+    this.updated_at = dto.updated_at ?? getPHDateTime(); // temporary; TypeORM overrides on UPDATE
+    this.deleted_by = dto.deleted_by ?? null;
+    this.deleted_at = dto.deleted_at ?? null;
   }
 
   /**
@@ -116,12 +123,35 @@ export class Holiday {
   }
 
   /**
+   * Rehydrates a Holiday from a raw database record.
+   *
+   * Used in repository `entityToModel()` to map DB rows back to the domain model.
+   * Bypasses validation since data from the DB is already assumed to be valid.
+   */
+  static fromPersistence(entity: Record<string, unknown>): Holiday {
+    return new Holiday({
+      id: entity.id as number,
+      name: entity.name as string,
+      date: entity.date as Date,
+      type: entity.type as string,
+      created_by: entity.created_by as string,
+      created_at: entity.created_at as Date,
+      updated_by: entity.updated_by as string | null,
+      updated_at: entity.updated_at as Date,
+      description: entity.description as string | null,
+      is_recurring: entity.is_recurring as boolean,
+      deleted_by: entity.deleted_by as string | null,
+      deleted_at: entity.deleted_at as Date | null,
+    });
+  }
+
+  /**
    * Updates the holiday details and audit fields.
    *
    * - Throws if the holiday is currently archived.
    * - Normalizes inputs before applying.
    * - Validates the new state after applying changes.
-   * - Refreshes `updated_at` to the current PH datetime.
+   * - Note: `updated_at` is managed by TypeORM (@UpdateDateColumn), not set here.
    */
   update(dto: {
     name: string;
@@ -138,14 +168,12 @@ export class Holiday {
       );
     }
 
-    // If validation ok, actually assign
     this.name = toLowerCaseString(dto.name) ?? '';
     this.date = toDate(dto.date)!;
     this.type = toLowerCaseString(dto.type) ?? '';
     this.description = toLowerCaseString(dto.description) ?? null;
     this.is_recurring = dto.is_recurring ?? this.is_recurring;
     this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
-    this.updated_at = getPHDateTime();
 
     this.validate();
   }
