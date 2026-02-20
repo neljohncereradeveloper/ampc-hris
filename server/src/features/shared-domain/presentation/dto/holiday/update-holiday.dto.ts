@@ -7,22 +7,29 @@ import {
   transformDateString,
 } from '@/core/utils/date.util';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { REGEX_CONST } from '@/features/shared-domain/domain/constants/regex.constants';
 
 export class UpdateHolidayDto {
   @ApiProperty({
     description: 'Holiday name',
     example: "New Year's Day",
-    minLength: 1,
-    maxLength: 100,
-    pattern: "^[a-zA-Z0-9\\s\\-_&.,()']+$",
+    minLength: 2,
+    maxLength: 255,
+    pattern: REGEX_CONST.LETTER_NUMBER_UNDERSCORE.toString(),
+    patternProperties: {
+      'description': {
+        pattern: REGEX_CONST.LETTER_NUMBER_UNDERSCORE.toString(),
+        message: 'Holiday name can only contain letters, numbers, and underscores',
+      }
+    }
   })
   @RequiredStringValidation({
     field_name: 'Holiday name',
     min_length: 2,
     max_length: 255,
-    pattern: /^[a-zA-Z0-9\s\-_&.,()!?]+$/,
+    pattern: REGEX_CONST.LETTER_NUMBER_UNDERSCORE,
     pattern_message:
-      'Holiday name can only contain letters, numbers, spaces, and basic punctuation',
+      'Holiday name can only contain letters, numbers, and underscores',
   })
   name: string;
 
@@ -38,17 +45,23 @@ export class UpdateHolidayDto {
   @ApiProperty({
     description: 'Holiday type',
     example: 'national',
-    minLength: 1,
+    minLength: 2,
     maxLength: 50,
-    pattern: '^[a-zA-Z0-9_]+$',
+    pattern: REGEX_CONST.LETTER_NUMBER_UNDERSCORE.toString(),
+    patternProperties: {
+      'description': {
+        pattern: REGEX_CONST.LETTER_NUMBER_UNDERSCORE.toString(),
+        message: 'Holiday type can only contain letters, numbers, and underscores',
+      }
+    }
   })
   @RequiredStringValidation({
     field_name: 'Holiday type',
-    min_length: 1,
+    min_length: 2,
     max_length: 50,
-    pattern: /^[a-zA-Z0-9_]+$/,
+    pattern: REGEX_CONST.LETTER_NUMBER_UNDERSCORE,
     pattern_message:
-      'Holiday type must contain only letters, numbers, and underscores',
+      'Holiday type can only contain letters, numbers, and underscores',
   })
   type: string;
 
@@ -56,13 +69,20 @@ export class UpdateHolidayDto {
     description: 'Description of the holiday',
     example: 'New Year celebration',
     maxLength: 1000,
+    pattern: REGEX_CONST.DESCRIPTION.toString(),
+    patternProperties: {
+      'description': {
+        pattern: REGEX_CONST.DESCRIPTION.toString(),
+        message: 'Description of the holiday can only contain letters, numbers, spaces, hyphens, apostrophes, periods, slashes, ampersands, exclamation marks, question marks, colons, and semicolons',
+      }
+    }
   })
   @OptionalStringValidation({
     field_name: 'Description',
     max_length: 500,
-    pattern: /^[a-zA-Z0-9\s\-_&.,()!?]+$/,
+    pattern: REGEX_CONST.DESCRIPTION,
     pattern_message:
-      'Description can only contain letters, numbers, spaces, and basic punctuation',
+      'Description of the holiday can only contain letters, numbers, spaces, hyphens, apostrophes, periods, slashes, ampersands, exclamation marks, question marks, colons, and semicolons',
   })
   description?: string | null;
 

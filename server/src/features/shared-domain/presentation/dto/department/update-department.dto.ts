@@ -1,5 +1,6 @@
-import { OptionalStringValidation, RequiredStringValidation } from '@/core/infrastructure/decorators';
+import { OptionalStringValidation, RequiredEnumValidation, RequiredStringValidation } from '@/core/infrastructure/decorators';
 import { REGEX_CONST } from '@/features/shared-domain/domain/constants/regex.constants';
+import { DepartmentScope } from '@/features/shared-domain/domain/enum/department-scope.enum';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateDepartmentDto {
@@ -8,6 +9,13 @@ export class UpdateDepartmentDto {
     example: 'Department Example',
     minLength: 2,
     maxLength: 100,
+    pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
+    patternProperties: {
+      'description': {
+        pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
+        message: 'Department description can only contain letters, numbers, and spaces',
+      }
+    }
   })
   @RequiredStringValidation({
     field_name: 'Department description (desc1)',
@@ -36,20 +44,14 @@ export class UpdateDepartmentDto {
   code: string;
 
   @ApiProperty({
-    description: 'Department designation (designation)',
-    example: 'Department Designation Example',
-    minLength: 2,
-    maxLength: 255,
+    description: 'Department scope (scope)',
+    example: DepartmentScope.HEAD_OFFICE,
   })
-  @RequiredStringValidation({
-    field_name: 'Department designation (designation)',
-    min_length: 2,
-    max_length: 255,
-    pattern: REGEX_CONST.LETTER_NUMBER_SPACE,
-    pattern_message:
-      'Department designation can only contain letters and spaces',
+  @RequiredEnumValidation({
+    field_name: 'Department scope (scope)',
+    enum_object: DepartmentScope,
   })
-  designation: string;
+  scope: DepartmentScope;
 
   @ApiPropertyOptional({
     description: 'Department remarks (remarks)',

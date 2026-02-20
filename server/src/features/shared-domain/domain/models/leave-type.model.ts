@@ -236,9 +236,9 @@ export class LeaveType {
         HTTP_STATUS.BAD_REQUEST,
       );
     }
-    if (this.name.length > 100) {
+    if (this.name.length > 255) {
       throw new LeaveTypeBusinessException(
-        'Leave type name must not exceed 100 characters.',
+        'Leave type name must not exceed 255 characters.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }

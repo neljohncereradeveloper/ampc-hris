@@ -8,6 +8,13 @@ export class CreateBranchDto {
     example: 'Branch Example',
     minLength: 2,
     maxLength: 100,
+    pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
+    patternProperties: {
+      'description': {
+        pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
+        message: 'Branch description can only contain letters, numbers, and spaces',
+      }
+    }
   })
   @RequiredStringValidation({
     field_name: 'Branch description (desc1)',
@@ -23,12 +30,19 @@ export class CreateBranchDto {
     description: 'Branch code (br_code)',
     example: 'BR001',
     minLength: 1,
-    maxLength: 50,
+    maxLength: 20,
+    pattern: REGEX_CONST.LETTER_NUMBER.toString(),
+    patternProperties: {
+      'description': {
+        pattern: REGEX_CONST.LETTER_NUMBER.toString(),
+        message: 'Branch code can only contain letters and numbers',
+      }
+    }
   })
   @RequiredStringValidation({
     field_name: 'Branch code (br_code)',
     min_length: 1,
-    max_length: 50,
+    max_length: 20,
     pattern: REGEX_CONST.LETTER_NUMBER,
     pattern_message:
       'Branch code can only contain letters and numbers',
