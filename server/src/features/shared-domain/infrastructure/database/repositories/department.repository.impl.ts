@@ -10,34 +10,22 @@ import {
 
 @Injectable()
 export class DepartmentRepositoryImpl implements DepartmentRepository<EntityManager> {
-  async create(
-    department: Department,
-    manager: EntityManager,
-  ): Promise<Department> {
+  async create(department: Department, manager: EntityManager): Promise<Department> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.DEPARTMENTS} (
-        desc1, code, designation, remarks, deleted_by, deleted_at,
-        created_by, created_at, updated_by, updated_at
+        desc1, code, scope, remarks, created_by
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *
     `;
-
     const result = await manager.query(query, [
       department.desc1,
       department.code,
-      department.designation,
+      department.scope,
       department.remarks ?? null,
-      department.deleted_by,
-      department.deleted_at,
       department.created_by,
-      department.created_at,
-      department.updated_by,
-      department.updated_at,
     ]);
-
-    const savedEntity = result[0];
-    return this.entityToModel(savedEntity);
+    return this.entityToModel(result[0]);
   }
 
   async update(
@@ -57,9 +45,9 @@ export class DepartmentRepositoryImpl implements DepartmentRepository<EntityMana
       updateFields.push(`code = $${paramIndex++}`);
       values.push(dto.code);
     }
-    if (dto.designation !== undefined) {
-      updateFields.push(`designation = $${paramIndex++}`);
-      values.push(dto.designation);
+    if (dto.scope !== undefined) {
+      updateFields.push(`scope = $${paramIndex++}`);
+      values.push(dto.scope);
     }
     if (dto.remarks !== undefined) {
       updateFields.push(`remarks = $${paramIndex++}`);
@@ -95,10 +83,12 @@ export class DepartmentRepositoryImpl implements DepartmentRepository<EntityMana
     return result.length > 0;
   }
 
-  async findById(
-    id: number,
-    manager: EntityManager,
-  ): Promise<Department | null> {
+  /**
+   * Finds a department by ID regardless of archived status.
+   * Used internally for archive/restore operations where we need
+   * to fetch the record before performing state transitions.
+   */
+  async findById(id: number, manager: EntityManager): Promise<Department | null> {
     const query = `
       SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.DEPARTMENTS}
@@ -141,20 +131,16 @@ export class DepartmentRepositoryImpl implements DepartmentRepository<EntityMana
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
 
-    let whereClause = '';
     const queryParams: unknown[] = [];
     let paramIndex = 1;
 
-    if (is_archived) {
-      whereClause = 'WHERE deleted_at IS NOT NULL';
-    } else {
-      whereClause = 'WHERE deleted_at IS NULL';
-    }
+    let whereClause = is_archived
+      ? 'WHERE deleted_at IS NOT NULL'
+      : 'WHERE deleted_at IS NULL';
 
     if (term) {
-      whereClause += ` AND desc1 ILIKE $${paramIndex}`;
+      whereClause += ` AND desc1 ILIKE $${paramIndex++}`;
       queryParams.push(searchTerm);
-      paramIndex++;
     }
 
     const countQuery = `
@@ -187,9 +173,13 @@ export class DepartmentRepositoryImpl implements DepartmentRepository<EntityMana
     };
   }
 
+  /**
+   * Returns a lightweight list of active departments for use in dropdowns.
+   * Selects all fields to ensure `fromPersistence()` maps correctly.
+   */
   async combobox(manager: EntityManager): Promise<Department[]> {
     const query = `
-      SELECT id, desc1
+      SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.DEPARTMENTS}
       WHERE deleted_at IS NULL
       ORDER BY desc1 ASC
@@ -202,18 +192,6 @@ export class DepartmentRepositoryImpl implements DepartmentRepository<EntityMana
   }
 
   private entityToModel(entity: Record<string, unknown>): Department {
-    return new Department({
-      id: entity.id as number,
-      desc1: entity.desc1 as string,
-      code: entity.code as string,
-      designation: entity.designation as string,
-      remarks: (entity.remarks as string) ?? null,
-      deleted_by: (entity.deleted_by as string) ?? null,
-      deleted_at: (entity.deleted_at as Date) ?? null,
-      created_by: (entity.created_by as string) ?? null,
-      created_at: entity.created_at as Date,
-      updated_by: (entity.updated_by as string) ?? null,
-      updated_at: entity.updated_at as Date,
-    });
+    return Department.fromPersistence(entity);
   }
 }

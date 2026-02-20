@@ -13,10 +13,9 @@ export class HolidayRepositoryImpl implements HolidayRepository<EntityManager> {
   async create(holiday: Holiday, manager: EntityManager): Promise<Holiday> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.HOLIDAYS} (
-        name, date, type, description, is_recurring, deleted_by, deleted_at,
-        created_by, created_at, updated_by, updated_at
+        name, date, type, description, is_recurring, created_by
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *
     `;
 
@@ -26,16 +25,10 @@ export class HolidayRepositoryImpl implements HolidayRepository<EntityManager> {
       holiday.type,
       holiday.description,
       holiday.is_recurring,
-      holiday.deleted_by,
-      holiday.deleted_at,
       holiday.created_by,
-      holiday.created_at,
-      holiday.updated_by,
-      holiday.updated_at,
     ]);
 
-    const savedEntity = result[0];
-    return this.entityToModel(savedEntity);
+    return this.entityToModel(result[0]);
   }
 
   async update(
@@ -97,6 +90,11 @@ export class HolidayRepositoryImpl implements HolidayRepository<EntityManager> {
     return result.length > 0;
   }
 
+  /**
+   * Finds a holiday by ID regardless of archived status.
+   * Used internally for archive/restore operations where we need
+   * to fetch the record before performing state transitions.
+   */
   async findById(id: number, manager: EntityManager): Promise<Holiday | null> {
     const query = `
       SELECT *
@@ -105,6 +103,24 @@ export class HolidayRepositoryImpl implements HolidayRepository<EntityManager> {
     `;
 
     const result = await manager.query(query, [id]);
+    if (result.length === 0) {
+      return null;
+    }
+
+    return this.entityToModel(result[0]);
+  }
+
+  async findByName(
+    name: string,
+    manager: EntityManager,
+  ): Promise<Holiday | null> {
+    const query = `
+      SELECT *
+      FROM ${SHARED_DOMAIN_DATABASE_MODELS.HOLIDAYS}
+      WHERE name = $1 AND deleted_at IS NULL
+    `;
+
+    const result = await manager.query(query, [name]);
     if (result.length === 0) {
       return null;
     }
@@ -122,22 +138,15 @@ export class HolidayRepositoryImpl implements HolidayRepository<EntityManager> {
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
 
-    let whereClause = '';
     const queryParams: unknown[] = [];
     let paramIndex = 1;
 
-    if (is_archived) {
-      whereClause = 'WHERE deleted_at IS NOT NULL';
-    } else {
-      whereClause = 'WHERE deleted_at IS NULL';
-    }
+    let whereClause = is_archived
+      ? 'WHERE deleted_at IS NOT NULL'
+      : 'WHERE deleted_at IS NULL';
 
     if (term) {
-      whereClause += ` AND (
-        name ILIKE $${paramIndex} OR
-        type ILIKE $${paramIndex} OR
-        description ILIKE $${paramIndex}
-      )`;
+      whereClause += ` AND (name ILIKE $${paramIndex} OR type ILIKE $${paramIndex} OR description ILIKE $${paramIndex})`;
       queryParams.push(searchTerm);
       paramIndex++;
     }
@@ -172,6 +181,9 @@ export class HolidayRepositoryImpl implements HolidayRepository<EntityManager> {
     };
   }
 
+  /**
+   * Returns all holidays within a date range.
+   */
   async findByDateRange(
     start_date: Date,
     end_date: Date,
@@ -190,9 +202,13 @@ export class HolidayRepositoryImpl implements HolidayRepository<EntityManager> {
     );
   }
 
+  /**
+   * Returns a lightweight list of active holidays for use in dropdowns.
+   * Selects all fields to ensure `fromPersistence()` maps correctly.
+   */
   async combobox(manager: EntityManager): Promise<Holiday[]> {
     const query = `
-      SELECT id, name, date, type
+      SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.HOLIDAYS}
       WHERE deleted_at IS NULL
       ORDER BY date ASC, name ASC
@@ -205,19 +221,6 @@ export class HolidayRepositoryImpl implements HolidayRepository<EntityManager> {
   }
 
   private entityToModel(entity: Record<string, unknown>): Holiday {
-    return new Holiday({
-      id: entity.id as number,
-      name: entity.name as string,
-      date: entity.date as Date,
-      type: entity.type as string,
-      description: (entity.description as string) ?? null,
-      is_recurring: (entity.is_recurring as boolean) ?? false,
-      deleted_by: (entity.deleted_by as string) ?? null,
-      deleted_at: (entity.deleted_at as Date) ?? null,
-      created_by: (entity.created_by as string) ?? null,
-      created_at: entity.created_at as Date,
-      updated_by: (entity.updated_by as string) ?? null,
-      updated_at: entity.updated_at as Date,
-    });
+    return Holiday.fromPersistence(entity);
   }
 }

@@ -25,8 +25,7 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
       branch.created_by,
     ]);
 
-    const savedEntity = result[0];
-    return this.entityToModel(savedEntity);
+    return this.entityToModel(result[0]);
   }
 
   async update(
@@ -76,6 +75,11 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
     return result.length > 0;
   }
 
+  /**
+   * Finds a branch by ID regardless of archived status.
+   * Used internally for archive/restore operations where we need
+   * to fetch the record before performing state transitions.
+   */
   async findById(id: number, manager: EntityManager): Promise<Branch | null> {
     const query = `
       SELECT *
@@ -119,20 +123,16 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
 
-    let whereClause = '';
     const queryParams: unknown[] = [];
     let paramIndex = 1;
 
-    if (is_archived) {
-      whereClause = 'WHERE deleted_at IS NOT NULL';
-    } else {
-      whereClause = 'WHERE deleted_at IS NULL';
-    }
+    let whereClause = is_archived
+      ? 'WHERE deleted_at IS NOT NULL'
+      : 'WHERE deleted_at IS NULL';
 
     if (term) {
-      whereClause += ` AND desc1 ILIKE $${paramIndex}`;
+      whereClause += ` AND desc1 ILIKE $${paramIndex++}`;
       queryParams.push(searchTerm);
-      paramIndex++;
     }
 
     const countQuery = `
@@ -165,9 +165,13 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
     };
   }
 
+  /**
+   * Returns a lightweight list of active branches for use in dropdowns.
+   * Selects all fields to ensure `fromPersistence()` maps correctly.
+   */
   async combobox(manager: EntityManager): Promise<Branch[]> {
     const query = `
-      SELECT id, desc1, br_code
+      SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.BRANCHES}
       WHERE deleted_at IS NULL
       ORDER BY desc1 ASC
@@ -180,16 +184,6 @@ export class BranchRepositoryImpl implements BranchRepository<EntityManager> {
   }
 
   private entityToModel(entity: Record<string, unknown>): Branch {
-    return new Branch({
-      id: entity.id as number,
-      desc1: entity.desc1 as string,
-      br_code: entity.br_code as string,
-      deleted_by: entity.deleted_by as string | null,
-      deleted_at: entity.deleted_at as Date | null,
-      created_by: entity.created_by as string,
-      created_at: entity.created_at as Date,
-      updated_by: entity.updated_by as string | null,
-      updated_at: entity.updated_at as Date,
-    });
+    return Branch.fromPersistence(entity);
   }
 }

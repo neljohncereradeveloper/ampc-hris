@@ -13,25 +13,18 @@ export class JobtitleRepositoryImpl implements JobtitleRepository<EntityManager>
   async create(jobtitle: Jobtitle, manager: EntityManager): Promise<Jobtitle> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.JOBTITLES} (
-        desc1, deleted_by, deleted_at,
-        created_by, created_at, updated_by, updated_at
+        desc1, created_by
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      VALUES ($1, $2)
       RETURNING *
     `;
 
     const result = await manager.query(query, [
       jobtitle.desc1,
-      jobtitle.deleted_by,
-      jobtitle.deleted_at,
       jobtitle.created_by,
-      jobtitle.created_at,
-      jobtitle.updated_by,
-      jobtitle.updated_at,
     ]);
 
-    const savedEntity = result[0];
-    return this.entityToModel(savedEntity);
+    return this.entityToModel(result[0]);
   }
 
   async update(
@@ -77,6 +70,10 @@ export class JobtitleRepositoryImpl implements JobtitleRepository<EntityManager>
     return result.length > 0;
   }
 
+  /**
+   * Finds a job title by ID regardless of archived status.
+   * Used internally for archive/restore operations.
+   */
   async findById(id: number, manager: EntityManager): Promise<Jobtitle | null> {
     const query = `
       SELECT *
@@ -120,20 +117,16 @@ export class JobtitleRepositoryImpl implements JobtitleRepository<EntityManager>
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
 
-    let whereClause = '';
     const queryParams: unknown[] = [];
     let paramIndex = 1;
 
-    if (is_archived) {
-      whereClause = 'WHERE deleted_at IS NOT NULL';
-    } else {
-      whereClause = 'WHERE deleted_at IS NULL';
-    }
+    let whereClause = is_archived
+      ? 'WHERE deleted_at IS NOT NULL'
+      : 'WHERE deleted_at IS NULL';
 
     if (term) {
-      whereClause += ` AND desc1 ILIKE $${paramIndex}`;
+      whereClause += ` AND desc1 ILIKE $${paramIndex++}`;
       queryParams.push(searchTerm);
-      paramIndex++;
     }
 
     const countQuery = `
@@ -166,9 +159,13 @@ export class JobtitleRepositoryImpl implements JobtitleRepository<EntityManager>
     };
   }
 
+  /**
+   * Returns a lightweight list of active job titles for use in dropdowns.
+   * Selects all fields to ensure `fromPersistence()` maps correctly.
+   */
   async combobox(manager: EntityManager): Promise<Jobtitle[]> {
     const query = `
-      SELECT id, desc1
+      SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.JOBTITLES}
       WHERE deleted_at IS NULL
       ORDER BY desc1 ASC
@@ -181,15 +178,6 @@ export class JobtitleRepositoryImpl implements JobtitleRepository<EntityManager>
   }
 
   private entityToModel(entity: Record<string, unknown>): Jobtitle {
-    return new Jobtitle({
-      id: entity.id as number,
-      desc1: entity.desc1 as string,
-      deleted_by: (entity.deleted_by as string) ?? null,
-      deleted_at: (entity.deleted_at as Date) ?? null,
-      created_by: (entity.created_by as string) ?? null,
-      created_at: entity.created_at as Date,
-      updated_by: (entity.updated_by as string) ?? null,
-      updated_at: entity.updated_at as Date,
-    });
+    return Jobtitle.fromPersistence(entity);
   }
 }
