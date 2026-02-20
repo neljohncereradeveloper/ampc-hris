@@ -22,7 +22,7 @@ export class Holiday {
   date: Date;
 
   /** Holiday type (e.g. 'regular', 'special', etc). */
-  /** Example: regular, special, etc. */
+  /** Example: National, Regional, Special, etc. */
   type: string;
 
   /** Optional description, extended info. */

@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { SHARED_DOMAIN_DATABASE_MODELS } from '@/features/shared-domain/domain/constants';
 import { EmployeeEntity } from './employee.entity';
+import { DepartmentScope } from '@/features/shared-domain/domain/enum';
 
 @Entity(SHARED_DOMAIN_DATABASE_MODELS.DEPARTMENTS)
 export class DepartmentEntity {
@@ -19,32 +20,32 @@ export class DepartmentEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    comment: 'Department description (desc1)',
+    comment: 'Department description. example: Human Resources, Information Technology, etc.',
   })
   @Index()
   desc1: string;
 
   @Column({
     type: 'varchar',
-    length: 255,
-    comment: 'Department code (code)',
+    length: 50,
+    comment: 'Department code. example: HR, IT, FIN, etc.',
   })
   @Index()
   code: string;
 
   @Column({
-    type: 'varchar',
-    length: 255,
-    comment: 'Department designation (designation)',
+    type: 'enum',
+    enum: DepartmentScope,
+    comment: 'Department scope. example: HEAD_OFFICE, BRANCH, etc.',
   })
   @Index()
-  designation: string;
+  scope: DepartmentScope;
 
   @Column({
     type: 'varchar',
     length: 500,
     nullable: true,
-    comment: 'Department remarks (remarks)',
+    comment: 'Department remarks. example: Human Resources Department, Information Technology Department, etc.',
   })
   remarks: string | null;
 

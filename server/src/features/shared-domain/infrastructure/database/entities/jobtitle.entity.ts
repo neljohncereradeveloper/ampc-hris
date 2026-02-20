@@ -19,7 +19,7 @@ export class JobtitleEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    comment: 'Jobtitle description (desc1)',
+    comment: 'Jobtitle description. example: Manager, Supervisor, etc.',
   })
   @Index()
   desc1: string;

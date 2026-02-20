@@ -7,6 +7,7 @@ import {
   DeleteDateColumn,
   Index,
   OneToMany,
+  Unique,
 } from 'typeorm';
 import { SHARED_DOMAIN_DATABASE_MODELS } from '@/features/shared-domain/domain/constants';
 import { EmployeeEntity } from './employee.entity';
@@ -19,17 +20,19 @@ export class BranchEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    comment: 'Branch description (desc1)',
+    comment: 'Branch description. example: Manila Branch, Cebu Branch, etc.',
   })
   @Index()
+  @Unique([SHARED_DOMAIN_DATABASE_MODELS.BRANCHES, 'desc1'])
   desc1: string;
 
   @Column({
     type: 'varchar',
-    length: 255,
-    comment: 'Branch code (br_code)',
+    length: 20,
+    comment: 'Branch code. example: MNL, CEB, etc.',
   })
   @Index()
+  @Unique([SHARED_DOMAIN_DATABASE_MODELS.BRANCHES, 'br_code'])
   br_code: string;
 
   // Audit fields (in standard order)
