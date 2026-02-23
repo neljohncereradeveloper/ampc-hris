@@ -3,6 +3,7 @@ const {
   camelCase,
   constantCase,
   kebabCase,
+  snakeCase,
 } = require('change-case');
 
 module.exports = function (plop) {
@@ -11,6 +12,7 @@ module.exports = function (plop) {
   plop.setHelper('camel', (txt) => camelCase(txt));
   plop.setHelper('constant', (txt) => constantCase(txt));
   plop.setHelper('kebab', (txt) => kebabCase(txt));
+  plop.setHelper('snake', (txt) => snakeCase(txt));
 
   plop.setGenerator('ddd', {
     description: 'Generate full DDD model structure',
