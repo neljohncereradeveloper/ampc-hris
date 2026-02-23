@@ -81,7 +81,7 @@ export class SeedAdminAccount {
 
     // Check if admin user already exists (include soft-deleted)
     const existingAdmin = await this.entityManager.findOne(UserEntity, {
-      where: { username: adminUsername },
+      where: { username: toLowerCaseString(adminUsername)! },
       withDeleted: true,
     });
 
@@ -93,11 +93,11 @@ export class SeedAdminAccount {
 
       // Create new admin user
       const adminUser = this.entityManager.create(UserEntity, {
-        username: adminUsername,
-        email: adminEmail,
+        username: toLowerCaseString(adminUsername)!,
+        email: toLowerCaseString(adminEmail)!,
         password: hashedPassword,
-        first_name: adminFirstName,
-        last_name: adminLastName,
+        first_name: toLowerCaseString(adminFirstName)!,
+        last_name: toLowerCaseString(adminLastName)!,
         is_active: true,
         is_email_verified: true,
         is_email_verified_at: getPHDateTime(),

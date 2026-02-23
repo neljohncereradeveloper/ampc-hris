@@ -88,7 +88,7 @@ export class DepartmentController {
     const command: CreateDepartmentCommand = {
       desc1: presentationDto.desc1,
       code: presentationDto.code,
-      designation: presentationDto.designation,
+      scope: presentationDto.scope,
       remarks: presentationDto.remarks,
     };
     return this.createDepartmentUseCase.execute(command, requestInfo);
@@ -115,7 +115,7 @@ export class DepartmentController {
     const command: UpdateDepartmentCommand = {
       desc1: presentationDto.desc1,
       code: presentationDto.code,
-      designation: presentationDto.designation,
+      scope: presentationDto.scope,
       remarks: presentationDto.remarks,
     };
     return this.updateDepartmentUseCase.execute(id, command, requestInfo);
