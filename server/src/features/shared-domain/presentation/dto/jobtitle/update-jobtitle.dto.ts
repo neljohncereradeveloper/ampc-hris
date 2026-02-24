@@ -10,11 +10,12 @@ export class UpdateJobtitleDto {
     maxLength: 255,
     pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
     patternProperties: {
-      'description': {
+      description: {
         pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
-        message: 'Jobtitle description can only contain letters, numbers, and spaces',
-      }
-    }
+        message:
+          'Jobtitle description can only contain letters, numbers, and spaces',
+      },
+    },
   })
   @RequiredStringValidation({
     field_name: 'Jobtitle description (desc1)',

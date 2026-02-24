@@ -32,7 +32,7 @@ export class UpdateLeavePolicyUseCase {
     private readonly leavePolicyRepository: LeavePolicyRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,

@@ -76,7 +76,7 @@ export class UserController {
     private readonly getUserByIdUseCase: GetUserByIdUseCase,
     private readonly getPaginatedUserUseCase: GetPaginatedUserUseCase,
     private readonly comboboxUserUseCase: ComboboxUserUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

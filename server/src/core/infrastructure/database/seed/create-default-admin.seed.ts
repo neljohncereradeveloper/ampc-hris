@@ -43,7 +43,7 @@ import { toLowerCaseString } from '@/core/utils/coercion.util';
 export class SeedAdminAccount {
   private readonly logger = new Logger(SeedAdminAccount.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   /**
    * Executes the seed operation to create default admin account.
@@ -64,11 +64,21 @@ export class SeedAdminAccount {
    */
   async run(roleMap: Map<string, number>): Promise<void> {
     // Get admin credentials from environment variables or use defaults
-    const adminUsername = toLowerCaseString(process.env.ADMIN_USERNAME ?? 'admin');
-    const adminEmail = toLowerCaseString(process.env.ADMIN_EMAIL ?? 'admin@example.com');
-    const adminPassword = toLowerCaseString(process.env.ADMIN_PASSWORD ?? 'admin');
-    const adminFirstName = toLowerCaseString(process.env.ADMIN_FIRST_NAME ?? 'system');
-    const adminLastName = toLowerCaseString(process.env.ADMIN_LAST_NAME ?? 'administrator');
+    const adminUsername = toLowerCaseString(
+      process.env.ADMIN_USERNAME ?? 'admin',
+    );
+    const adminEmail = toLowerCaseString(
+      process.env.ADMIN_EMAIL ?? 'admin@example.com',
+    );
+    const adminPassword = toLowerCaseString(
+      process.env.ADMIN_PASSWORD ?? 'admin',
+    );
+    const adminFirstName = toLowerCaseString(
+      process.env.ADMIN_FIRST_NAME ?? 'system',
+    );
+    const adminLastName = toLowerCaseString(
+      process.env.ADMIN_LAST_NAME ?? 'administrator',
+    );
 
     // Get Admin role ID from roleMap
     const adminRoleId = roleMap.get(ROLES.ADMIN);

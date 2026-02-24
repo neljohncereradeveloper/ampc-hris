@@ -33,7 +33,7 @@ export class CreateLeavePolicyUseCase {
     private readonly leaveTypeRepository: LeaveTypeRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   /**
    * Executes the create leave policy use case.
@@ -69,16 +69,16 @@ export class CreateLeavePolicyUseCase {
           );
         }
 
-
         // Adjusted logic: Prevent creation if there is an overlapping date range
         if (effectiveDate && expiryDate) {
           // Retrieve all policies for this leave type
-          const overlap = await this.leavePolicyRepository.hasOverlappingDateRange(
-            Number(leave_type.id),
-            effectiveDate,
-            expiryDate,
-            manager,
-          );
+          const overlap =
+            await this.leavePolicyRepository.hasOverlappingDateRange(
+              Number(leave_type.id),
+              effectiveDate,
+              expiryDate,
+              manager,
+            );
           if (overlap) {
             throw new LeavePolicyBusinessException(
               `A leave policy for "${leave_type.name}" already exists that overlaps the time range ${command.effective_date} - ${command.expiry_date}. You cannot create another leave policy for the same period.`,
@@ -88,11 +88,12 @@ export class CreateLeavePolicyUseCase {
         } else {
           // Fallback: Check for same year-only logic (legacy constraint)
           const effectiveYear = effectiveDate.getFullYear();
-          const existingPolicyInYear = await this.leavePolicyRepository.findAllByLeaveTypeAndEffectiveDateYear(
-            Number(leave_type.id),
-            effectiveYear,
-            manager,
-          );
+          const existingPolicyInYear =
+            await this.leavePolicyRepository.findAllByLeaveTypeAndEffectiveDateYear(
+              Number(leave_type.id),
+              effectiveYear,
+              manager,
+            );
           if (existingPolicyInYear.length > 0) {
             throw new LeavePolicyBusinessException(
               `A leave policy for "${leave_type.name}" already exists for the year ${effectiveYear}. You cannot create another for the same year.`,
@@ -102,11 +103,15 @@ export class CreateLeavePolicyUseCase {
         }
 
         // Check if there is already an ACTIVE policy for the leave type
-        const existing_policy = await this.leavePolicyRepository.findByLeaveType(
-          Number(leave_type.id),
-          manager,
-        );
-        if (existing_policy && existing_policy.status === EnumLeavePolicyStatus.ACTIVE) {
+        const existing_policy =
+          await this.leavePolicyRepository.findByLeaveType(
+            Number(leave_type.id),
+            manager,
+          );
+        if (
+          existing_policy &&
+          existing_policy.status === EnumLeavePolicyStatus.ACTIVE
+        ) {
           throw new LeavePolicyBusinessException(
             `Leave policy for leave type "${leave_type.name}" already exists and is active`,
             HTTP_STATUS.BAD_REQUEST,

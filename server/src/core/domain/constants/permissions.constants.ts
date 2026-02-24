@@ -114,7 +114,6 @@ export const PERMISSIONS = {
       PERMISSION_RESOURCES.PERMISSIONS,
       PERMISSION_ACTIONS.READ,
     ),
-
   },
   // User permissions
   USERS: {

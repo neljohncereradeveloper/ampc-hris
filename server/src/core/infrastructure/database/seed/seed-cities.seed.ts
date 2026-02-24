@@ -8,7 +8,7 @@ import { toLowerCaseString } from '@/core/utils/coercion.util';
 export class SeedCities {
   private readonly logger = new Logger(SeedCities.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';

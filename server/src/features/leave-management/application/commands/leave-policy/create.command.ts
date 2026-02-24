@@ -1,4 +1,4 @@
-import { EnumLeavePolicyStatus } from "@/features/leave-management/domain";
+import { EnumLeavePolicyStatus } from '@/features/leave-management/domain';
 
 /**
  * Command for creating a leave policy (typically as DRAFT).

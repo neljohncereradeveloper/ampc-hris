@@ -13,7 +13,10 @@ import {
   LaborClassificationEnum,
   LaborClassificationStatusEnum,
 } from '@/features/shared-domain/domain/enum';
-import { IsDateStringCustom, transformDateString } from '@/core/utils/date.util';
+import {
+  IsDateStringCustom,
+  transformDateString,
+} from '@/core/utils/date.util';
 import { Transform } from 'class-transformer';
 
 export class CreateEmployeeDto {
@@ -354,7 +357,9 @@ export class CreateEmployeeDto {
   })
   @Transform(({ value }) => transformDateString(value))
   @IsOptional()
-  @IsDateStringCustom({ message: 'Husband or wife birth date must be a valid date' })
+  @IsDateStringCustom({
+    message: 'Husband or wife birth date must be a valid date',
+  })
   husband_or_wife_birth_date?: Date;
 
   @ApiProperty({

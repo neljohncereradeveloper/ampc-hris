@@ -8,7 +8,7 @@ import { toLowerCaseString } from '@/core/utils/coercion.util';
 export class SeedEducationSchools {
   private readonly logger = new Logger(SeedEducationSchools.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';
@@ -24,7 +24,9 @@ export class SeedEducationSchools {
           created_at: getPHDateTime(),
         });
         await this.entityManager.save(entity);
-        this.logger.log(`Created education school: ${toLowerCaseString(desc1)!}`);
+        this.logger.log(
+          `Created education school: ${toLowerCaseString(desc1)!}`,
+        );
       }
     }
   }

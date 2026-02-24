@@ -1,7 +1,11 @@
 import { HTTP_STATUS } from '@/core/domain/constants';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { HolidayBusinessException } from '../exceptions/holiday-business.exception';
-import { toLowerCaseString, toNumber, toDate } from '@/core/utils/coercion.util';
+import {
+  toLowerCaseString,
+  toNumber,
+  toDate,
+} from '@/core/utils/coercion.util';
 
 /**
  * Holiday domain entity.
@@ -241,7 +245,11 @@ export class Holiday {
     }
 
     // date validation
-    if (!this.date || !(this.date instanceof Date) || isNaN(this.date.getTime())) {
+    if (
+      !this.date ||
+      !(this.date instanceof Date) ||
+      isNaN(this.date.getTime())
+    ) {
       throw new HolidayBusinessException(
         'Holiday date is required and must be a valid date.',
         HTTP_STATUS.BAD_REQUEST,

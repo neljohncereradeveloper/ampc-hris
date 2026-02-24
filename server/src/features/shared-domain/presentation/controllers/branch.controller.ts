@@ -67,7 +67,7 @@ export class BranchController {
     private readonly restoreBranchUseCase: RestoreBranchUseCase,
     private readonly getPaginatedBranchUseCase: GetPaginatedBranchUseCase,
     private readonly comboboxBranchUseCase: ComboboxBranchUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

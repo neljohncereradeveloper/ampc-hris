@@ -120,11 +120,12 @@ export function formatDate(date: Date): string {
  */
 export function getPHDateTime(date?: Date | null): Date {
   // Always produce "now" in PH if no date is passed or it's falsy
-  const baseDate = date instanceof Date && !isNaN(date.getTime())
-    ? date
-    : new Date();
+  const baseDate =
+    date instanceof Date && !isNaN(date.getTime()) ? date : new Date();
   // Get string as it appears in PH, then parse back a Date (local JS time)
-  const phString = baseDate.toLocaleString('en-US', { timeZone: 'Asia/Manila' });
+  const phString = baseDate.toLocaleString('en-US', {
+    timeZone: 'Asia/Manila',
+  });
   return new Date(phString);
 }
 

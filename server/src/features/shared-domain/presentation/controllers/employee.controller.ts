@@ -88,7 +88,7 @@ export class EmployeeController {
     private readonly findByBioNumberEmployeeUseCase: FindByBioNumberEmployeeUseCase,
     private readonly retrieveActiveEmployeesUseCase: RetrieveActiveEmployeesUseCase,
     private readonly findEmployeesEligibleForLeaveUseCase: FindEmployeesEligibleForLeaveUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

@@ -66,7 +66,7 @@ export class ReferenceController {
     private readonly archiveReferenceUseCase: ArchiveReferenceUseCase,
     private readonly restoreReferenceUseCase: RestoreReferenceUseCase,
     private readonly getPaginatedReferenceUseCase: GetPaginatedReferenceUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

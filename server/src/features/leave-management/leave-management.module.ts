@@ -59,7 +59,6 @@ const leavePolicyUseCaseList = [
   LeavePolicyUseCases.RetirePolicyUseCase,
 ];
 
-
 const leaveYearConfigurationUseCaseList = [
   LeaveYearConfigurationUseCases.CreateLeaveYearConfigurationUseCase,
   LeaveYearConfigurationUseCases.UpdateLeaveYearConfigurationUseCase,
@@ -129,4 +128,4 @@ const leaveYearConfigurationUseCaseList = [
     ...leaveYearConfigurationUseCaseList,
   ],
 })
-export class LeaveManagementModule { }
+export class LeaveManagementModule {}

@@ -65,7 +65,7 @@ export class CreateLeaveRequestUseCase {
     private readonly activityLogRepository: ActivityLogRepository,
     @Inject(SHARED_DOMAIN_TOKENS.EMPLOYEE)
     private readonly employeeRepository: EmployeeRepository,
-  ) { }
+  ) {}
 
   async execute(
     command: CreateLeaveRequestCommand,
@@ -212,12 +212,13 @@ export class CreateLeaveRequestUseCase {
           );
         }
         const year = yearConfig.year;
-        const balance = await this.leaveBalanceRepository.loadEmployeeBalancesByLeaveTypeAndYear(
-          employee_id,
-          policy.leave_type_id,
-          year,
-          manager,
-        );
+        const balance =
+          await this.leaveBalanceRepository.loadEmployeeBalancesByLeaveTypeAndYear(
+            employee_id,
+            policy.leave_type_id,
+            year,
+            manager,
+          );
         if (!balance || balance.id == null) {
           throw new LeaveRequestBusinessException(
             'Leave balance not found for this employee, leave type, and leave year',

@@ -19,14 +19,16 @@ export class HolidayEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    comment: 'Name of the holiday. example: New Year\'s Day, Independence Day, etc.',
+    comment:
+      "Name of the holiday. example: New Year's Day, Independence Day, etc.",
   })
   @Index()
   name: string;
 
   @Column({
     type: 'date',
-    comment: 'Date of the holiday. example: January 1, 2026, July 4, 2026, etc.',
+    comment:
+      'Date of the holiday. example: January 1, 2026, July 4, 2026, etc.',
   })
   @Index()
   date: Date;
@@ -43,14 +45,16 @@ export class HolidayEntity {
     type: 'varchar',
     length: 500,
     nullable: true,
-    comment: 'Description of the holiday. example: New Year\'s Day is a national holiday in the Philippines.',
+    comment:
+      "Description of the holiday. example: New Year's Day is a national holiday in the Philippines.",
   })
   description: string | null;
 
   @Column({
     type: 'boolean',
     default: false,
-    comment: 'Whether the holiday recurs annually. example: true for holidays that recur annually, false for holidays that do not recur annually.',
+    comment:
+      'Whether the holiday recurs annually. example: true for holidays that recur annually, false for holidays that do not recur annually.',
   })
   is_recurring: boolean;
 

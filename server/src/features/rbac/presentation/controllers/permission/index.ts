@@ -32,7 +32,7 @@ export class PermissionController {
     // Note: CreatePermissionUseCase, UpdatePermissionUseCase, ArchivePermissionUseCase, RestorePermissionUseCase, GetPermissionByIdUseCase, ComboboxPermissionUseCase removed
     // Permissions are statically defined and managed via seeders only
     private readonly getAllPermissionsUseCase: GetAllPermissionsUseCase,
-  ) { }
+  ) {}
 
   // Note: Create, Update, Archive, Restore, and GetById endpoints removed - permissions are statically defined
   // and managed via seeders only. Modifying or archiving them would break authorization checks.

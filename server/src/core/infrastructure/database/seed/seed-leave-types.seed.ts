@@ -8,7 +8,7 @@ import { getPHDateTime } from '@/core/utils/date.util';
 export class SeedLeaveTypes {
   private readonly logger = new Logger(SeedLeaveTypes.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   async run(): Promise<void> {
     for (const item of LEAVE_TYPES) {
@@ -28,7 +28,9 @@ export class SeedLeaveTypes {
           created_at: getPHDateTime(),
         });
         await this.entityManager.save(entity);
-        this.logger.log(`Created leave type: ${toLowerCaseString(item.name)!} (${toLowerCaseString(item.code)!})`);
+        this.logger.log(
+          `Created leave type: ${toLowerCaseString(item.name)!} (${toLowerCaseString(item.code)!})`,
+        );
       }
     }
   }

@@ -3,6 +3,4 @@
  * Source: QS/Webometrics rankings
  */
 
-export const EDUCATION_SCHOOLS = [
-  'default'
-] as const;
+export const EDUCATION_SCHOOLS = ['default'] as const;

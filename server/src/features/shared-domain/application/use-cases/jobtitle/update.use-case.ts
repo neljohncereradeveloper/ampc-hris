@@ -29,7 +29,7 @@ export class UpdateJobtitleUseCase {
     private readonly jobtitleRepository: JobtitleRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,

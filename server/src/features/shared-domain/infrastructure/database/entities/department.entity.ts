@@ -20,7 +20,8 @@ export class DepartmentEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    comment: 'Department description. example: Human Resources, Information Technology, etc.',
+    comment:
+      'Department description. example: Human Resources, Information Technology, etc.',
   })
   @Index()
   desc1: string;
@@ -45,7 +46,8 @@ export class DepartmentEntity {
     type: 'varchar',
     length: 500,
     nullable: true,
-    comment: 'Department remarks. example: Human Resources Department, Information Technology Department, etc.',
+    comment:
+      'Department remarks. example: Human Resources Department, Information Technology Department, etc.',
   })
   remarks: string | null;
 

@@ -1,4 +1,3 @@
-
 /**
  * Determines how payroll is grouped for this department unit.
  *
@@ -8,6 +7,6 @@
  * Extensible in the future (e.g. BRANCH_DEPARTMENT for big branches with own departments).
  */
 export enum DepartmentScope {
-    HEAD_OFFICE = 'head_office',
-    BRANCH = 'branch',
+  HEAD_OFFICE = 'head_office',
+  BRANCH = 'branch',
 }

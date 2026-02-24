@@ -11,11 +11,14 @@ import {
   PaginatedResult,
   calculatePagination,
 } from '@/core/utils/pagination.util';
-import { parseJsonArray, parseJsonNumberArray, toDate, toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
+import {
+  parseJsonArray,
+  parseJsonNumberArray,
+  toDate,
+  toLowerCaseString,
+  toNumber,
+} from '@/core/utils/coercion.util';
 import { EnumLeavePolicyStatus } from '@/features/leave-management/domain/enum';
-
-
-
 
 @Injectable()
 export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityManager> {
@@ -103,15 +106,11 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     }
     if (dto.allowed_employment_types !== undefined) {
       updateFields.push(`allowed_employment_types = $${paramIndex++}`);
-      values.push(
-        parseJsonArray(dto.allowed_employment_types)
-      );
+      values.push(parseJsonArray(dto.allowed_employment_types));
     }
     if (dto.allowed_employee_statuses !== undefined) {
       updateFields.push(`allowed_employee_statuses = $${paramIndex++}`);
-      values.push(
-        parseJsonArray(dto.allowed_employee_statuses)
-      );
+      values.push(parseJsonArray(dto.allowed_employee_statuses));
     }
     if (dto.excluded_weekdays !== undefined) {
       updateFields.push(`excluded_weekdays = $${paramIndex++}`);
@@ -209,7 +208,9 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
       where lp.status = $1 and lp.deleted_at is null
       order by lp.leave_type_id
     `;
-    const result = await manager.query(query, [toLowerCaseString(EnumLeavePolicyStatus.ACTIVE)]);
+    const result = await manager.query(query, [
+      toLowerCaseString(EnumLeavePolicyStatus.ACTIVE),
+    ]);
     return result.map((row: Record<string, unknown>) =>
       this.entityToModel(row),
     );
@@ -273,7 +274,10 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     return result.length > 0;
   }
 
-  async findByLeaveType(leave_type_id: number, manager: EntityManager): Promise<LeavePolicy | null> {
+  async findByLeaveType(
+    leave_type_id: number,
+    manager: EntityManager,
+  ): Promise<LeavePolicy | null> {
     const query = `
       select lp.*, lt.name as leave_type_name
       from ${lp} lp
@@ -285,14 +289,21 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     return this.entityToModel(result[0]);
   }
 
-  async findAllByLeaveTypeAndEffectiveDateYear(leave_type_id: number, effective_date_year: number, manager: EntityManager): Promise<LeavePolicy[]> {
+  async findAllByLeaveTypeAndEffectiveDateYear(
+    leave_type_id: number,
+    effective_date_year: number,
+    manager: EntityManager,
+  ): Promise<LeavePolicy[]> {
     const query = `
       select lp.*, lt.name as leave_type_name
       from ${lp} lp
       left join ${lt} lt on lp.leave_type_id = lt.id
       where lp.leave_type_id = $1 and lp.deleted_at is null and extract(year from lp.effective_date) = $2
     `;
-    const result = await manager.query(query, [leave_type_id, toNumber(effective_date_year)]);
+    const result = await manager.query(query, [
+      leave_type_id,
+      toNumber(effective_date_year),
+    ]);
     return result.map((row: Record<string, unknown>) =>
       this.entityToModel(row),
     );
@@ -313,7 +324,7 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
     effective_date: Date,
     expiry_date: Date | undefined,
     manager: EntityManager,
-    exclude_policy_id?: number
+    exclude_policy_id?: number,
   ): Promise<boolean> {
     // Build query parts
     let query = `
@@ -365,7 +376,9 @@ export class LeavePolicyRepositoryImpl implements LeavePolicyRepository<EntityMa
       remarks: toLowerCaseString(entity.remarks),
       minimum_service_months: toNumber(entity.minimum_service_months),
       allowed_employment_types: parseJsonArray(entity.allowed_employment_types),
-      allowed_employee_statuses: parseJsonArray(entity.allowed_employee_statuses),
+      allowed_employee_statuses: parseJsonArray(
+        entity.allowed_employee_statuses,
+      ),
       excluded_weekdays: parseJsonNumberArray(entity.excluded_weekdays),
       deleted_by: toLowerCaseString(entity.deleted_by),
       deleted_at: toDate(entity.deleted_at),

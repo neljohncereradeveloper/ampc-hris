@@ -20,20 +20,27 @@ export class GetActivePolicyUseCase {
     private readonly transactionHelper: TransactionPort,
     @Inject(SHARED_DOMAIN_TOKENS.LEAVE_TYPE)
     private readonly leaveTypeRepository: LeaveTypeRepository,
-  ) { }
+  ) {}
 
   async execute(leave_type_code: string): Promise<LeavePolicy | null> {
     return this.transactionHelper.executeTransaction(
       LEAVE_POLICY_ACTIONS.GET_ACTIVE_POLICY,
       async (manager) => {
-        const leave_type = await this.leaveTypeRepository.findByCode(leave_type_code, manager);
+        const leave_type = await this.leaveTypeRepository.findByCode(
+          leave_type_code,
+          manager,
+        );
         if (!leave_type) {
-          throw new LeavePolicyBusinessException(`Leave type with code "${leave_type_code}" not found`, HTTP_STATUS.NOT_FOUND);
+          throw new LeavePolicyBusinessException(
+            `Leave type with code "${leave_type_code}" not found`,
+            HTTP_STATUS.NOT_FOUND,
+          );
         }
-        return this.leavePolicyRepository.getActivePolicy(Number(leave_type.id), manager);
-      }
+        return this.leavePolicyRepository.getActivePolicy(
+          Number(leave_type.id),
+          manager,
+        );
+      },
     );
-
-
   }
 }

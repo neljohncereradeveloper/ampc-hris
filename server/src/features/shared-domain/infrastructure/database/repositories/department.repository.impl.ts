@@ -10,7 +10,10 @@ import {
 
 @Injectable()
 export class DepartmentRepositoryImpl implements DepartmentRepository<EntityManager> {
-  async create(department: Department, manager: EntityManager): Promise<Department> {
+  async create(
+    department: Department,
+    manager: EntityManager,
+  ): Promise<Department> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.DEPARTMENTS} (
         desc1, code, scope, remarks, created_by
@@ -88,7 +91,10 @@ export class DepartmentRepositoryImpl implements DepartmentRepository<EntityMana
    * Used internally for archive/restore operations where we need
    * to fetch the record before performing state transitions.
    */
-  async findById(id: number, manager: EntityManager): Promise<Department | null> {
+  async findById(
+    id: number,
+    manager: EntityManager,
+  ): Promise<Department | null> {
     const query = `
       SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.DEPARTMENTS}

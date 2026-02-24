@@ -10,7 +10,10 @@ import {
 
 @Injectable()
 export class LeaveTypeRepositoryImpl implements LeaveTypeRepository<EntityManager> {
-  async create(leave_type: LeaveType, manager: EntityManager): Promise<LeaveType> {
+  async create(
+    leave_type: LeaveType,
+    manager: EntityManager,
+  ): Promise<LeaveType> {
     const query = `
       INSERT INTO ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES} (
         name, code, desc1, paid, remarks, created_by
@@ -98,7 +101,10 @@ export class LeaveTypeRepositoryImpl implements LeaveTypeRepository<EntityManage
    * Finds a leave type by ID regardless of archived status.
    * Used internally for archive/restore operations.
    */
-  async findById(id: number, manager: EntityManager): Promise<LeaveType | null> {
+  async findById(
+    id: number,
+    manager: EntityManager,
+  ): Promise<LeaveType | null> {
     const query = `
       SELECT *
       FROM ${SHARED_DOMAIN_DATABASE_MODELS.LEAVE_TYPES}

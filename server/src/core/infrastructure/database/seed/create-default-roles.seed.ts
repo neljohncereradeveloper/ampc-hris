@@ -27,7 +27,7 @@ import { toLowerCaseString } from '@/core/utils/coercion.util';
 export class SeedRoles {
   private readonly logger = new Logger(SeedRoles.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   /**
    * Executes the seed operation to create default role entries.
@@ -93,7 +93,9 @@ export class SeedRoles {
         this.logger.log(`Created role: ${toLowerCaseString(role.name)!}`);
       } else {
         roleMap.set(toLowerCaseString(role.name)!, existing_role.id);
-        this.logger.log(`Role already exists: ${toLowerCaseString(role.name)!}`);
+        this.logger.log(
+          `Role already exists: ${toLowerCaseString(role.name)!}`,
+        );
       }
     }
 

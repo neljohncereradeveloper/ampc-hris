@@ -33,7 +33,7 @@ export class RoleController {
     // Note: CreateRoleUseCase, UpdateRoleUseCase, ArchiveRoleUseCase, RestoreRoleUseCase, GetRoleByIdUseCase, ComboboxRoleUseCase removed
     // Roles are statically defined (Admin, Editor, Viewer) and managed via seeders only
     private readonly getAllRolesUseCase: GetAllRolesUseCase,
-  ) { }
+  ) {}
 
   // Note: Create, Update, Archive, Restore, and GetById endpoints removed - roles are statically defined
   // (Admin, Editor, Viewer) and managed via seeders only. Modifying or archiving them would break

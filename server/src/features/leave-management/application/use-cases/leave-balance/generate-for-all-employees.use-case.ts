@@ -53,7 +53,7 @@ export class GenerateBalancesForAllEmployeesUseCase {
     @Inject(LEAVE_MANAGEMENT_TOKENS.LEAVE_POLICY)
     private readonly policyRepo: LeavePolicyRepository,
     private readonly bulkCreateService: LeaveBalanceBulkCreateService,
-  ) { }
+  ) {}
 
   async execute(
     year: string,

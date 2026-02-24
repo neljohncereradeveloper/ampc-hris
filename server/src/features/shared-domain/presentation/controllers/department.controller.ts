@@ -67,7 +67,7 @@ export class DepartmentController {
     private readonly restoreDepartmentUseCase: RestoreDepartmentUseCase,
     private readonly getPaginatedDepartmentUseCase: GetPaginatedDepartmentUseCase,
     private readonly comboboxDepartmentUseCase: ComboboxDepartmentUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

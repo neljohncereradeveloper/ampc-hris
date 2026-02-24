@@ -8,7 +8,7 @@ import { toLowerCaseString } from '@/core/utils/coercion.util';
 export class SeedEmploymentStatuses {
   private readonly logger = new Logger(SeedEmploymentStatuses.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';
@@ -27,7 +27,9 @@ export class SeedEmploymentStatuses {
           created_at: getPHDateTime(),
         });
         await this.entityManager.save(entity);
-        this.logger.log(`Created employment status: ${toLowerCaseString(desc1)!}`);
+        this.logger.log(
+          `Created employment status: ${toLowerCaseString(desc1)!}`,
+        );
       }
     }
   }

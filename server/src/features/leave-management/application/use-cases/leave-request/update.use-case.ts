@@ -67,7 +67,7 @@ export class UpdateLeaveRequestUseCase {
     private readonly activityLogRepository: ActivityLogRepository,
     @Inject(SHARED_DOMAIN_TOKENS.EMPLOYEE)
     private readonly employeeRepository: EmployeeRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,

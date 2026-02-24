@@ -88,7 +88,10 @@ export interface LeavePolicyRepository<Context = unknown> {
    * @param leave_type_id - Leave type primary key
    * @param context - Transaction or connection
    */
-  findByLeaveType(leave_type_id: number, context: Context): Promise<LeavePolicy | null>;
+  findByLeaveType(
+    leave_type_id: number,
+    context: Context,
+  ): Promise<LeavePolicy | null>;
 
   /**
    * Find all policies by leave type id and effective date year.
@@ -99,7 +102,7 @@ export interface LeavePolicyRepository<Context = unknown> {
   findAllByLeaveTypeAndEffectiveDateYear(
     leave_type_id: number,
     effective_date_year: number,
-    context: Context
+    context: Context,
   ): Promise<LeavePolicy[]>;
 
   /**
@@ -116,6 +119,6 @@ export interface LeavePolicyRepository<Context = unknown> {
     effective_date: Date,
     expiry_date: Date | undefined,
     context: Context,
-    exclude_policy_id?: number
+    exclude_policy_id?: number,
   ): Promise<boolean>;
 }

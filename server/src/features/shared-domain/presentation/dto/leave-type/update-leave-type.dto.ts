@@ -1,9 +1,10 @@
-import { OptionalStringValidation, RequiredStringValidation } from '@/core/infrastructure/decorators';
+import {
+  OptionalStringValidation,
+  RequiredStringValidation,
+} from '@/core/infrastructure/decorators';
 import { REGEX_CONST } from '@/features/shared-domain/domain/constants/regex.constants';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsBoolean,
-} from 'class-validator';
+import { IsBoolean } from 'class-validator';
 
 export class UpdateLeaveTypeDto {
   @ApiProperty({
@@ -13,11 +14,12 @@ export class UpdateLeaveTypeDto {
     maxLength: 255,
     pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
     patternProperties: {
-      'description': {
+      description: {
         pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
-        message: 'Leave type name can only contain letters, numbers, and spaces',
-      }
-    }
+        message:
+          'Leave type name can only contain letters, numbers, and spaces',
+      },
+    },
   })
   @RequiredStringValidation({
     field_name: 'Leave type name (name)',
@@ -36,19 +38,18 @@ export class UpdateLeaveTypeDto {
     maxLength: 100,
     pattern: REGEX_CONST.LETTER_NUMBER.toString(),
     patternProperties: {
-      'description': {
+      description: {
         pattern: REGEX_CONST.LETTER_NUMBER.toString(),
         message: 'Leave type code can only contain letters and numbers',
-      }
-    }
+      },
+    },
   })
   @RequiredStringValidation({
     field_name: 'Leave type code (code)',
     min_length: 2,
     max_length: 50,
     pattern: REGEX_CONST.LETTER_NUMBER,
-    pattern_message:
-      'Leave type code can only contain letters and numbers',
+    pattern_message: 'Leave type code can only contain letters and numbers',
   })
   code: string;
 
@@ -59,11 +60,12 @@ export class UpdateLeaveTypeDto {
     maxLength: 255,
     pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
     patternProperties: {
-      'description': {
+      description: {
         pattern: REGEX_CONST.LETTER_NUMBER_SPACE.toString(),
-        message: 'Leave type description can only contain letters, numbers, and spaces',
-      }
-    }
+        message:
+          'Leave type description can only contain letters, numbers, and spaces',
+      },
+    },
   })
   @RequiredStringValidation({
     field_name: 'Leave type description (desc1)',
@@ -89,11 +91,12 @@ export class UpdateLeaveTypeDto {
     maxLength: 500,
     pattern: REGEX_CONST.DESCRIPTION.toString(),
     patternProperties: {
-      'description': {
+      description: {
         pattern: REGEX_CONST.DESCRIPTION.toString(),
-        message: 'Remarks can only contain letters, numbers, spaces, hyphens, apostrophes, periods, slashes, ampersands, exclamation marks, question marks, colons, and semicolons',
-      }
-    }
+        message:
+          'Remarks can only contain letters, numbers, spaces, hyphens, apostrophes, periods, slashes, ampersands, exclamation marks, question marks, colons, and semicolons',
+      },
+    },
   })
   @OptionalStringValidation({
     field_name: 'Remarks',

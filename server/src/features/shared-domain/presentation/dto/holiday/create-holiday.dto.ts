@@ -17,11 +17,12 @@ export class CreateHolidayDto {
     maxLength: 255,
     pattern: REGEX_CONST.LETTER_NUMBER_UNDERSCORE.toString(),
     patternProperties: {
-      'description': {
+      description: {
         pattern: REGEX_CONST.LETTER_NUMBER_UNDERSCORE.toString(),
-        message: 'Holiday name can only contain letters, numbers, and underscores',
-      }
-    }
+        message:
+          'Holiday name can only contain letters, numbers, and underscores',
+      },
+    },
   })
   @RequiredStringValidation({
     field_name: 'Holiday name',
@@ -49,11 +50,12 @@ export class CreateHolidayDto {
     maxLength: 50,
     pattern: REGEX_CONST.LETTER_NUMBER_UNDERSCORE.toString(),
     patternProperties: {
-      'description': {
+      description: {
         pattern: REGEX_CONST.LETTER_NUMBER_UNDERSCORE.toString(),
-        message: 'Holiday type can only contain letters, numbers, and underscores',
-      }
-    }
+        message:
+          'Holiday type can only contain letters, numbers, and underscores',
+      },
+    },
   })
   @RequiredStringValidation({
     field_name: 'Holiday type',
@@ -71,11 +73,12 @@ export class CreateHolidayDto {
     maxLength: 1000,
     pattern: REGEX_CONST.DESCRIPTION.toString(),
     patternProperties: {
-      'description': {
+      description: {
         pattern: REGEX_CONST.DESCRIPTION.toString(),
-        message: 'Description of the holiday can only contain letters, numbers, spaces, hyphens, apostrophes, periods, slashes, ampersands, exclamation marks, question marks, colons, and semicolons',
-      }
-    }
+        message:
+          'Description of the holiday can only contain letters, numbers, spaces, hyphens, apostrophes, periods, slashes, ampersands, exclamation marks, question marks, colons, and semicolons',
+      },
+    },
   })
   @OptionalStringValidation({
     field_name: 'Description',

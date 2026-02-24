@@ -35,7 +35,8 @@ export class LeaveTypeEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    comment: 'Leave type description. example: Vacation Leave, Sick Leave, etc.',
+    comment:
+      'Leave type description. example: Vacation Leave, Sick Leave, etc.',
   })
   @Index()
   desc1: string;
@@ -43,7 +44,8 @@ export class LeaveTypeEntity {
   @Column({
     type: 'boolean',
     default: true,
-    comment: 'Whether this leave type is paid. example: true for paid leave types, false for unpaid leave types',
+    comment:
+      'Whether this leave type is paid. example: true for paid leave types, false for unpaid leave types',
   })
   paid: boolean;
 
@@ -51,7 +53,8 @@ export class LeaveTypeEntity {
     type: 'varchar',
     length: 500,
     nullable: true,
-    comment: 'Optional remarks. example: 5 days for employees with at least 1 year service (art. 95, labor code), 105 days (ra 11210); extendible unpaid, 7 days (ra 8187) for legitimate child, 7 days per year (ra 8972), Typically 3–5 days for immediate family, leave without pay',
+    comment:
+      'Optional remarks. example: 5 days for employees with at least 1 year service (art. 95, labor code), 105 days (ra 11210); extendible unpaid, 7 days (ra 8187) for legitimate child, 7 days per year (ra 8972), Typically 3–5 days for immediate family, leave without pay',
   })
   remarks: string | null;
 

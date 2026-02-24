@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { REGEX_CONST } from '@/features/shared-domain/domain/constants';
-import { OptionalStringValidation, RequiredNumberValidation } from '@/core/infrastructure/decorators';
+import {
+  OptionalStringValidation,
+  RequiredNumberValidation,
+} from '@/core/infrastructure/decorators';
 
 export class GetPaginatedPendingLeaveRequestsDto {
   @ApiProperty({

@@ -1,4 +1,4 @@
-import { DepartmentScope } from "@/features/shared-domain/domain/enum";
+import { DepartmentScope } from '@/features/shared-domain/domain/enum';
 
 /**
  * Command for creating a department

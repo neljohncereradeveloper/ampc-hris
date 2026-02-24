@@ -297,20 +297,20 @@ module.exports = function (plop) {
 
       {
         type: 'add',
-        path: 'src/features/{{feature}}/presentation/controllers/{{kebab model}}/index.ts',
+        path: 'src/features/{{feature}}/presentation/controllers/index.ts',
         skipIfExists: true,
         templateFile: 'plop-templates/presentation/controller-index.hbs',
       },
       {
         type: 'modify',
-        path: 'src/features/{{feature}}/presentation/controllers/{{kebab model}}/index.ts',
+        path: 'src/features/{{feature}}/presentation/controllers/index.ts',
         pattern: /(\/\/ PLOP-APPEND-CONTROLLERS)/g,
         template: "export * from './{{kebab model}}.controller';\n$1",
       },
 
       {
         type: 'add',
-        path: 'src/features/{{feature}}/presentation/controllers/{{kebab model}}/{{kebab model}}.controller.ts',
+        path: 'src/features/{{feature}}/presentation/controllers/{{kebab model}}.controller.ts',
         templateFile: 'plop-templates/presentation/controller.hbs',
       },
 
@@ -329,6 +329,104 @@ module.exports = function (plop) {
         type: 'add',
         path: 'src/features/{{feature}}/presentation/dto/{{kebab model}}/update-{{kebab model}}.dto.ts',
         templateFile: 'plop-templates/presentation/update-dto.hbs',
+      },
+
+      /**
+       * =========================
+       * FEATURE MODULE
+       * =========================
+       */
+
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/{{kebab feature}}.module.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/module/feature.module.hbs',
+      },
+
+      /** Import Repository */
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/{{kebab feature}}.module.ts',
+        pattern: /(\/\/ PLOP-IMPORT-REPOSITORIES)/g,
+        template:
+          "import { {{pascal model}}RepositoryImpl } from './infrastructure/database/repositories';\n$1",
+      },
+      /** Import UseCases */
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/{{kebab feature}}.module.ts',
+        pattern: /(\/\/ PLOP-IMPORT-USECASES)/g,
+        template:
+          "import * as {{pascal model}}UseCases from './application/use-cases/{{kebab model}}';\n$1",
+      },
+      /** Import Controllers */
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/{{kebab feature}}.module.ts',
+        pattern: /(\/\/ PLOP-IMPORT-CONTROLLERS)/g,
+        template:
+          "import { {{pascal model}}Controller } from './presentation/controllers';\n$1",
+      },
+      /** Declare UseCase Lists */
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/{{kebab feature}}.module.ts',
+        pattern: /(\/\/ PLOP-DECLARE-USECASE-LISTS)/g,
+        template: `
+      const {{camel model}}UseCaseList = [
+        {{pascal model}}UseCases.Create{{pascal model}}UseCase,
+        {{pascal model}}UseCases.Update{{pascal model}}UseCase,
+        {{pascal model}}UseCases.Archive{{pascal model}}UseCase,
+        {{pascal model}}UseCases.Restore{{pascal model}}UseCase,
+        {{pascal model}}UseCases.GetPaginated{{pascal model}}UseCase,
+      ];
+      
+      $1`,
+      },
+
+      /** Add Controllers */
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/{{kebab feature}}.module.ts',
+        pattern: /(\/\/ PLOP-CONTROLLERS)/g,
+        template: '{{pascal model}}Controller,\n$1',
+      },
+
+      /** Add Repository Provider */
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/{{kebab feature}}.module.ts',
+        pattern: /(\/\/ PLOP-PROVIDERS)/g,
+        template: `
+          {
+            provide: {{constant (snake feature)}}_TOKENS.{{constant model}},
+            useClass: {{pascal model}}RepositoryImpl,
+          },
+          $1`,
+      },
+
+      /** Spread UseCase List in Providers */
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/{{kebab feature}}.module.ts',
+        pattern: /(\/\/ PLOP-USECASE-SPREAD)/g,
+        template: '...{{camel model}}UseCaseList,\n$1',
+      },
+      /** Add Export Token */
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/{{kebab feature}}.module.ts',
+        pattern: /(\/\/ PLOP-EXPORTS)/g,
+        template:
+          '{{constant (snake feature)}}_TOKENS.{{constant model}},\n    $1',
+      },
+      /** Export UseCases */
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/{{kebab feature}}.module.ts',
+        pattern: /(\/\/ PLOP-EXPORT-USECASE-SPREAD)/g,
+        template: '...{{camel model}}UseCaseList,\n$1',
       },
     ],
   });

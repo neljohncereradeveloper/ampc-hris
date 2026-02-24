@@ -1,0 +1,46 @@
+import { Module } from '@nestjs/common';
+import { PostgresqlDatabaseModule } from '@/core/infrastructure/database/postgresql-database.module';
+import { TransactionAdapter } from '@/core/infrastructure/database/adapters/transaction-helper.adapter';
+import { ActivityLogRepositoryImpl } from '@/core/infrastructure/database/repositories';
+import { TOKENS_CORE } from '@/core/domain/constants';
+
+import { {{constant (snake feature)}}_TOKENS } from './domain/constants';
+import { SharedDomainModule } from '@/features/shared-domain/shared-domain.module';
+
+// PLOP-IMPORT-REPOSITORIES
+// PLOP-IMPORT-USECASES
+// PLOP-IMPORT-CONTROLLERS
+
+/**
+ * =========================
+ * USE CASES
+ * =========================
+ */
+
+// PLOP-DECLARE-USECASE-LISTS
+
+@Module({
+  imports: [PostgresqlDatabaseModule, SharedDomainModule],
+  controllers: [
+    // PLOP-CONTROLLERS
+  ],
+  providers: [
+    {
+      provide: TOKENS_CORE.TRANSACTIONPORT,
+      useClass: TransactionAdapter,
+    },
+    {
+      provide: TOKENS_CORE.ACTIVITYLOGS,
+      useClass: ActivityLogRepositoryImpl,
+    },
+
+    // PLOP-PROVIDERS
+
+    // PLOP-USECASE-SPREAD
+  ],
+  exports: [
+    // PLOP-EXPORTS
+    // PLOP-EXPORT-USECASE-SPREAD
+  ],
+})
+export class {{pascal feature}}Module {}

@@ -90,7 +90,10 @@ export class Department {
     this.desc1 = toLowerCaseString(dto.desc1) ?? '';
     this.code = toLowerCaseString(dto.code) ?? '';
     this.scope = dto.scope;
-    this.remarks = dto.remarks !== undefined ? toLowerCaseString(dto.remarks) ?? undefined : undefined;
+    this.remarks =
+      dto.remarks !== undefined
+        ? (toLowerCaseString(dto.remarks) ?? undefined)
+        : undefined;
     this.created_by = toLowerCaseString(dto.created_by) ?? '';
     this.created_at = dto.created_at ?? getPHDateTime(); // temporary; TypeORM overrides on INSERT
     this.updated_by = dto.updated_by ?? null;
@@ -170,7 +173,10 @@ export class Department {
     this.desc1 = toLowerCaseString(dto.desc1) ?? '';
     this.code = toLowerCaseString(dto.code) ?? '';
     this.scope = dto.scope;
-    this.remarks = dto.remarks !== undefined ? toLowerCaseString(dto.remarks) ?? undefined : undefined;
+    this.remarks =
+      dto.remarks !== undefined
+        ? (toLowerCaseString(dto.remarks) ?? undefined)
+        : undefined;
     this.updated_by = toLowerCaseString(dto.updated_by) ?? null;
 
     this.validate();

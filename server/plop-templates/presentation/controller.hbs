@@ -1,0 +1,198 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Patch,
+  Body,
+  Param,
+  Query,
+  HttpCode,
+  HttpStatus,
+  Version,
+  Req,
+  ParseIntPipe,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+  ApiBody,
+} from '@nestjs/swagger';
+import { Request } from 'express';
+import { createRequestInfo } from '@/core/utils/request-info.util';
+import {
+  RequirePermissions,
+  RequireRoles,
+} from '@/features/auth/infrastructure/decorators';
+import { PERMISSIONS, ROLES } from '@/core/domain/constants';
+import {
+  Create{{pascal model}}UseCase,
+  Update{{pascal model}}UseCase,
+  Archive{{pascal model}}UseCase,
+  Restore{{pascal model}}UseCase,
+  GetPaginated{{pascal model}}UseCase,
+  Combobox{{pascal model}}UseCase,
+} from '../../application/use-cases/{{kebab model}}';
+import {
+  Create{{pascal model}}Dto as Create{{pascal model}}PresentationDto,
+  Update{{pascal model}}Dto as Update{{pascal model}}PresentationDto,
+} from '../dto/{{kebab model}}';
+import {
+  Create{{pascal model}}Command,
+  Update{{pascal model}}Command,
+} from '../../application/commands/{{kebab model}}';
+import { {{pascal model}} } from '../../domain/models';
+import { PaginatedResult } from '@/core/utils/pagination.util';
+import { PaginationQueryDto } from '@/core/infrastructure/dto';
+import {
+  RATE_LIMIT_MODERATE,
+  RateLimit,
+} from '@/core/infrastructure/decorators';
+
+@ApiTags('{{pascal model}}')
+@Controller('{{kebab (plural model)}}')
+@RateLimit({
+  ...RATE_LIMIT_MODERATE,
+  message: 'Too many requests. Please try again later.',
+})
+export class {{pascal model}}Controller {
+  constructor(
+    private readonly create{{pascal model}}UseCase: Create{{pascal model}}UseCase,
+    private readonly update{{pascal model}}UseCase: Update{{pascal model}}UseCase,
+    private readonly archive{{pascal model}}UseCase: Archive{{pascal model}}UseCase,
+    private readonly restore{{pascal model}}UseCase: Restore{{pascal model}}UseCase,
+    private readonly getPaginated{{pascal model}}UseCase: GetPaginated{{pascal model}}UseCase,
+    private readonly combobox{{pascal model}}UseCase: Combobox{{pascal model}}UseCase,
+  ) { }
+
+  @Version('1')
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @RequireRoles(ROLES.ADMIN, ROLES.EDITOR)
+  @RequirePermissions(PERMISSIONS.{{constant (snake (plural model))}}.CREATE)
+  @ApiOperation({ summary: 'Create a new {{pascal model}}' })
+  @ApiBody({ type: Create{{pascal model}}PresentationDto })
+  @ApiResponse({ status: 201, description: '{{pascal model}} created successfully' })
+  @ApiResponse({ status: 400, description: 'Bad request - validation error' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth('JWT-auth')
+  async create(
+    @Body() presentationDto: Create{{pascal model}}PresentationDto,
+    @Req() request: Request,
+  ): Promise<{{pascal model}}> {
+    const requestInfo = createRequestInfo(request);
+    const command: Create{{pascal model}}Command = {
+      desc1: presentationDto.desc1
+    };
+    return this.create{{pascal model}}UseCase.execute(command, requestInfo);
+  }
+
+  @Version('1')
+  @Put(':id')
+  @RequireRoles(ROLES.ADMIN, ROLES.EDITOR)
+  @RequirePermissions(PERMISSIONS.{{constant (snake (plural model))}}.UPDATE)
+  @ApiOperation({ summary: 'Update {{pascal model}} information' })
+  @ApiParam({ name: 'id', description: '{{pascal model}} ID', example: 1 })
+  @ApiBody({ type: Update{{pascal model}}PresentationDto })
+  @ApiResponse({ status: 200, description: '{{pascal model}} updated successfully' })
+  @ApiResponse({ status: 404, description: '{{pascal model}} not found' })
+  @ApiResponse({ status: 400, description: 'Bad request - validation error' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth('JWT-auth')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() presentationDto: Update{{pascal model}}PresentationDto,
+    @Req() request: Request,
+  ): Promise<{{pascal model}} | null> {
+    const requestInfo = createRequestInfo(request);
+    const command: Update{{pascal model}}Command = {
+      desc1: presentationDto.desc1
+    };
+    return this.update{{pascal model}}UseCase.execute(id, command, requestInfo);
+  }
+
+  @Version('1')
+  @Delete(':id/archive')
+  @HttpCode(HttpStatus.OK)
+  @RequireRoles(ROLES.ADMIN)
+  @RequirePermissions(PERMISSIONS.{{constant (snake (plural model))}}.ARCHIVE)
+  @ApiOperation({ summary: 'Archive a {{pascal model}}' })
+  @ApiParam({ name: 'id', description: '{{pascal model}} ID', example: 1 })
+  @ApiResponse({ status: 200, description: '{{pascal model}} archived successfully' })
+  @ApiResponse({ status: 404, description: '{{pascal model}} not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth('JWT-auth')
+  async archive(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request: Request,
+  ): Promise<{ success: boolean }> {
+    const requestInfo = createRequestInfo(request);
+    await this.archive{{pascal model}}UseCase.execute(id, requestInfo);
+    return { success: true };
+  }
+
+  @Version('1')
+  @Patch(':id/restore')
+  @HttpCode(HttpStatus.OK)
+  @RequireRoles(ROLES.ADMIN)
+  @RequirePermissions(PERMISSIONS.{{constant (snake (plural model))}}.RESTORE)
+  @ApiOperation({ summary: 'Restore a {{pascal model}}' })
+  @ApiParam({ name: 'id', description: '{{pascal model}} ID', example: 1 })
+  @ApiResponse({
+    status: 200,
+    description: '{{pascal model}} restored successfully',
+  })
+  @ApiResponse({ status: 404, description: '{{pascal model}} not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth('JWT-auth')
+  async restore(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request: Request,
+  ): Promise<{ success: boolean }> {
+    const requestInfo = createRequestInfo(request);
+    await this.restore{{pascal model}}UseCase.execute(id, requestInfo);
+    return { success: true };
+  }
+
+  @Version('1')
+  @Get()
+  @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
+  @RequirePermissions(PERMISSIONS.{{constant (snake (plural model))}}.READ)
+  @ApiOperation({ summary: 'Get paginated list of {{pascal model}}s' })
+  @ApiResponse({
+    status: 200,
+    description: '{{pascal model}}s retrieved successfully',
+  })
+  @ApiResponse({ status: 400, description: 'Bad request - validation error' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth('JWT-auth')
+  async getPaginated(
+    @Query() query: PaginationQueryDto,
+  ): Promise<PaginatedResult<{{pascal model}}>> {
+    return this.getPaginated{{pascal model}}UseCase.execute(
+      query.term ?? '',
+      query.page,
+      query.limit,
+      query.is_archived === 'true',
+    );
+  }
+
+  @Version('1')
+  @Get('combobox')
+  @RequireRoles(ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER)
+  @RequirePermissions(PERMISSIONS.{{constant (snake (plural model))}}.READ)
+  @ApiOperation({ summary: 'Get {{pascal (plural model)}}s combobox list' })
+  @ApiResponse({
+    status: 200,
+    description: '{{pascal (plural model)}} combobox retrieved successfully',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth('JWT-auth')
+  async getCombobox(): Promise<{ value: string; label: string }[]> {
+    return this.combobox{{pascal model}}UseCase.execute();
+  }
+}

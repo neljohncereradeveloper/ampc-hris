@@ -19,7 +19,8 @@ export const LEAVE_TYPES: LeaveTypeSeedItem[] = [
     code: 'sil',
     desc1: 'service incentive leave',
     paid: true,
-    remarks: '5 days for employees with at least 1 year service (art. 95, labor code)',
+    remarks:
+      '5 days for employees with at least 1 year service (art. 95, labor code)',
   },
   { name: 'sick leave', code: 'sl', desc1: 'sick leave', paid: true },
   { name: 'vacation leave', code: 'vl', desc1: 'vacation leave', paid: true },

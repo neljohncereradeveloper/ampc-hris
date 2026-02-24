@@ -27,7 +27,7 @@ export class LeaveBalanceBulkCreateService {
     private readonly repo: LeaveBalanceRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     year: string,

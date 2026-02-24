@@ -90,7 +90,11 @@ export class Branch {
    * Constructs and validates the branch in one step.
    * Throws `BranchBusinessException` if any business rule is violated.
    */
-  static create(params: { desc1: string; br_code: string; created_by: string }): Branch {
+  static create(params: {
+    desc1: string;
+    br_code: string;
+    created_by: string;
+  }): Branch {
     const branch = new Branch({
       desc1: params.desc1,
       br_code: params.br_code,
@@ -128,7 +132,11 @@ export class Branch {
    * - Validates the new state after applying changes.
    * - Note: `updated_at` is managed by TypeORM (@UpdateDateColumn), not set here.
    */
-  update(dto: { desc1: string; br_code: string; updated_by?: string | null }): void {
+  update(dto: {
+    desc1: string;
+    br_code: string;
+    updated_by?: string | null;
+  }): void {
     if (this.deleted_at) {
       throw new BranchBusinessException(
         'Branch is archived and cannot be updated.',

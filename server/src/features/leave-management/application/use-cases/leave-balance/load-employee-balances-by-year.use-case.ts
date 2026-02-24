@@ -15,7 +15,7 @@ export class LoadEmployeeBalancesByYearUseCase {
     private readonly repo: LeaveBalanceRepository,
     @Inject(TOKENS_CORE.TRANSACTIONPORT)
     private readonly transactionHelper: TransactionPort,
-  ) { }
+  ) {}
 
   /**
    * Retrieves the leave balances for a specific employee and year.
@@ -28,7 +28,11 @@ export class LoadEmployeeBalancesByYearUseCase {
     return this.transactionHelper.executeTransaction(
       LEAVE_BALANCE_ACTIONS.LOAD_EMPLOYEE_BALANCES_BY_YEAR,
       async (manager) => {
-        const result = await this.repo.loadEmployeeBalancesByYear(employee_id, year, manager);
+        const result = await this.repo.loadEmployeeBalancesByYear(
+          employee_id,
+          year,
+          manager,
+        );
         return Array.isArray(result) ? result : [];
       },
     );

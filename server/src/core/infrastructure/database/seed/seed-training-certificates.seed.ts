@@ -8,7 +8,7 @@ import { toDate, toLowerCaseString } from '@/core/utils/coercion.util';
 export class SeedTrainingCertificates {
   private readonly logger = new Logger(SeedTrainingCertificates.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   async run(): Promise<void> {
     const seedBy = 'seed-runner';
@@ -36,7 +36,9 @@ export class SeedTrainingCertificates {
           created_at: getPHDateTime(),
         });
         await this.entityManager.save(entity);
-        this.logger.log(`Created training certificate: ${toLowerCaseString(certificateName)!}`);
+        this.logger.log(
+          `Created training certificate: ${toLowerCaseString(certificateName)!}`,
+        );
       }
     }
   }

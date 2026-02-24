@@ -37,11 +37,10 @@ export function toLowerCaseString(value: unknown): string | null {
   return null;
 }
 
-
 /**
  * Converts a value into a string array (lowercased), for leave policy fields which
  * are stored as JSON arrays or comma-separated strings in the database.
-  * Returns null if the value cannot be converted.
+ * Returns null if the value cannot be converted.
  *
  * @param value - Array<string>, JSON string, or null/undefined
  * @returns string[] (lowercased), or null if not convertible
@@ -59,8 +58,8 @@ export function parseJsonArray(value: unknown): string[] | null {
       const arr = JSON.parse(value);
       return Array.isArray(arr)
         ? arr
-          .map((v: unknown) => toLowerCaseString(v))
-          .filter((v): v is string => typeof v === 'string' && v !== null)
+            .map((v: unknown) => toLowerCaseString(v))
+            .filter((v): v is string => typeof v === 'string' && v !== null)
         : null;
     } catch {
       // Not valid JSON -- fallback: try splitting by comma
@@ -71,7 +70,6 @@ export function parseJsonArray(value: unknown): string[] | null {
   }
   return null;
 }
-
 
 /**
  * Converts a value into a number array (using toNumber), for leave policy fields which
@@ -84,13 +82,17 @@ export function parseJsonArray(value: unknown): string[] | null {
 export function parseJsonNumberArray(value: unknown): number[] | null {
   if (value == null) return null;
   if (Array.isArray(value)) {
-    return (value as unknown[]).map((v) => toNumber(v)).filter((v): v is number => v !== null);
+    return (value as unknown[])
+      .map((v) => toNumber(v))
+      .filter((v): v is number => v !== null);
   }
   if (typeof value === 'string') {
     try {
       const arr = JSON.parse(value);
       return Array.isArray(arr)
-        ? arr.map((v: unknown) => toNumber(v)).filter((v): v is number => v !== null)
+        ? arr
+            .map((v: unknown) => toNumber(v))
+            .filter((v): v is number => v !== null)
         : null;
     } catch {
       // Could extend for legacy comma-separated, but skip for now.

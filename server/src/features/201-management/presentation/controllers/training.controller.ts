@@ -66,7 +66,7 @@ export class TrainingController {
     private readonly archiveTrainingUseCase: ArchiveTrainingUseCase,
     private readonly restoreTrainingUseCase: RestoreTrainingUseCase,
     private readonly getPaginatedTrainingUseCase: GetPaginatedTrainingUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()

@@ -27,7 +27,7 @@ export class CloseBalancesForEmployeeUseCase {
     private readonly repo: LeaveBalanceRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     employee_id: number,

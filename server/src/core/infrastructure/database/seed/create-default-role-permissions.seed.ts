@@ -27,7 +27,7 @@ import { toNumber } from '@/core/utils/coercion.util';
 export class SeedRolePermissions {
   private readonly logger = new Logger(SeedRolePermissions.name);
 
-  constructor(private readonly entityManager: EntityManager) { }
+  constructor(private readonly entityManager: EntityManager) {}
 
   /**
    * Executes the seed operation to create default role-permission links.
@@ -272,9 +272,9 @@ export class SeedRolePermissions {
       ],
       [ROLES.EDITOR]: [
         /**
-        * NO DELETE OR ARCHIVE OR RESTORE FOR RBAC PERMISSIONS
-       * RBAC permissions read, read, assign roles, grant permissions, deny permissions, remove overrides
-       */
+         * NO DELETE OR ARCHIVE OR RESTORE FOR RBAC PERMISSIONS
+         * RBAC permissions read, read, assign roles, grant permissions, deny permissions, remove overrides
+         */
         PERMISSIONS.ROLES.READ,
         PERMISSIONS.PERMISSIONS.READ,
         PERMISSIONS.USER_ROLES.READ,
@@ -294,7 +294,7 @@ export class SeedRolePermissions {
         PERMISSIONS.USERS.VERIFY_EMAIL,
         /**
          * NO DELETE OR ARCHIVE OR RESTORE FOR SHARED-DOMAIN PERMISSIONS
-         * Shared-domain permissions update, read, create 
+         * Shared-domain permissions update, read, create
          */
         PERMISSIONS.HOLIDAYS.CREATE,
         PERMISSIONS.HOLIDAYS.READ,

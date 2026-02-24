@@ -29,7 +29,7 @@ export class UpdateLeaveYearConfigurationUseCase {
     private readonly repo: LeaveYearConfigurationRepository,
     @Inject(TOKENS_CORE.ACTIVITYLOGS)
     private readonly activityLogRepository: ActivityLogRepository,
-  ) { }
+  ) {}
 
   async execute(
     id: number,

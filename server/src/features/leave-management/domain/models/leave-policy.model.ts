@@ -2,7 +2,13 @@ import { HTTP_STATUS } from '@/core/domain/constants';
 import { getPHDateTime } from '@/core/utils/date.util';
 import { EnumLeavePolicyStatus } from '../enum';
 import { LeavePolicyBusinessException } from '../exceptions';
-import { parseJsonArray, parseJsonNumberArray, toDate, toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
+import {
+  parseJsonArray,
+  parseJsonNumberArray,
+  toDate,
+  toLowerCaseString,
+  toNumber,
+} from '@/core/utils/coercion.util';
 
 export class LeavePolicy {
   /** Primary key; set after persistence. */
@@ -83,8 +89,10 @@ export class LeavePolicy {
     this.status = toLowerCaseString(dto.status) as EnumLeavePolicyStatus;
     this.remarks = toLowerCaseString(dto.remarks);
     this.minimum_service_months = toNumber(dto.minimum_service_months) ?? 0;
-    this.allowed_employment_types = parseJsonArray(dto.allowed_employment_types) ?? [];
-    this.allowed_employee_statuses = parseJsonArray(dto.allowed_employee_statuses) ?? [];
+    this.allowed_employment_types =
+      parseJsonArray(dto.allowed_employment_types) ?? [];
+    this.allowed_employee_statuses =
+      parseJsonArray(dto.allowed_employee_statuses) ?? [];
     this.excluded_weekdays = parseJsonNumberArray(dto.excluded_weekdays) ?? [];
     this.deleted_by = toLowerCaseString(dto.deleted_by) ?? null;
     this.deleted_at = toDate(dto.deleted_at) ?? null;
@@ -153,21 +161,30 @@ export class LeavePolicy {
     }
     if (dto.annual_entitlement !== undefined)
       this.annual_entitlement = toNumber(dto.annual_entitlement);
-    if (dto.carry_limit !== undefined) this.carry_limit = toNumber(dto.carry_limit);
-    if (dto.encash_limit !== undefined) this.encash_limit = toNumber(dto.encash_limit);
+    if (dto.carry_limit !== undefined)
+      this.carry_limit = toNumber(dto.carry_limit);
+    if (dto.encash_limit !== undefined)
+      this.encash_limit = toNumber(dto.encash_limit);
     if (dto.carried_over_years !== undefined)
       this.carried_over_years = toNumber(dto.carried_over_years);
     if (dto.effective_date !== undefined)
       this.effective_date = toDate(dto.effective_date);
-    if (dto.expiry_date !== undefined) this.expiry_date = toDate(dto.expiry_date);
-    if (dto.status !== undefined) this.status = toLowerCaseString(dto.status) as EnumLeavePolicyStatus;
-    if (dto.remarks !== undefined) this.remarks = toLowerCaseString(dto.remarks);
+    if (dto.expiry_date !== undefined)
+      this.expiry_date = toDate(dto.expiry_date);
+    if (dto.status !== undefined)
+      this.status = toLowerCaseString(dto.status) as EnumLeavePolicyStatus;
+    if (dto.remarks !== undefined)
+      this.remarks = toLowerCaseString(dto.remarks);
     if (dto.minimum_service_months !== undefined)
       this.minimum_service_months = toNumber(dto.minimum_service_months);
     if (dto.allowed_employment_types !== undefined)
-      this.allowed_employment_types = parseJsonArray(dto.allowed_employment_types);
+      this.allowed_employment_types = parseJsonArray(
+        dto.allowed_employment_types,
+      );
     if (dto.allowed_employee_statuses !== undefined)
-      this.allowed_employee_statuses = parseJsonArray(dto.allowed_employee_statuses);
+      this.allowed_employee_statuses = parseJsonArray(
+        dto.allowed_employee_statuses,
+      );
     if (dto.excluded_weekdays !== undefined)
       this.excluded_weekdays = parseJsonNumberArray(dto.excluded_weekdays);
     this.updated_by = toLowerCaseString(dto.updated_by) ?? null;

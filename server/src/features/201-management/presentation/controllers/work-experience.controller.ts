@@ -66,7 +66,7 @@ export class WorkExperienceController {
     private readonly archiveWorkExperienceUseCase: ArchiveWorkExperienceUseCase,
     private readonly restoreWorkExperienceUseCase: RestoreWorkExperienceUseCase,
     private readonly getPaginatedWorkExperienceUseCase: GetPaginatedWorkExperienceUseCase,
-  ) { }
+  ) {}
 
   @Version('1')
   @Post()
