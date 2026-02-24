@@ -1,0 +1,41 @@
+import { Injectable, Inject } from '@nestjs/common';
+import { TOKENS_CORE } from '@/core/domain/constants';
+import { TransactionPort } from '@/core/domain/ports';
+import { {{pascal model}}Repository } from '@/features/{{feature}}/domain/repositories';
+import {
+  {{constant (snake model)}}_ACTIONS,
+  {{constant (snake feature)}}_TOKENS,
+} from '@/features/{{feature}}/domain/constants';
+import { PaginatedResult } from '@/core/utils/pagination.util';
+import { {{pascal model}} } from '@/features/{{feature}}/domain/models';
+
+@Injectable()
+export class GetPaginated{{pascal model}}UseCase {
+  constructor(
+    @Inject({{constant (snake feature)}}_TOKENS.{{constant model}})
+    private readonly {{camel model}}Repository: {{pascal model}}Repository,
+    @Inject(TOKENS_CORE.TRANSACTIONPORT)
+    private readonly transactionHelper: TransactionPort,
+  ) {}
+
+  async execute(
+    term: string,
+    page: number,
+    limit: number,
+    is_archived: boolean,
+  ): Promise<PaginatedResult<{{pascal model}}>> {
+    return this.transactionHelper.executeTransaction(
+      {{constant (snake model)}}_ACTIONS.PAGINATED_LIST,
+      async (manager) => {
+        const {{snake (plural model)}} = await this.{{camel model}}Repository.findPaginatedList(
+          term,
+          page,
+          limit,
+          is_archived,
+          manager,
+        );
+        return {{snake (plural model)}};
+      },
+    );
+  }
+}

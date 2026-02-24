@@ -164,45 +164,66 @@ module.exports = function (plop) {
        * =========================
        */
 
+      // Index Commands
       {
         type: 'add',
-        path: 'src/features/{{feature}}/application/use_cases/{{kebab model}}/create.use-case.ts',
+        path: 'src/features/{{feature}}/application/commands/{{kebab model}}/index.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/application/command-index.hbs',
+      },
+
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/application/use-cases/{{kebab model}}/index.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/application/use-case-index.hbs',
+      },
+
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/application/use-cases/{{kebab model}}/create.use-case.ts',
         templateFile: 'plop-templates/application/create-use-case.hbs',
       },
 
       {
         type: 'add',
-        path: 'src/features/{{feature}}/application/use_cases/{{kebab model}}/update.use-case.ts',
+        path: 'src/features/{{feature}}/application/use-cases/{{kebab model}}/update.use-case.ts',
         templateFile: 'plop-templates/application/update-use-case.hbs',
       },
 
       {
         type: 'add',
-        path: 'src/features/{{feature}}/application/use_cases/{{kebab model}}/archive.use-case.ts',
+        path: 'src/features/{{feature}}/application/use-cases/{{kebab model}}/archive.use-case.ts',
         templateFile: 'plop-templates/application/archive-use-case.hbs',
       },
 
       {
         type: 'add',
-        path: 'src/features/{{feature}}/application/use_cases/{{kebab model}}/restore.use-case.ts',
+        path: 'src/features/{{feature}}/application/use-cases/{{kebab model}}/restore.use-case.ts',
         templateFile: 'plop-templates/application/restore-use-case.hbs',
       },
 
       {
         type: 'add',
-        path: 'src/features/{{feature}}/application/use_cases/{{kebab model}}/get-paginated.use-case.ts',
+        path: 'src/features/{{feature}}/application/use-cases/{{kebab model}}/get-paginated.use-case.ts',
         templateFile: 'plop-templates/application/get-paginated-use-case.hbs',
       },
 
       {
         type: 'add',
-        path: 'src/features/{{feature}}/application/commands/{{kebab model}}/create.command.ts',
+        path: 'src/features/{{feature}}/application/use-cases/{{kebab model}}/combobox.use-case.ts',
+        templateFile: 'plop-templates/application/combobox-use-case.hbs',
+      },
+
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/application/commands/{{kebab model}}/create-{{kebab model}}.command.ts',
         templateFile: 'plop-templates/application/create-command.hbs',
       },
 
       {
         type: 'add',
-        path: 'src/features/{{feature}}/application/commands/{{kebab model}}/update.command.ts',
+        path: 'src/features/{{feature}}/application/commands/{{kebab model}}/update-{{kebab model}}.command.ts',
         templateFile: 'plop-templates/application/update-command.hbs',
       },
 
@@ -217,11 +238,55 @@ module.exports = function (plop) {
         path: 'src/features/{{feature}}/infrastructure/database/entities/{{kebab model}}.entity.ts',
         templateFile: 'plop-templates/infrastructure/entity.hbs',
       },
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/infrastructure/database/entities/index.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/infrastructure/entity-index.hbs',
+      },
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/infrastructure/database/entities/index.ts',
+        pattern: /(\/\/ PLOP-APPEND-ENTITIES)/g,
+        template: "export * from './{{kebab model}}.entity';\n$1",
+      },
 
       {
         type: 'add',
         path: 'src/features/{{feature}}/infrastructure/database/repositories/{{kebab model}}.repository.impl.ts',
         templateFile: 'plop-templates/infrastructure/repository-impl.hbs',
+      },
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/infrastructure/database/repositories/index.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/infrastructure/repository-impl-index.hbs',
+      },
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/infrastructure/database/repositories/index.ts',
+        pattern: /(\/\/ PLOP-APPEND-REPOSITORIES)/g,
+        template: "export * from './{{kebab model}}.repository.impl';\n$1",
+      },
+
+      {
+        type: 'add',
+        path: 'src/features/{{kebab feature}}/infrastructure/database/entities/{{kebab feature}}.entities.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/infrastructure/entities-index.hbs',
+      },
+      {
+        type: 'modify',
+        path: 'src/features/{{kebab feature}}/infrastructure/database/entities/{{kebab feature}}.entities.ts',
+        pattern: /(\/\/ PLOP-APPEND-IMPORTS)/g,
+        template:
+          "import { {{pascal model}}Entity } from './{{kebab model}}.entity';\n$1",
+      },
+      {
+        type: 'modify',
+        path: 'src/features/{{kebab feature}}/infrastructure/database/entities/{{kebab feature}}.entities.ts',
+        pattern: /(\/\/ PLOP-APPEND-ARRAY)/g,
+        template: '  {{pascal model}}Entity,\n  $1',
       },
 
       /**
@@ -232,10 +297,28 @@ module.exports = function (plop) {
 
       {
         type: 'add',
+        path: 'src/features/{{feature}}/presentation/controllers/{{kebab model}}/index.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/presentation/controller-index.hbs',
+      },
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/presentation/controllers/{{kebab model}}/index.ts',
+        pattern: /(\/\/ PLOP-APPEND-CONTROLLERS)/g,
+        template: "export * from './{{kebab model}}.controller';\n$1",
+      },
+
+      {
+        type: 'add',
         path: 'src/features/{{feature}}/presentation/controllers/{{kebab model}}/{{kebab model}}.controller.ts',
         templateFile: 'plop-templates/presentation/controller.hbs',
       },
 
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/presentation/dto/{{kebab model}}/index.ts',
+        templateFile: 'plop-templates/presentation/dto-index.hbs',
+      },
       {
         type: 'add',
         path: 'src/features/{{feature}}/presentation/dto/{{kebab model}}/create-{{kebab model}}.dto.ts',

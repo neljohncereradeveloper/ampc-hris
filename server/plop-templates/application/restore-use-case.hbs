@@ -1,0 +1,67 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { TOKENS_CORE, HTTP_STATUS } from '@/core/domain/constants';
+import { ActivityLogRepository } from '@/core/domain/repositories';
+import { RequestInfo } from '@/core/utils/request-info.util';
+import { getPHDateTime } from '@/core/utils/date.util';
+import { ActivityLog } from '@/core/domain/models';
+import { TransactionPort } from '@/core/domain/ports';
+import { {{pascal model}}BusinessException } from '@/features/{{feature}}/domain/exceptions';
+import { {{pascal model}}Repository } from '@/features/{{feature}}/domain/repositories';
+import {
+  {{constant (snake model)}}_ACTIONS,
+  {{constant (snake feature)}}_DATABASE_MODELS,
+  {{constant (snake feature)}}_TOKENS,
+} from '@/features/{{feature}}/domain/constants';
+
+@Injectable()
+export class Restore{{pascal model}}UseCase {
+  constructor(
+    @Inject(TOKENS_CORE.TRANSACTIONPORT)
+    private readonly transactionHelper: TransactionPort,
+    @Inject({{constant (snake feature)}}_TOKENS.{{constant model}})
+    private readonly {{camel model}}Repository: {{pascal model}}Repository,
+    @Inject(TOKENS_CORE.ACTIVITYLOGS)
+    private readonly activityLogRepository: ActivityLogRepository,
+  ) {}
+
+  async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
+    return this.transactionHelper.executeTransaction(
+      {{constant (snake model)}}_ACTIONS.RESTORE,
+      async (manager) => {
+        const {{snake model}} = await this.{{camel model}}Repository.findById(id, manager);
+        if (!{{snake model}}) {
+          throw new {{pascal model}}BusinessException(
+            `{{pascal model}} with ID ${id} not found.`,
+            HTTP_STATUS.NOT_FOUND,
+          );
+        }
+
+        {{snake model}}.restore();
+
+        const success = await this.{{camel model}}Repository.update(id, {{snake model}}, manager);
+        if (!success) {
+          throw new {{pascal model}}BusinessException(
+            '{{pascal model}} restore failed',
+            HTTP_STATUS.INTERNAL_SERVER_ERROR,
+          );
+        }
+
+        const log = ActivityLog.create({
+          action: {{constant (snake model)}}_ACTIONS.RESTORE,
+          entity: {{constant (snake feature)}}_DATABASE_MODELS.{{constant (plural model)}},
+          details: JSON.stringify({
+            id,
+            desc1: {{snake model}}.desc1,
+            explanation: `{{pascal model}} with ID : ${id} restored by USER : ${requestInfo?.user_name || ''}`,
+            restored_by: requestInfo?.user_name || '',
+            restored_at: getPHDateTime(new Date()),
+          }),
+          request_info: requestInfo || { user_name: '' },
+        });
+        await this.activityLogRepository.create(log, manager);
+
+        return true;
+      },
+    );
+  }
+}

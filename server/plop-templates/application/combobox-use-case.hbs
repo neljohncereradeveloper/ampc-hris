@@ -1,0 +1,34 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { TOKENS_CORE } from '@/core/domain/constants';
+import { TransactionPort } from '@/core/domain/ports';
+import { {{pascal model}}Repository } from '@/features/{{feature}}/domain/repositories';
+import {
+  {{constant (snake model)}}_ACTIONS,
+  {{constant (snake feature)}}_TOKENS,
+} from '@/features/{{feature}}/domain/constants';
+
+@Injectable()
+export class Combobox{{pascal model}}UseCase {
+  constructor(
+    @Inject({{constant (snake feature)}}_TOKENS.{{constant model}})
+    private readonly {{camel model}}Repository: {{pascal model}}Repository,
+  @Inject(TOKENS_CORE.TRANSACTIONPORT)
+  private readonly transactionHelper: TransactionPort,
+  ) { }
+
+  async execute(): Promise < { value: string; label: string }[] > {
+  return this.transactionHelper.executeTransaction(
+    {{constant (snake model)}}_ACTIONS.COMBOBOX,
+      async (manager) => {
+        const {{snake (plural model)}} = await this.{{camel model}}Repository.combobox(manager);
+return {{snake (plural model)}}.map(({{snake model}}: { desc1: string }) => ({
+  value: {{snake model}}.desc1 || '',
+  label: {{snake model}}.desc1
+  ? {{snake model}}.desc1.charAt(0).toUpperCase() +
+{{snake model}}.desc1.slice(1).toLowerCase()
+            : '',
+        }));
+      },
+    );
+  }
+}

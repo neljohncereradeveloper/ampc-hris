@@ -1,0 +1,67 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { TOKENS_CORE, HTTP_STATUS } from '@/core/domain/constants';
+import { ActivityLogRepository } from '@/core/domain/repositories';
+import { ActivityLog } from '@/core/domain/models';
+import { TransactionPort } from '@/core/domain/ports';
+import { {{pascal model}}BusinessException } from '@/features/{{feature}}/domain/exceptions';
+import { {{pascal model}}Repository } from '@/features/{{feature}}/domain/repositories';
+import {
+  {{constant (snake model)}}_ACTIONS,
+  {{constant (snake feature)}}_DATABASE_MODELS,
+  {{constant (snake feature)}}_TOKENS,
+} from '@/features/{{feature}}/domain/constants';
+import { RequestInfo } from '@/core/utils/request-info.util';
+import { getPHDateTime } from '@/core/utils/date.util';
+
+@Injectable()
+export class Archive{{pascal model}}UseCase {
+  constructor(
+    @Inject(TOKENS_CORE.TRANSACTIONPORT)
+    private readonly transactionHelper: TransactionPort,
+    @Inject({{constant (snake feature)}}_TOKENS.{{constant model}})
+    private readonly {{camel model}}Repository: {{pascal model}}Repository,
+    @Inject(TOKENS_CORE.ACTIVITYLOGS)
+    private readonly activityLogRepository: ActivityLogRepository,
+  ) { }
+
+  async execute(id: number, requestInfo?: RequestInfo): Promise<boolean> {
+    return this.transactionHelper.executeTransaction(
+      {{constant (snake model)}}_ACTIONS.ARCHIVE,
+      async (manager) => {
+        const {{snake model}} = await this.{{camel model}}Repository.findById(id, manager);
+        if (!{{snake model}}) {
+          throw new {{pascal model}}BusinessException(
+            `{{camel model}} with ID ${id} not found.`,
+            HTTP_STATUS.NOT_FOUND,
+          );
+        }
+
+        {{snake model}}.archive(requestInfo?.user_name || '');
+
+        const success = await this.{{camel model}}Repository.update(id, {{snake model}}, manager);
+        if (!success) {
+          throw new {{pascal model}}BusinessException(
+            '{{pascal model}} archive failed',
+            HTTP_STATUS.INTERNAL_SERVER_ERROR,
+          );
+        }
+
+        const log = ActivityLog.create({
+          action: {{constant (snake model)}}_ACTIONS.ARCHIVE,
+          entity: {{constant (snake feature)}}_DATABASE_MODELS.{{constant (plural model)}},
+          details: JSON.stringify({
+            id,
+            desc1: {{snake model}}.desc1,
+            explanation: `{{camel model}} with ID : ${id} archived by USER : ${requestInfo?.user_name || ''}`,
+            archived_by: requestInfo?.user_name || '',
+            archived_at: getPHDateTime({{snake model}}.deleted_at || new Date()),
+          }),
+          request_info: requestInfo || { user_name: '' },
+        });
+        await this.activityLogRepository.create(log, manager);
+
+        return true;
+      },
+    );
+  }
+}

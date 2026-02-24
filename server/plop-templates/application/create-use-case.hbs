@@ -1,0 +1,70 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { TOKENS_CORE, HTTP_STATUS } from '@/core/domain/constants';
+import { ActivityLogRepository } from '@/core/domain/repositories';
+import { RequestInfo } from '@/core/utils/request-info.util';
+import { getPHDateTime } from '@/core/utils/date.util';
+import { ActivityLog } from '@/core/domain/models';
+import { TransactionPort } from '@/core/domain/ports';
+import { {{pascal model}}BusinessException } from '@/features/{{feature}}/domain/exceptions';
+import { {{pascal model}} } from '@/features/{{feature}}/domain/models';
+import { {{pascal model}}Repository } from '@/features/{{feature}}/domain/repositories';
+import {
+  {{constant (snake model)}}_ACTIONS,
+  {{constant (snake feature)}}_DATABASE_MODELS,
+  {{constant (snake feature)}}_TOKENS,
+} from '@/features/{{feature}}/domain/constants';
+import { Create{{pascal model}}Command } from '../../commands/{{kebab model}}/create-{{kebab model}}.command';
+
+@Injectable()
+export class Create{{pascal model}}UseCase {
+  constructor(
+    @Inject(TOKENS_CORE.TRANSACTIONPORT)
+    private readonly transactionHelper: TransactionPort,
+    @Inject({{constant (snake feature)}}_TOKENS.{{constant model}})
+    private readonly {{camel model}}Repository: {{pascal model}}Repository,
+    @Inject(TOKENS_CORE.ACTIVITYLOGS)
+    private readonly activityLogRepository: ActivityLogRepository,
+  ) { }
+
+  async execute(
+    command: Create{{pascal model}}Command,
+    requestInfo?: RequestInfo,
+  ): Promise<{{pascal model}}> {
+    return this.transactionHelper.executeTransaction(
+      {{constant (snake model)}}_ACTIONS.CREATE,
+      async (manager) => {
+        const new_{{snake model}} = {{pascal model}}.create({
+          desc1: command.desc1,
+          created_by: requestInfo?.user_name || '',
+        });
+
+        const created_{{snake model}} = await this.{{camel model}}Repository.create(
+          new_{{snake model}},
+          manager,
+        );
+
+        if (!created_{{snake model}}) {
+          throw new {{pascal model}}BusinessException(
+            '{{pascal model}} creation failed',
+            HTTP_STATUS.INTERNAL_SERVER_ERROR,
+          );
+        }
+
+        const log = ActivityLog.create({
+          action: {{constant (snake model)}}_ACTIONS.CREATE,
+          entity: {{constant (snake feature)}}_DATABASE_MODELS.{{constant (plural model)}},
+          details: JSON.stringify({
+            id: created_{{snake model}}.id,
+            desc1: created_{{snake model}}.desc1,
+            created_by: requestInfo?.user_name || '',
+            created_at: getPHDateTime(created_{{snake model}}.created_at),
+          }),
+          request_info: requestInfo || { user_name: '' },
+        });
+        await this.activityLogRepository.create(log, manager);
+
+        return created_{{snake model}};
+      },
+    );
+  }
+}
