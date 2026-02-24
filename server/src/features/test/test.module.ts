@@ -7,18 +7,14 @@ import { TOKENS_CORE } from '@/core/domain/constants';
 import { TEST_TOKENS } from './domain/constants';
 import { SharedDomainModule } from '@/features/shared-domain/shared-domain.module';
 
-import { TestOneRepositoryImpl } from './infrastructure/database/repositories';
-import { TestTwoRepositoryImpl } from './infrastructure/database/repositories';
-import { TestThreeRepositoryImpl } from './infrastructure/database/repositories';
-// PLOP-IMPORT-REPOSITORIES
-import * as TestOneUseCases from './application/use-cases/test-one';
-import * as TestTwoUseCases from './application/use-cases/test-two';
-import * as TestThreeUseCases from './application/use-cases/test-three';
+import * as TestRepositories from './infrastructure/database/repositories';
+import * as TestControllers from './presentation/controllers';
+
+import * as EducationCourseLevelUseCases from './application/use-cases/education-course-level';
+import * as EducationCourseUseCases from './application/use-cases/education-course';
+import * as EducationLevelUseCases from './application/use-cases/education-level';
+import * as EducationSchoolUseCases from './application/use-cases/education-school';
 // PLOP-IMPORT-USECASES
-import { TestOneController } from './presentation/controllers';
-import { TestTwoController } from './presentation/controllers';
-import { TestThreeController } from './presentation/controllers';
-// PLOP-IMPORT-CONTROLLERS
 
 /**
  * =========================
@@ -26,28 +22,40 @@ import { TestThreeController } from './presentation/controllers';
  * =========================
  */
 
-const testOneUseCaseList = [
-  TestOneUseCases.CreateTestOneUseCase,
-  TestOneUseCases.UpdateTestOneUseCase,
-  TestOneUseCases.ArchiveTestOneUseCase,
-  TestOneUseCases.RestoreTestOneUseCase,
-  TestOneUseCases.GetPaginatedTestOneUseCase,
+const educationCourseLevelUseCaseList = [
+  EducationCourseLevelUseCases.CreateEducationCourseLevelUseCase,
+  EducationCourseLevelUseCases.UpdateEducationCourseLevelUseCase,
+  EducationCourseLevelUseCases.ArchiveEducationCourseLevelUseCase,
+  EducationCourseLevelUseCases.RestoreEducationCourseLevelUseCase,
+  EducationCourseLevelUseCases.GetPaginatedEducationCourseLevelUseCase,
+  EducationCourseLevelUseCases.ComboboxEducationCourseLevelUseCase,
 ];
 
-const testTwoUseCaseList = [
-  TestTwoUseCases.CreateTestTwoUseCase,
-  TestTwoUseCases.UpdateTestTwoUseCase,
-  TestTwoUseCases.ArchiveTestTwoUseCase,
-  TestTwoUseCases.RestoreTestTwoUseCase,
-  TestTwoUseCases.GetPaginatedTestTwoUseCase,
+const educationCourseUseCaseList = [
+  EducationCourseUseCases.CreateEducationCourseUseCase,
+  EducationCourseUseCases.UpdateEducationCourseUseCase,
+  EducationCourseUseCases.ArchiveEducationCourseUseCase,
+  EducationCourseUseCases.RestoreEducationCourseUseCase,
+  EducationCourseUseCases.GetPaginatedEducationCourseUseCase,
+  EducationCourseUseCases.ComboboxEducationCourseUseCase,
 ];
 
-const testThreeUseCaseList = [
-  TestThreeUseCases.CreateTestThreeUseCase,
-  TestThreeUseCases.UpdateTestThreeUseCase,
-  TestThreeUseCases.ArchiveTestThreeUseCase,
-  TestThreeUseCases.RestoreTestThreeUseCase,
-  TestThreeUseCases.GetPaginatedTestThreeUseCase,
+const educationLevelUseCaseList = [
+  EducationLevelUseCases.CreateEducationLevelUseCase,
+  EducationLevelUseCases.UpdateEducationLevelUseCase,
+  EducationLevelUseCases.ArchiveEducationLevelUseCase,
+  EducationLevelUseCases.RestoreEducationLevelUseCase,
+  EducationLevelUseCases.GetPaginatedEducationLevelUseCase,
+  EducationLevelUseCases.ComboboxEducationLevelUseCase,
+];
+
+const educationSchoolUseCaseList = [
+  EducationSchoolUseCases.CreateEducationSchoolUseCase,
+  EducationSchoolUseCases.UpdateEducationSchoolUseCase,
+  EducationSchoolUseCases.ArchiveEducationSchoolUseCase,
+  EducationSchoolUseCases.RestoreEducationSchoolUseCase,
+  EducationSchoolUseCases.GetPaginatedEducationSchoolUseCase,
+  EducationSchoolUseCases.ComboboxEducationSchoolUseCase,
 ];
 
 // PLOP-DECLARE-USECASE-LISTS
@@ -55,9 +63,10 @@ const testThreeUseCaseList = [
 @Module({
   imports: [PostgresqlDatabaseModule, SharedDomainModule],
   controllers: [
-    TestOneController,
-    TestTwoController,
-    TestThreeController,
+    TestControllers.EducationCourseLevelController,
+    TestControllers.EducationCourseController,
+    TestControllers.EducationLevelController,
+    TestControllers.EducationSchoolController,
     // PLOP-CONTROLLERS
   ],
   providers: [
@@ -71,34 +80,42 @@ const testThreeUseCaseList = [
     },
 
     {
-      provide: TEST_TOKENS.TEST_ONE,
-      useClass: TestOneRepositoryImpl,
+      provide: TEST_TOKENS.EDUCATION_COURSE_LEVEL,
+      useClass: TestRepositories.EducationCourseLevelRepositoryImpl,
     },
 
     {
-      provide: TEST_TOKENS.TEST_TWO,
-      useClass: TestTwoRepositoryImpl,
+      provide: TEST_TOKENS.EDUCATION_COURSE,
+      useClass: TestRepositories.EducationCourseRepositoryImpl,
     },
 
     {
-      provide: TEST_TOKENS.TEST_THREE,
-      useClass: TestThreeRepositoryImpl,
+      provide: TEST_TOKENS.EDUCATION_LEVEL,
+      useClass: TestRepositories.EducationLevelRepositoryImpl,
+    },
+
+    {
+      provide: TEST_TOKENS.EDUCATION_SCHOOL,
+      useClass: TestRepositories.EducationSchoolRepositoryImpl,
     },
     // PLOP-PROVIDERS
 
-    ...testOneUseCaseList,
-    ...testTwoUseCaseList,
-    ...testThreeUseCaseList,
+    ...educationCourseLevelUseCaseList, // providers
+    ...educationCourseUseCaseList, // providers
+    ...educationLevelUseCaseList, // providers
+    ...educationSchoolUseCaseList, // providers
     // PLOP-USECASE-SPREAD
   ],
   exports: [
-    TEST_TOKENS.TEST_ONE,
-    TEST_TOKENS.TEST_TWO,
-    TEST_TOKENS.TEST_THREE,
+    TEST_TOKENS.EDUCATION_COURSE_LEVEL, // exports
+    TEST_TOKENS.EDUCATION_COURSE, // exports
+    TEST_TOKENS.EDUCATION_LEVEL, // exports
+    TEST_TOKENS.EDUCATION_SCHOOL, // exports
     // PLOP-EXPORTS
-    ...testOneUseCaseList,
-    ...testTwoUseCaseList,
-    ...testThreeUseCaseList,
+    ...educationCourseLevelUseCaseList, // export-spread
+    ...educationCourseUseCaseList, // export-spread
+    ...educationLevelUseCaseList, // export-spread
+    ...educationSchoolUseCaseList, // export-spread
     // PLOP-EXPORT-USECASE-SPREAD
   ],
 })

@@ -12,7 +12,7 @@ import { {{constant (snake feature)}}_DATABASE_MODELS } from '@/features/{{featu
 import { EmployeeEntity } from '@/features/shared-domain/infrastructure/database/entities/employee.entity';
 
 
-@Entity(SHARED_DOMAIN_DATABASE_MODELS.{{ constant model }})
+@Entity({{constant (snake feature)}}_DATABASE_MODELS.{{ constant (plural model) }})
 export class {{pascal model }}Entity {
   @PrimaryGeneratedColumn()
   id: number;

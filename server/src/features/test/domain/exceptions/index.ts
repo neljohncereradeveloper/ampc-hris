@@ -1,4 +1,5 @@
-export * from './test-one.exception';
-export * from './test-two.exception';
-export * from './test-three.exception';
+export * from './education-course-level.exception';
+export * from './education-course.exception';
+export * from './education-level.exception';
+export * from './education-school.exception';
 // PLOP-APPEND-EXCEPTIONS

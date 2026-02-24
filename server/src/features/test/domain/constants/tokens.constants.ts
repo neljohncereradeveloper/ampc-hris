@@ -1,5 +1,6 @@
 export const TEST_TOKENS = {
-  TEST_ONE: 'TestOneRepository',
-  TEST_TWO: 'TestTwoRepository',
-  TEST_THREE: 'TestThreeRepository',
+  EDUCATION_COURSE_LEVEL: 'EducationCourseLevelRepository',
+  EDUCATION_COURSE: 'EducationCourseRepository',
+  EDUCATION_LEVEL: 'EducationLevelRepository',
+  EDUCATION_SCHOOL: 'EducationSchoolRepository',
 } as const;

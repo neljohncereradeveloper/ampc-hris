@@ -1,5 +1,6 @@
 export const TEST_DATABASE_MODELS = {
-  TEST_ONES: 'test-ones',
-  TEST_TWOS: 'test-twos',
-  TEST_THREES: 'test-threes',
+  EDUCATION_COURSE_LEVELS: 'education_course_levels',
+  EDUCATION_COURSES: 'education_courses',
+  EDUCATION_LEVELS: 'education_levels',
+  EDUCATION_SCHOOLS: 'education_schools',
 } as const;
