@@ -1,7 +1,7 @@
 /**
- * Command for creating a {{camel model}}
+ * Command for updating a religion
  * Application layer command - simple type definition without validation
  */
-export interface Create{{pascal model}}Command {
+export interface UpdateReligionCommand {
   desc1: string;
 }

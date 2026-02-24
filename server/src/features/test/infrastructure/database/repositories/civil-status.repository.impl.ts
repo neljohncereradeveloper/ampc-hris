@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager, Repository } from 'typeorm';
-import { {{pascal model}}Repository } from '@/features/{{feature}}/domain/repositories';
-import { {{pascal model}} } from '@/features/{{feature}}/domain/models';
-import { {{constant (snake feature)}}_DATABASE_MODELS } from '@/features/{{feature}}/domain/constants';
+import { CivilStatusRepository } from '@/features/test/domain/repositories';
+import { CivilStatus } from '@/features/test/domain/models';
+import { TEST_DATABASE_MODELS } from '@/features/test/domain/constants';
 import {
   PaginatedResult,
   calculatePagination,
 } from '@/core/utils/pagination.util';
 
 @Injectable()
-export class {{pascal model}}RepositoryImpl implements {{pascal model}}Repository<EntityManager> {
-async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise<{{pascal model}}> {
+export class CivilStatusRepositoryImpl implements CivilStatusRepository<EntityManager> {
+async create(civil_status: CivilStatus, manager: EntityManager): Promise<CivilStatus> {
   const query = `
-    INSERT INTO ${ {{constant (snake feature)}}_DATABASE_MODELS.{{constant (plural model)}} } (
+    INSERT INTO ${ TEST_DATABASE_MODELS.CIVIL_STATUSES } (
       desc1, created_by
     )
     VALUES ($1, $2)
@@ -20,8 +20,8 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
   `;
 
   const result = await manager.query(query, [
-    {{snake model}}.desc1,
-    {{snake model}}.created_by,
+    civil_status.desc1,
+    civil_status.created_by,
   ]);
 
   return this.entityToModel(result[0]);
@@ -29,7 +29,7 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
 
   async update(
     id: number,
-    dto: Partial<{{pascal model}}>,
+    dto: Partial<CivilStatus>,
     manager: EntityManager,
   ): Promise<boolean> {
     const updateFields: string[] = [];
@@ -60,7 +60,7 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
     values.push(id);
 
     const query = `
-      UPDATE ${ {{constant (snake feature)}}_DATABASE_MODELS.{{constant (plural model)}} } }
+      UPDATE ${ TEST_DATABASE_MODELS.CIVIL_STATUSES } }
       SET ${updateFields.join(', ')}
       WHERE id = $${paramIndex} AND deleted_at IS NULL
       RETURNING id
@@ -74,10 +74,10 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
    * Finds a job title by ID regardless of archived status.
    * Used internally for archive/restore operations.
    */
-  async findById(id: number, manager: EntityManager): Promise<{{pascal model}} | null> {
+  async findById(id: number, manager: EntityManager): Promise<CivilStatus | null> {
     const query = `
       SELECT *
-      FROM ${ {{constant (snake feature)}}_DATABASE_MODELS.{{constant (plural model)}} } }
+      FROM ${ TEST_DATABASE_MODELS.CIVIL_STATUSES } }
       WHERE id = $1
     `;
 
@@ -92,10 +92,10 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
   async findByDescription(
     description: string,
     manager: EntityManager,
-  ): Promise<{{pascal model}} | null> {
+  ): Promise<CivilStatus | null> {
     const query = `
       SELECT *
-      FROM ${ {{constant (snake feature)}}_DATABASE_MODELS.{{constant (plural model)}} } }
+      FROM ${ TEST_DATABASE_MODELS.CIVIL_STATUSES } }
       WHERE desc1 = $1 AND deleted_at IS NULL
     `;
 
@@ -113,7 +113,7 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
     limit: number,
     is_archived: boolean,
     manager: EntityManager,
-  ): Promise<PaginatedResult<{{pascal model}}>> {
+  ): Promise<PaginatedResult<CivilStatus>> {
     const offset = (page - 1) * limit;
     const searchTerm = term ? `%${term}%` : '%';
 
@@ -131,7 +131,7 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
 
     const countQuery = `
       SELECT COUNT(*) as total
-      FROM ${ {{constant (snake feature)}}_DATABASE_MODELS.{{constant (plural model)}} } }
+      FROM ${ TEST_DATABASE_MODELS.CIVIL_STATUSES } }
       ${whereClause}
     `;
 
@@ -140,7 +140,7 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
 
     const dataQuery = `
       SELECT *
-      FROM ${ {{constant (snake feature)}}_DATABASE_MODELS.{{constant (plural model)}} } }
+      FROM ${ TEST_DATABASE_MODELS.CIVIL_STATUSES } }
       ${whereClause}
       ORDER BY desc1 ASC, created_at DESC
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
@@ -149,12 +149,12 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
     queryParams.push(limit, offset);
     const dataResult = await manager.query(dataQuery, queryParams);
 
-    const {{snake model}}s = dataResult.map((row: Record<string, unknown>) =>
+    const civil_statuss = dataResult.map((row: Record<string, unknown>) =>
       this.entityToModel(row),
     );
 
     return {
-      data: {{snake model}}s,
+      data: civil_statuss,
       meta: calculatePagination(totalRecords, page, limit),
     };
   }
@@ -163,10 +163,10 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
    * Returns a lightweight list of active job titles for use in dropdowns.
    * Selects all fields to ensure `fromPersistence()` maps correctly.
    */
-  async combobox(manager: EntityManager): Promise<{{pascal model}}[]> {
+  async combobox(manager: EntityManager): Promise<CivilStatus[]> {
     const query = `
       SELECT *
-      FROM ${ {{constant (snake feature)}}_DATABASE_MODELS.{{constant (plural model)}} } }
+      FROM ${ TEST_DATABASE_MODELS.CIVIL_STATUSES } }
       WHERE deleted_at IS NULL
       ORDER BY desc1 ASC
     `;
@@ -177,7 +177,7 @@ async create({{snake model}}: {{pascal model}}, manager: EntityManager): Promise
     );
   }
 
-  private entityToModel(entity: Record<string, unknown>): {{pascal model}} {
-    return {{pascal model}}.fromPersistence(entity);
+  private entityToModel(entity: Record<string, unknown>): CivilStatus {
+    return CivilStatus.fromPersistence(entity);
   }
 }

@@ -25,7 +25,8 @@
       "@/features/auth/*": ["src/features/auth/*"],
       "@/features/rbac/*": ["src/features/rbac/*"],
       "@/features/user-management/*": ["src/features/user-management/*"],
-      "@/features/shared-domain/*": ["src/features/shared-domain/*"]
+      "@/features/shared-domain/*": ["src/features/shared-domain/*"],
+      "@/features/test/*": ["src/features/test/*"]
     },
     "incremental": true,
     "skipLibCheck": true

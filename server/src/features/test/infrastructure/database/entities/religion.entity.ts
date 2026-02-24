@@ -8,19 +8,19 @@ import {
   Index,
   OneToMany,
 } from 'typeorm';
-import { SHARED_DOMAIN_DATABASE_MODELS } from '@/features/{{feature}}/domain/constants';
+import { SHARED_DOMAIN_DATABASE_MODELS } from '@/features/test/domain/constants';
 import { EmployeeEntity } from '@/features/shared-domain/infrastructure/database/entities/employee.entity';
 
 
-@Entity(SHARED_DOMAIN_DATABASE_MODELS.{{ constant model }})
-export class {{pascal model }}Entity {
+@Entity(SHARED_DOMAIN_DATABASE_MODELS.RELIGION)
+export class ReligionEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     type: 'varchar',
     length: 255,
-    comment: '{{camel model}} description. example: Manager, Supervisor, etc.',
+    comment: 'religion description. example: Manager, Supervisor, etc.',
   })
   @Index()
   desc1: string;
@@ -30,7 +30,7 @@ export class {{pascal model }}Entity {
     type: 'varchar',
     length: 255,
     nullable: true,
-    comment: 'User who deleted the {{camel model}}',
+    comment: 'User who deleted the religion',
   })
   deleted_by: string | null;
 
@@ -42,7 +42,7 @@ export class {{pascal model }}Entity {
     type: 'varchar',
     length: 255,
     nullable: true,
-    comment: 'User who created the {{camel model}}',
+    comment: 'User who created the religion',
   })
   created_by: string | null;
 
@@ -53,7 +53,7 @@ export class {{pascal model }}Entity {
     type: 'varchar',
     length: 255,
     nullable: true,
-    comment: 'User who last updated the {{camel model}}',
+    comment: 'User who last updated the religion',
   })
   updated_by: string | null;
 
@@ -64,8 +64,8 @@ export class {{pascal model }}Entity {
    * RELATIONS
    */
   /**
-   * One {{camel model}} belongs to many employees as {{camel model}}
+   * One religion belongs to many employees as religion
    */
-  @OneToMany(() => EmployeeEntity, (employee) => employee.{{ snake model }})
+  @OneToMany(() => EmployeeEntity, (employee) => employee.religion)
 employees: EmployeeEntity[];
 }

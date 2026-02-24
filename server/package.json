@@ -26,7 +26,8 @@
     "migration:generate": "typeorm migration:generate -d dist/core/infrastructure/database/migrations/typeorm.config.js --pretty",
     "migration:run": "typeorm migration:run -d dist/core/infrastructure/database/migrations/typeorm.config.js",
     "migration:show": "typeorm migration:show -d dist/core/infrastructure/database/migrations/typeorm.config.js",
-    "seed:run": "node -r ts-node/register -r ./tsconfig-paths-bootstrap.js src/core/infrastructure/database/seed/seed-runner.ts"
+    "seed:run": "node -r ts-node/register -r ./tsconfig-paths-bootstrap.js src/core/infrastructure/database/seed/seed-runner.ts",
+    "plop": "plop"
   },
   "dependencies": {
     "@godaddy/terminus": "^4.12.1",
@@ -76,6 +77,7 @@
     "globals": "^16.0.0",
     "jest": "^30.0.0",
     "plop": "^4.0.5",
+    "pluralize": "^8.0.0",
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",

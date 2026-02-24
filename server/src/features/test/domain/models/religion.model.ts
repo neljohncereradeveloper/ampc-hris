@@ -1,35 +1,35 @@
 import { HTTP_STATUS } from '@/core/domain/constants';
 import { getPHDateTime } from '@/core/utils/date.util';
-import { {{pascal model}}BusinessException } from '../exceptions/{{kebab model}}.exception';
+import { ReligionBusinessException } from '../exceptions/religion.exception';
 import { toLowerCaseString, toNumber } from '@/core/utils/coercion.util';
 
 /**
- * {{pascal model}} domain entity.
+ * Religion domain entity.
  *
- * Encapsulates all business rules and state transitions for a {{camel model}}.
+ * Encapsulates all business rules and state transitions for a religion.
  *
  * Two ways to instantiate:
- * - `{{pascal model}}.create()` — for new {{camel model}} (validates business rules)
- * - `{{pascal model}}.fromPersistence()` — for rehydrating from the database (no validation)
+ * - `Religion.create()` — for new religion (validates business rules)
+ * - `Religion.fromPersistence()` — for rehydrating from the database (no validation)
  */
-export class {{pascal model}} {
+export class Religion {
   /** Auto-incremented primary key. Null when not yet persisted. */
   id?: number | null;
 
-  /** {{camel model}} description / name. e.g. 'manager', 'supervisor', etc. */
+  /** religion description / name. e.g. 'manager', 'supervisor', etc. */
   desc1: string;
 
-  /** Who created this {{camel model}}. Required at creation time. */
+  /** Who created this religion. Required at creation time. */
   created_by: string;
 
   /**
-   * Timestamp when this {{camel model}} was created.
+   * Timestamp when this religion was created.
    * Set temporarily in-memory on construction; TypeORM overrides this on INSERT via @CreateDateColumn.
    * Authoritative value comes from the database after persist.
    */
   created_at: Date;
 
-  /** Who last updated this {{camel model}}. Null until first update. */
+  /** Who last updated this religion. Null until first update. */
   updated_by: string | null;
 
   /**
@@ -39,14 +39,14 @@ export class {{pascal model}} {
    */
   updated_at: Date;
 
-  /** Who archived (soft-deleted) this {{camel model}}. Null if not archived. */
+  /** Who archived (soft-deleted) this religion. Null if not archived. */
   deleted_by: string | null;
 
-  /** Timestamp when this {{camel model}} was archived. Null if not archived. */
+  /** Timestamp when this religion was archived. Null if not archived. */
   deleted_at: Date | null;
 
   /**
-   * Normalizes and initializes {{camel model}} fields from a raw DTO.
+   * Normalizes and initializes religion fields from a raw DTO.
    *
    * Responsibilities:
    * - Coerces all string fields to lowercase via `toLowerCaseString`
@@ -80,28 +80,28 @@ export class {{pascal model}} {
   }
 
   /**
-   * Static factory method — the preferred way to create a new {{camel model}}.
+   * Static factory method — the preferred way to create a new religion.
    *
-   * Constructs and validates the {{camel model}} in one step.
-   * Throws `{{pascal model}}BusinessException` if any business rule is violated.
+   * Constructs and validates the religion in one step.
+   * Throws `ReligionBusinessException` if any business rule is violated.
    */
-  static create(params: { desc1: string; created_by: string }): {{pascal model}} {
-    const {{snake model}} = new {{pascal model}}({
+  static create(params: { desc1: string; created_by: string }): Religion {
+    const religion = new Religion({
       desc1: params.desc1,
       created_by: params.created_by,
     });
-    {{snake model}}.validate();
-    return {{snake model}};
+    religion.validate();
+    return religion;
   }
 
   /**
-   * Rehydrates a {{camel model}} from a raw database record.
+   * Rehydrates a religion from a raw database record.
    *
    * Used in repository `entityToModel()` to map DB rows back to the domain model.
    * Bypasses validation since data from the DB is already assumed to be valid.
    */
-  static fromPersistence(entity: Record<string, unknown>): {{pascal model}} {
-    return new {{pascal model}}({
+  static fromPersistence(entity: Record<string, unknown>): Religion {
+    return new Religion({
       id: entity.id as number,
       desc1: entity.desc1 as string,
       created_by: entity.created_by as string,
@@ -114,17 +114,17 @@ export class {{pascal model}} {
   }
 
   /**
-    * Updates the {{camel model}} description and audit fields.
+    * Updates the religion description and audit fields.
    *
-   * - Throws if the {{camel model}} is currently archived.
+   * - Throws if the religion is currently archived.
    * - Normalizes inputs before applying.
    * - Validates the new state after applying changes.
    * - Note: `updated_at` is managed by TypeORM (@UpdateDateColumn), not set here.
    */
   update(dto: { desc1: string; updated_by?: string | null }): void {
     if (this.deleted_at) {
-      throw new {{pascal model}}BusinessException(
-        '{{pascal model}} is archived and cannot be updated.',
+      throw new ReligionBusinessException(
+        'Religion is archived and cannot be updated.',
         HTTP_STATUS.CONFLICT,
       );
     }
@@ -136,16 +136,16 @@ export class {{pascal model}} {
   }
 
   /**
-   * Soft-deletes the {{camel model}} (archive).
+   * Soft-deletes the religion (archive).
    *
-   * - Throws if the {{camel model}} is already archived.
+   * - Throws if the religion is already archived.
    * - Sets `deleted_at` to the current PH datetime.
    * - Records who performed the archive.
    */
   archive(deleted_by: string): void {
     if (this.deleted_at) {
-      throw new {{pascal model}}BusinessException(
-        '{{pascal model}} is already archived.',
+      throw new ReligionBusinessException(
+        'Religion is already archived.',
         HTTP_STATUS.CONFLICT,
       );
     }
@@ -154,15 +154,15 @@ export class {{pascal model}} {
   }
 
   /**
-   * Restores an archived {{camel model}}.
+   * Restores an archived religion.
    *
-   * - Throws if the {{camel model}} is not currently archived.
+   * - Throws if the religion is not currently archived.
    * - Clears `deleted_at` and `deleted_by`.
    */
   restore(): void {
     if (!this.deleted_at) {
-      throw new {{pascal model}}BusinessException(
-        `{{pascal model}} with ID ${this.id} is not archived.`,
+      throw new ReligionBusinessException(
+        `Religion with ID ${this.id} is not archived.`,
         HTTP_STATUS.CONFLICT,
       );
     }
@@ -174,25 +174,25 @@ export class {{pascal model}} {
    * Enforces business rules on the current state.
    *
    * Called by `create()` and `update()`.
-   * Throws `{{pascal model}}BusinessException` with BAD_REQUEST on any violation.
+   * Throws `ReligionBusinessException` with BAD_REQUEST on any violation.
    */
   validate(): void {
     // desc1 validations
     if (!this.desc1 || this.desc1.trim().length === 0) {
-      throw new {{pascal model}}BusinessException(
-        '{{pascal model}} description (desc1) is required and cannot be empty.',
+      throw new ReligionBusinessException(
+        'Religion description (desc1) is required and cannot be empty.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     if (this.desc1.trim().length < 2) {
-      throw new {{pascal model}}BusinessException(
-        '{{pascal model}} description (desc1) must be at least 2 characters long.',
+      throw new ReligionBusinessException(
+        'Religion description (desc1) must be at least 2 characters long.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }
     if (this.desc1.length > 255) {
-      throw new {{pascal model}}BusinessException(
-        '{{pascal model}} description (desc1) must not exceed 255 characters.',
+      throw new ReligionBusinessException(
+        'Religion description (desc1) must not exceed 255 characters.',
         HTTP_STATUS.BAD_REQUEST,
       );
     }

@@ -1,0 +1,30 @@
+import { PaginatedResult } from '@/core/utils/pagination.util';
+import { {{pascal model}} } from '../models/{{kebab model}}.model';
+
+export interface {{pascal model}}Repository<Context = unknown> {
+  /** Create a {{camel model}}. */
+  create({{snake model}}: {{pascal model}}, context: Context): Promise<{{pascal model}}>;
+  /** Update a {{camel model}}. */
+  update(
+    id: number,
+    dto: Partial<{{pascal model}}>,
+    context: Context,
+  ): Promise<boolean>;
+  /** Find a {{camel model}} by ID. */
+  findById(id: number, context: Context): Promise<{{pascal model}} | null>;
+  /** Find a {{camel model}} by description. */
+  findByDescription(
+    description: string,
+    context: Context,
+  ): Promise<{{pascal model}} | null>;
+  /** Find paginated list of {{camel model}}. */
+  findPaginatedList(
+    term: string,
+    page: number,
+    limit: number,
+    is_archived: boolean,
+    context: Context,
+  ): Promise<PaginatedResult<{{pascal model}}>>;
+  /** Get {{camel model}} for combobox/dropdown. */
+  combobox(context: Context): Promise<{{pascal model}}[]>;
+}

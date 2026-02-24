@@ -5,6 +5,7 @@ const {
   kebabCase,
   snakeCase,
 } = require('change-case');
+const pluralize = require('pluralize');
 
 module.exports = function (plop) {
   // Helpers
@@ -13,6 +14,7 @@ module.exports = function (plop) {
   plop.setHelper('constant', (txt) => constantCase(txt));
   plop.setHelper('kebab', (txt) => kebabCase(txt));
   plop.setHelper('snake', (txt) => snakeCase(txt));
+  plop.setHelper('plural', (text) => pluralize(text));
 
   plop.setGenerator('ddd', {
     description: 'Generate full DDD model structure',
@@ -23,6 +25,11 @@ module.exports = function (plop) {
         message: 'Feature name (e.g. user_management):',
       },
       { type: 'input', name: 'model', message: 'Model name (e.g. role):' },
+      // {
+      //   type: 'input',
+      //   name: 'feature-upper',
+      //   message: 'Feature all uppercase snake (e.g. SHARED_DOMAIN):',
+      // },
     ],
 
     actions: [
@@ -31,6 +38,39 @@ module.exports = function (plop) {
        * DOMAIN LAYER
        * =========================
        */
+      // Add Tokens Constant
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/domain/constants/tokens.constants.ts',
+        skipIfExists: true,
+        template: `export const {{constant (snake feature)}}_TOKENS = {
+            } as const;
+            `,
+      },
+      // Modify Tokens Constant
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/domain/constants/tokens.constants.ts',
+        pattern: /(export const .*_TOKENS = \{[\s\S]*?)(\}\s+as const;)/,
+        template: `$1  {{constant model}}: '{{pascal model}}Repository',\n$2`,
+      },
+      // Add Database Models Constant
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/domain/constants/database.constants.ts',
+        skipIfExists: true,
+        template: `export const {{constant (snake feature)}}_DATABASE_MODELS = {
+        } as const;
+        `,
+      },
+      // Modify Database Models Constant
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/domain/constants/database.constants.ts',
+        pattern:
+          /(export const .*_DATABASE_MODELS = \{[\s\S]*?)(\}\s+as const;)/,
+        template: `$1  {{constant (plural model)}}: '{{kebab (plural model)}}',\n$2`,
+      },
 
       // Model
       {
@@ -39,11 +79,37 @@ module.exports = function (plop) {
         templateFile: 'plop-templates/domain/model.hbs',
       },
 
+      // Index Models
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/domain/models/index.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/domain/models-index.hbs',
+      },
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/domain/models/index.ts',
+        pattern: /(\/\/ PLOP-APPEND-MODELS)/g,
+        template: "export * from './{{kebab model}}.model';\n$1",
+      },
+
       // Constant
       {
         type: 'add',
-        path: 'src/features/{{feature}}/domain/constants/{{kebab model}}.constant.ts',
+        path: 'src/features/{{feature}}/domain/constants/{{kebab model}}.constants.ts',
         templateFile: 'plop-templates/domain/constant.hbs',
+      },
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/domain/constants/index.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/domain/constant-index.hbs',
+      },
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/domain/constants/index.ts',
+        pattern: /(\/\/ PLOP-APPEND-CONSTANTS)/g,
+        template: "export * from './{{kebab model}}.constants';\n$1",
       },
 
       // Exception
@@ -52,12 +118,44 @@ module.exports = function (plop) {
         path: 'src/features/{{feature}}/domain/exceptions/{{kebab model}}.exception.ts',
         templateFile: 'plop-templates/domain/exception.hbs',
       },
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/domain/exceptions/index.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/domain/exception-index.hbs',
+      },
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/domain/exceptions/index.ts',
+        pattern: /(\/\/ PLOP-APPEND-EXCEPTIONS)/g,
+        template: "export * from './{{kebab model}}.exception';\n$1",
+      },
 
       // Repository Interface
       {
         type: 'add',
         path: 'src/features/{{feature}}/domain/repositories/{{kebab model}}.repository.ts',
         templateFile: 'plop-templates/domain/repository-interface.hbs',
+      },
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/domain/repositories/index.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/domain/repository-interface-index.hbs',
+      },
+      {
+        type: 'modify',
+        path: 'src/features/{{feature}}/domain/repositories/index.ts',
+        pattern: /(\/\/ PLOP-APPEND-REPOSITORIES)/g,
+        template: "export * from './{{kebab model}}.repository';\n$1",
+      },
+
+      // Index Domain
+      {
+        type: 'add',
+        path: 'src/features/{{feature}}/domain/index.ts',
+        skipIfExists: true,
+        templateFile: 'plop-templates/domain/index.hbs',
       },
 
       /**
